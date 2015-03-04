@@ -50,14 +50,18 @@ define( function( require ) {
     var units = new Text( positionString, {
       font: new PhetFont( 18 ),
       centerX: background.centerX,
-      y: background.bottom + 30,
+      y: background.bottom + 40,
     });
     this.addChild( units );
-
-
-
-
-
+    
+    model.showProbDensityProperty.link( function() {
+      if (model.showProbDensityProperty.value) {
+        title.text = titlePDString;
+      }
+      else {
+        title.text = titleWFString;
+      }
+    });
   }
 
   return inherit( Node, BottomPlotNode);

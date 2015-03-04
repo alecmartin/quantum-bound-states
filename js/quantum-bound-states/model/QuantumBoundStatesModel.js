@@ -12,6 +12,10 @@ define( function( require ) {
   var PropertySet = require( 'AXON/PropertySet' );
   var QuantumBoundStatesConstants = require( 'QUANTUM_BOUND_STATES/quantum-bound-states/model/QuantumBoundStatesConstants' );
   var SquareWellPotential = require( 'QUANTUM_BOUND_STATES/quantum-bound-states/model/SquareWellPotential' );
+  var AsymmetricPotential = require( 'QUANTUM_BOUND_STATES/quantum-bound-states/model/AsymmetricPotential' );
+  var Coulomb1DPotential = require( 'QUANTUM_BOUND_STATES/quantum-bound-states/model/Coulomb1DPotential' );
+  var Coulomb3DPotential = require( 'QUANTUM_BOUND_STATES/quantum-bound-states/model/Coulomb3DPotential' );
+  var HarmonicOscillatorPotential = require( 'QUANTUM_BOUND_STATES/quantum-bound-states/model/HarmonicOscillatorPotential' );
   var Vector2 = require( 'DOT/Vector2' );
 
   /**
@@ -29,6 +33,7 @@ define( function( require ) {
       currentEigenstate: 1,
       currentEnergy: 0,
       currentPotential: firstPotential,
+      potentialType: 0,
       eigenvals: [],
       superpositionCoefficients: [1],
       
@@ -56,6 +61,10 @@ define( function( require ) {
       this.currentPotentialProperty.value = potential;
       this.eigenvalsProperty.value = potential.getEigenvalues();
       this.currentEnergyProperty.value = potential.getNthEigenvalue( this.currentEigenstateProperty.value );
+      
+      if (potential instanceof SquareWellPotential) {
+        this.potentialType = 0;
+      }
     },
     
     /**

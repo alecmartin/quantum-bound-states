@@ -25,6 +25,7 @@ define( function( require ) {
     var background = new Rectangle(50, 0, width, height, 0, 0, {fill:'black'});
     this.addChild( background );
     
+    // ticks along left side
     var ySpacing = (height - 10) / 4;
     var tickLength = 5;
     var yLoc = 5;
@@ -34,6 +35,19 @@ define( function( require ) {
       this.addChild( new Text( i.toString(), {right: tick.left - 5, centerY: yLoc, font: new PhetFont( 12 )} ) );
       yLoc += ySpacing;
     }
+    
+    // vertical lines
+    var divisors = (model.maxX - model.minX);
+    var xSpacing = (width  / divisors);
+    var xLoc = xSpacing /2;
+    for (var i = model.minX + 0.5; i < divisors + model.minX; i += 1) {
+      var tick = new Line(background.left + xLoc, background.top, background.left+xLoc, background.bottom, {stroke: 'gray'});
+      this.addChild( tick );
+      xLoc += xSpacing;
+    }
+    
+    var l = new Line(background.left, background.centerY, background.right, background.centerY, {stroke:'purple'});
+    this.addChild(l);
     
     var title = new Text( titleString, {
       font: new PhetFont( 18 ),
