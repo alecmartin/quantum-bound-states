@@ -10,12 +10,16 @@ define( function( require ) {
   // modules
   var inherit = require( 'PHET_CORE/inherit' );
   var Node = require( 'SCENERY/nodes/Node' );
+  var Rectangle = require( 'SCENERY/nodes/Rectangle' );
 
   function EnergyPlotNode( model, options ) {
 
     Node.call( this, options );
     
+    var background = new Rectangle(50, 0, 300, 200, 0, 0, {fill:'black'});
+    this.addChild( background );
+    
   }
 
-  return inherit( Node, EnergyPlotNode);
+  return inherit( Node, EnergyPlotNode );
 } );

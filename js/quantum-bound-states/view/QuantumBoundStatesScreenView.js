@@ -11,6 +11,7 @@ define( function( require ) {
   var inherit = require( 'PHET_CORE/inherit' );
   var ScreenView = require( 'JOIST/ScreenView' );
   var ResetAllButton = require( 'SCENERY_PHET/buttons/ResetAllButton' );
+  var EnergyPlotNode = require( 'QUANTUM_BOUND_STATES/quantum-bound-states/view/EnergyPlotNode' );
 
   /**
    * @param {QuantumBoundStatesModel} quantumBoundStatesModel
@@ -19,6 +20,12 @@ define( function( require ) {
   function QuantumBoundStatesScreenView( quantumBoundStatesModel ) {
 
     ScreenView.call( this );
+    
+    var energyPlotNode = new EnergyPlotNode( quantumBoundStatesModel, {
+      x: 0,
+      y: 50,
+    });
+    this.addChild( energyPlotNode );
 
     // Create and add the Reset All Button in the bottom right, which resets the model
     var resetAllButton = new ResetAllButton( {
