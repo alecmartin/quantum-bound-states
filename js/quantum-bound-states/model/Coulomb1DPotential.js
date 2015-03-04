@@ -61,7 +61,7 @@ define( function( require ) {
         var n = this.groundState;
         var energy = 0;
         while ( n <= 6 ) {
-          energy = getNthEigenvalue(n);
+          energy = this.getNthEigenvalue(n);
           this.eigenvals.push( energy );
           n++;
         }

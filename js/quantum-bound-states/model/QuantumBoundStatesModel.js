@@ -27,9 +27,9 @@ define( function( require ) {
     PropertySet.call( this, {
       particleMass: 1*constants.electronMass,
       currentEigenstate: 1,
-      currentEnergy: firstPotential.getNthEigenvalue( 1 ),
+      currentEnergy: 0,
       currentPotential: firstPotential,
-      eigenvals: firstPotential.getEigenvalues(),
+      eigenvals: [],
       superpositionCoefficients: [1],
       
       showMagnifyingGlass: false,
