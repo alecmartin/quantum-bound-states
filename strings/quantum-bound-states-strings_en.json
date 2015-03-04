@@ -1,4 +1,9 @@
 {
   "quantum-bound-states.name": "Quantum Bound States",
-  "energy-plot-title": "Energy (eV)"
+  "energy-plot-title": "Energy (eV)",
+
+
+  "bottom-plot-position": "Position (nm)",
+  "bottom-plot-pd-title": "Probability Density",
+  "bottom-plot-wf-title": "Wave Function"
 }

@@ -17,6 +17,12 @@ define( function( require ) {
 
   function BottomPlotNode( model, width, height, options ) {
 
+    // strings
+    var titleWFString = require( 'string!QUANTUM_BOUND_STATES/bottom-plot-wf-title' );
+    var titlePDString = require( 'string!QUANTUM_BOUND_STATES/bottom-plot-pd-title' );
+    var positionString = require( 'string!QUANTUM_BOUND_STATES/bottom-plot-position' );
+
+
     Node.call( this, options );
     //create black background
     var background = new Rectangle(50,0,width,height,0,0, {fill:'black'});
@@ -31,6 +37,26 @@ define( function( require ) {
       this.addChild( new Text( i.toString(), {centerX: tick.centerX, top: background.bottom + 5, font: new PhetFont( 12 )} ) );
       xLoc += xSpacing;
     }
+
+    // right now default to WFString
+    var title = new Text( titleWFString, {
+      font: new PhetFont( 18 ),
+      rotation: -Math.PI / 2,
+      centerY: background.centerY,
+      x: background.left - 30,
+    });
+    this.addChild( title );
+
+    var units = new Text( positionString, {
+      font: new PhetFont( 18 ),
+      centerX: background.centerX,
+      y: background.bottom + 30,
+    });
+    this.addChild( units );
+
+
+
+
 
   }
 
