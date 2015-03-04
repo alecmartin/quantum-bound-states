@@ -71,6 +71,14 @@ define( function( require ) {
         x += delta;
       }
       return points;
+    },
+    
+    getMinEnergy: function( ) {
+      return this.currentPotentialProperty.value.minEnergy;
+    },
+    
+    getMaxEnergy: function( ) {
+      return this.currentPotentialProperty.value.maxEnergy;
     }
   } );
 } );

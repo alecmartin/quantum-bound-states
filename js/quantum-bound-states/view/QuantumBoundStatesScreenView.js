@@ -30,7 +30,7 @@ define( function( require ) {
 
     var bottomPlotNode = new BottomPlotNode( quantumBoundStatesModel, 600, 200, {
       x: 0,
-      y: 300,
+      y: 325,
     });
     this.addChild( bottomPlotNode );
 
