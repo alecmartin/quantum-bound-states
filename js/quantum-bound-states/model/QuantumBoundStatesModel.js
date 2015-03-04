@@ -62,8 +62,25 @@ define( function( require ) {
       this.eigenvalsProperty.value = potential.getEigenvalues();
       this.currentEnergyProperty.value = potential.getNthEigenvalue( this.currentEigenstateProperty.value );
       
-      if (potential instanceof SquareWellPotential) {
-        this.potentialType = 0;
+      switch (typeof potential) {
+        case "SquareWellPotential":
+          this.potentialTypeProperty.value = 0;
+          break;
+        case "AsymmetricPotential":
+          this.potentialTypeProperty.value = 1;
+          break;
+        case "Coulomb1DPotential":
+          this.potentialTypeProperty.value = 2;
+          break;
+        case "Coulomb3DPotential":
+          this.potentialTypeProperty.value = 3;
+          break;
+        case "HarmonicOscillatorPotential":
+          this.potentialTypeProperty.value = 4;
+          break;
+        default:
+          console.log("This is bad");
+          break;
       }
     },
     
