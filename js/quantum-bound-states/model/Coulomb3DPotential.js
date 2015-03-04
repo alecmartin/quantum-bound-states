@@ -18,7 +18,7 @@ define( function( require ) {
   * @param {double} wellOffset
   * @constructor
   */
-  function Coulomb1DPotential( model, wellOffset ) {
+  function Coulomb3DPotential( model, wellOffset ) {
     this.wellOffset = new Property( wellOffset );
     this.minEnergy = -15; // eV
     this.maxEnergy = 5; // eV
@@ -34,7 +34,7 @@ define( function( require ) {
     * @param {double} r: distance from center of well (origin) in nanometers
     */
     potentialValue: function( r ) {
-      var k = 1 / (4 * Math.PI * constants.epsilon)
+      var k = 1 / (4 * Math.PI * constants.epsilon);
       return -k * constants.electronCharge * constants.electronCharge / Math.abs(r) + this.wellOffset;
     },
     
@@ -42,7 +42,7 @@ define( function( require ) {
      * Get the energy of the nth energy level
      */
     getNthEigenvalue: function( n ) {
-      var m = model.particleMassProperty.value;
+      var m = this.model.particleMassProperty.value;
       var e = constants.electronCharge;
       var hbar = constants.hbar;
       var e0 = constants.epsilon;
@@ -54,14 +54,14 @@ define( function( require ) {
      * Returns an array of energy values
      */
     getEigenvalues: function() {
-      if ( this.eigenvals.length == 0 || this.redrawEigenstates ) {
+      if ( this.eigenvals.length === 0 || this.redrawEigenstates ) {
         if ( this.redrawEigenstates ) {
           this.eigenvals = [];
         }
         var n = this.groundState;
         var energy = 0;
         while ( n <= 10 ) {
-          energy = getNthEigenstate(n);
+          energy = getNthEigenvalue(n);
           this.eigenvals.push( energy );
           n++;
         }

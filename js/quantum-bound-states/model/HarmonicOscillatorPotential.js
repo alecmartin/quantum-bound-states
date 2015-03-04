@@ -29,7 +29,7 @@ define( function( require ) {
     this.groundState = 0;
     this.eigenvals = []; // array of eigenstate energies
     this.redrawEigenstates = false;
-    this.eigenstates = new Array(getNumberOfEigenstates()); // array of (x, y) points that describe the eigenstate functions
+    this.eigenstates = new Array(this.getNumberOfEigenstates()); // array of (x, y) points that describe the eigenstate functions
     
     this.solver = new EigenstateSolver( this.model );
     
@@ -64,14 +64,14 @@ define( function( require ) {
      * Returns an array of energy values
      */
     getEigenvalues: function() {
-      if ( this.eigenvals.length == 0 || this.redrawEigenstates ) {
+      if ( this.eigenvals.length === 0 || this.redrawEigenstates ) {
         if ( this.redrawEigenstates ) {
           this.eigenvals = [];
         }
         var n = this.groundState;
         var energy = 0;
         while ( energy <= this.maxEnergy ) {
-          energy = getNthEigenstate(n);
+          energy = this.getNthEigenstate(n);
           this.eigenvals.push( energy );
           n++;
         }
@@ -84,8 +84,8 @@ define( function( require ) {
      * Get the number of eigenstates available
      */
     getNumberOfEigenstates: function() {
-      if ( this.eigenvals.length == 0 ) {
-        getEigenvalues();
+      if ( this.eigenvals.length === 0 ) {
+        this.getEigenvalues();
       }
       return this.eigenvals.length;
     },

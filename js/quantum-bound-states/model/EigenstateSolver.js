@@ -44,8 +44,8 @@ define( function( require ) {
       var delta = (this.model.maxX - this.model.minX) / (n - 1);
       for (var i = 0; i < n; i++) {
         eigen[ i ] = new Vector2( x, psi[0] );
-        pos += delta;
-        psi = step( potentialValue, delta, x, psi, energy );
+        x += delta;
+        psi = this.step( potentialValue, delta, x, psi, energy );
       }
       return eigen;
     },
@@ -59,10 +59,10 @@ define( function( require ) {
      * @param energy: energy of the eigenstate
      */
     step: function( potentialValue, delta, x, psi, energy ) {
-      var k1 = fprime(potentialValue, x, psi, energy);
-      var k2 = fprime(potentialValue, x + delta/2, [psi[0] + k1[0]*delta/2, psi[1] + k1[1]*delta/2], energy);
-      var k3 = fprime(potentialValue, x + delta/2, [psi[0] + k2[0]*delta/2, psi[1] + k2[1]*delta/2], energy);
-      var k4 = fprime(potentialValue, x + delta, [psi[0] + k3[0]*delta, psi[1] + k3[1]*delta], energy);
+      var k1 = this.fprime(potentialValue, x, psi, energy);
+      var k2 = this.fprime(potentialValue, x + delta/2, [psi[0] + k1[0]*delta/2, psi[1] + k1[1]*delta/2], energy);
+      var k3 = this.fprime(potentialValue, x + delta/2, [psi[0] + k2[0]*delta/2, psi[1] + k2[1]*delta/2], energy);
+      var k4 = this.fprime(potentialValue, x + delta, [psi[0] + k3[0]*delta, psi[1] + k3[1]*delta], energy);
       var ksum = [k1[0] + 2*k2[0] + 2*k3[0] + k4[0], k1[1] + 2*k2[1] + 2*k3[1] + k4[1]];
       return [x[0] + ksum[0]*delta/6, x[1] + ksum[1]*delta/6];
     },
