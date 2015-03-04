@@ -12,11 +12,11 @@ define( function( require ) {
   var Node = require( 'SCENERY/nodes/Node' );
   var Rectangle = require( 'SCENERY/nodes/Rectangle' );
 
-  function BottomPlotNode( model, options ) {
+  function BottomPlotNode( model, width, height, options ) {
 
     Node.call( this, options );
     //create black background
-    var background = new Rectangle(0,0,300,200,0,0, {fill:'black'});
+    var background = new Rectangle(50,0,width,height,0,0, {fill:'black'});
     this.addChild( background );
     
   }
