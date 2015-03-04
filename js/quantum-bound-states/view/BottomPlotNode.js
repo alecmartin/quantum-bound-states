@@ -15,9 +15,9 @@ define( function( require ) {
   function BottomPlotNode( model, options ) {
 
     Node.call( this, options );
-
+    //create black background
     var background = new Rectangle(0,0,300,200,0,0, {fill:'black'});
-
+    this.addChild( background );
     
   }
 

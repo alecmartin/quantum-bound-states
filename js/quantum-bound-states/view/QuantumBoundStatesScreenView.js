@@ -12,6 +12,7 @@ define( function( require ) {
   var ScreenView = require( 'JOIST/ScreenView' );
   var ResetAllButton = require( 'SCENERY_PHET/buttons/ResetAllButton' );
   var EnergyPlotNode = require( 'QUANTUM_BOUND_STATES/quantum-bound-states/view/EnergyPlotNode' );
+  var BottomPlotNode = require( 'QUANTUM_BOUND_STATES/quantum-bound-states/view/BottomPlotNode' );
 
   /**
    * @param {QuantumBoundStatesModel} quantumBoundStatesModel
@@ -26,6 +27,12 @@ define( function( require ) {
       y: 50,
     });
     this.addChild( energyPlotNode );
+
+    var bottomPlotNode = new BottomPlotNode( quantumBoundStatesModel, {
+      x: 0,
+      y: 300,
+    });
+    this.addChild( bottomPlotNode );
 
     // Create and add the Reset All Button in the bottom right, which resets the model
     var resetAllButton = new ResetAllButton( {
