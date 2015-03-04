@@ -22,13 +22,13 @@ define( function( require ) {
 
     ScreenView.call( this );
     
-    var energyPlotNode = new EnergyPlotNode( quantumBoundStatesModel, {
+    var energyPlotNode = new EnergyPlotNode( quantumBoundStatesModel, 600, 250, {
       x: 0,
       y: 50,
     });
     this.addChild( energyPlotNode );
 
-    var bottomPlotNode = new BottomPlotNode( quantumBoundStatesModel, {
+    var bottomPlotNode = new BottomPlotNode( quantumBoundStatesModel, 600, 200, {
       x: 0,
       y: 300,
     });

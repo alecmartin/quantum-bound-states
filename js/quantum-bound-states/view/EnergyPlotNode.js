@@ -12,11 +12,11 @@ define( function( require ) {
   var Node = require( 'SCENERY/nodes/Node' );
   var Rectangle = require( 'SCENERY/nodes/Rectangle' );
 
-  function EnergyPlotNode( model, options ) {
+  function EnergyPlotNode( model, width, height, options ) {
 
     Node.call( this, options );
     
-    var background = new Rectangle(50, 0, 300, 200, 0, 0, {fill:'black'});
+    var background = new Rectangle(50, 0, width, height, 0, 0, {fill:'black'});
     this.addChild( background );
     
   }
