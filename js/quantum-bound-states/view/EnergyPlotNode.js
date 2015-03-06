@@ -12,6 +12,7 @@ define( function( require ) {
   var Line = require( 'SCENERY/nodes/Line' );
   var Node = require( 'SCENERY/nodes/Node' );
   var PhetFont = require( 'SCENERY_PHET/PhetFont' );
+  var PotentialWellNode = require( 'QUANTUM_BOUND_STATES/quantum-bound-states/view/PotentialWellNode' );
   var Rectangle = require( 'SCENERY/nodes/Rectangle' );
   var Text = require( 'SCENERY/nodes/Text' );
 
@@ -25,8 +26,10 @@ define( function( require ) {
     var background = new Rectangle(50, 0, width, height, 0, 0, {fill:'black'});
     this.addChild( background );
     
+    var padding = 10;
+    
     // ticks along left side
-    var ySpacing = (height - 10) / 4;
+    var ySpacing = (height - padding) / 4;
     var tickLength = 5;
     var yLoc = 5;
     for (var i = model.getMaxEnergy(); i >= model.getMinEnergy(); i -= 5) {
@@ -39,15 +42,15 @@ define( function( require ) {
     // vertical lines
     var divisors = (model.maxX - model.minX);
     var xSpacing = (width  / divisors);
-    var xLoc = xSpacing /2;
+    var xLoc = xSpacing / 2;
     for (var i = model.minX + 0.5; i < divisors + model.minX; i += 1) {
       var tick = new Line(background.left + xLoc, background.top, background.left+xLoc, background.bottom, {stroke: 'gray'});
       this.addChild( tick );
       xLoc += xSpacing;
     }
     
-    var l = new Line(background.left, background.centerY, background.right, background.centerY, {stroke:'purple'});
-    this.addChild(l);
+    var well = new PotentialWellNode( model, width, height+padding, {x: 50} );
+    this.addChild( well );
     
     var title = new Text( titleString, {
       font: new PhetFont( 18 ),

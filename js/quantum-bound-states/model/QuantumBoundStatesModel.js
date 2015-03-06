@@ -31,6 +31,7 @@ define( function( require ) {
     PropertySet.call( this, {
       particleMass: 1*constants.electronMass,
       currentEigenstate: 1,
+      hoveredEigenstate: -1,
       currentEnergy: 0,
       currentPotential: firstPotential,
       potentialType: 0,
@@ -105,6 +106,14 @@ define( function( require ) {
     
     getMaxEnergy: function( ) {
       return this.currentPotentialProperty.value.maxEnergy;
+    },
+    
+    setHoveredEigenstate: function( n ) {
+      this.hoveredEigenstateProperty.value = n;
+    },
+    
+    setCurrentEigenstate: function( n ) {
+      this.currentEigenstateProperty.value = n;
     }
   } );
 } );
