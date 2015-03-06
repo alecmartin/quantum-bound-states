@@ -10,7 +10,6 @@ define( function( require ) {
   // modules
   var dot = require( 'DOT/dot' );
   var inherit = require( 'PHET_CORE/inherit' );
-  //var Property = require( 'AXON/Property' );
   var QuantumBoundStatesConstants = require( 'QUANTUM_BOUND_STATES/quantum-bound-states/model/QuantumBoundStatesConstants' );
   var Vector2 = require( 'DOT/Vector2' );
   

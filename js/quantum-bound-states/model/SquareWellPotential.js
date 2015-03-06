@@ -24,6 +24,8 @@ define( function( require ) {
     this.minEnergy = -5; // eV
     this.maxEnergy = 15; // eV
     this.groundState = 1;
+    this.eigenvals = []; // array of eigenstate energies
+    this.redrawEigenstates = false;
   }
   
   return inherit( Object, SquareWellPotential, {
@@ -39,6 +41,44 @@ define( function( require ) {
       else {
         return this.wellOffset + this.wellHeight;
       }
-    }
+    },
+    
+    /**
+     * Get the energy of the nth energy level
+     */
+    getNthEigenvalue: function( n ) {
+      return n; // not calculated yet
+    },
+    
+    /**
+     * Get all eigenstates visible
+     * Returns an array of energy values
+     */
+    getEigenvalues: function() {
+      if ( this.eigenvals.length === 0 || this.redrawEigenstates ) {
+        if ( this.redrawEigenstates ) {
+          this.eigenvals = [];
+        }
+        var n = this.groundState;
+        var energy = 0;
+        while ( energy <= this.wellHeight.value + this.wellOffset.value ) {
+          energy = this.getNthEigenvalue(n);
+          this.eigenvals.push( energy );
+          n++;
+        }
+      }
+      this.redrawEigenstates = false;
+      return this.eigenvals;
+    },
+    
+    /**
+     * Get the number of eigenstates available
+     */
+    getNumberOfEigenstates: function() {
+      if ( this.eigenvals.length === 0 ) {
+        this.getEigenvalues();
+      }
+      return this.eigenvals.length;
+    },
   } );
 } );

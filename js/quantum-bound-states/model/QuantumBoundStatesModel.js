@@ -8,14 +8,15 @@ define( function( require ) {
   'use strict';
 
   // modules
-  var inherit = require( 'PHET_CORE/inherit' );
-  var PropertySet = require( 'AXON/PropertySet' );
-  var QuantumBoundStatesConstants = require( 'QUANTUM_BOUND_STATES/quantum-bound-states/model/QuantumBoundStatesConstants' );
-  var SquareWellPotential = require( 'QUANTUM_BOUND_STATES/quantum-bound-states/model/SquareWellPotential' );
   var AsymmetricPotential = require( 'QUANTUM_BOUND_STATES/quantum-bound-states/model/AsymmetricPotential' );
   var Coulomb1DPotential = require( 'QUANTUM_BOUND_STATES/quantum-bound-states/model/Coulomb1DPotential' );
   var Coulomb3DPotential = require( 'QUANTUM_BOUND_STATES/quantum-bound-states/model/Coulomb3DPotential' );
   var HarmonicOscillatorPotential = require( 'QUANTUM_BOUND_STATES/quantum-bound-states/model/HarmonicOscillatorPotential' );
+  var inherit = require( 'PHET_CORE/inherit' );
+  var PropertySet = require( 'AXON/PropertySet' );
+  var QuantumBoundStatesConstants = require( 'QUANTUM_BOUND_STATES/quantum-bound-states/model/QuantumBoundStatesConstants' );
+  var SquareWellPotential = require( 'QUANTUM_BOUND_STATES/quantum-bound-states/model/SquareWellPotential' );
+  var SuperpositionCoefficients = require( 'QUANTUM_BOUND_STATES/quantum-bound-states/model/SuperpositionCoefficients' );
   var Vector2 = require( 'DOT/Vector2' );
 
   /**
@@ -27,6 +28,7 @@ define( function( require ) {
     this.minX = -3.5; // nm
     this.maxX = 3.5; // nm
     var firstPotential = new SquareWellPotential( 0.0, 1.0, 10.0 );
+    var firstCoefficients = new SuperpositionCoefficients( this, firstPotential );
 
     PropertySet.call( this, {
       particleMass: 1*constants.electronMass,
@@ -35,8 +37,8 @@ define( function( require ) {
       currentEnergy: 0,
       currentPotential: firstPotential,
       potentialType: 0,
-      eigenvals: [],
-      superpositionCoefficients: [1],
+      eigenvals: firstPotential.getEigenvalues(),
+      superpositionCoefficients: firstCoefficients,
       
       showMagnifyingGlass: false,
       showProbDensity: true,
@@ -114,6 +116,14 @@ define( function( require ) {
     
     setCurrentEigenstate: function( n ) {
       this.currentEigenstateProperty.value = n;
+    },
+    
+    getNumberOfEigenstates: function( ) {
+      return this.currentPotentialProperty.value.getNumberOfEigenstates();
+    },
+    
+    getEigenvalues: function( ) {
+      return this.currentPotentialProperty.value.getEigenvalues();
     }
   } );
 } );

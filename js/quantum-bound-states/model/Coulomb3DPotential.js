@@ -68,6 +68,16 @@ define( function( require ) {
       }
       this.redrawEigenstates = false;
       return this.eigenvals;
-    }
+    },
+    
+    /**
+     * Get the number of eigenstates available
+     */
+    getNumberOfEigenstates: function() {
+      if ( this.eigenvals.length === 0 ) {
+        this.getEigenvalues();
+      }
+      return this.eigenvals.length;
+    },
   } );
 } );
