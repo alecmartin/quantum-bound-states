@@ -14,10 +14,15 @@ define( function( require ) {
   var PhetFont = require( 'SCENERY_PHET/PhetFont' );
   var Rectangle = require( 'SCENERY/nodes/Rectangle' );
   var Text = require( 'SCENERY/nodes/Text' );
+  var SubSupText = require( 'SCENERY_PHET/SubSupText' );
 
   function BottomPlotNode( model, width, height, options ) {
 
     // strings
+    var psiString = "Ψ";
+    var pd = false;
+    // Temporarily setting selectedEnergyLevel to 1
+    var selectedEnergyLevel = 1;
     var titleWFString = require( 'string!QUANTUM_BOUND_STATES/bottom-plot-wf-title' );
     var titlePDString = require( 'string!QUANTUM_BOUND_STATES/bottom-plot-pd-title' );
     var positionString = require( 'string!QUANTUM_BOUND_STATES/bottom-plot-position' );
@@ -38,6 +43,8 @@ define( function( require ) {
       xLoc += xSpacing;
     }
 
+
+
     // right now default to WFString
     var title = new Text( titleWFString, {
       font: new PhetFont( 18 ),
@@ -47,6 +54,18 @@ define( function( require ) {
     });
     this.addChild( title );
 
+
+    model.showProbDensityProperty.link( function() {
+      if (model.showProbDensityProperty.value) {
+        title.text = titlePDString;
+        pd = true;
+      }
+      else {
+        title.text = titleWFString;
+        pd = false;
+      }
+    });
+
     var units = new Text( positionString, {
       font: new PhetFont( 18 ),
       centerX: background.centerX,
@@ -54,14 +73,20 @@ define( function( require ) {
     });
     this.addChild( units );
     
-    model.showProbDensityProperty.link( function() {
-      if (model.showProbDensityProperty.value) {
-        title.text = titlePDString;
-      }
-      else {
-        title.text = titleWFString;
-      }
+    var EigenSubString = psiString + "<sub>" + selectedEnergyLevel + "</sub>(x,t)" ;
+    var EigenString = pd ? "|" + EigenSubString + "|<sup>2</sup>" : EigenSubString ;
+    var EigenText = new SubSupText( EigenString , {
+      font: new PhetFont( 18 ),
+      fill: "#ff0000",
+      y: background.right,
+      x: background.top
     });
+    this.addChild( EigenText );
+
+
+
+
+
   }
 
   return inherit( Node, BottomPlotNode);
