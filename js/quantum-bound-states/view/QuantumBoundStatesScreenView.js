@@ -35,6 +35,12 @@ define( function( require ) {
     });
     this.addChild( bottomPlotNode );
 
+    var topChartNode = new TopChartNode( quantumBoundStatesModel, {
+      x: 650,
+      y: 50,
+    });
+    this.addChild( topChartNode );
+
     // Create and add the Reset All Button in the bottom right, which resets the model
     var resetAllButton = new ResetAllButton( {
       listener: function() {
