@@ -90,7 +90,7 @@ define( function( require ) {
      * Returns true if the number of nonzero coefficients is greater than 1
      */
     isSuperpositionState: function( ) {
-      return (getNumNonZeroCoefficients() > 1);
+      return (this.getNumNonZeroCoefficients() > 1);
     }
   } );
 } );
