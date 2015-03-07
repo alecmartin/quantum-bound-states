@@ -8,6 +8,10 @@ define( function( require ) {
   var Node = require( 'SCENERY/nodes/Node' );
   var PhetFont = require( 'SCENERY_PHET/PhetFont' );
   var Text = require( 'SCENERY/nodes/Text' );
+
+  var PotentialComboBox = require( 'QUANTUM_BOUND_STATES/quantum-bound-states/view/PotentialComboBox' );
+
+
   var HBox = require( 'SCENERY/nodes/HBox' );
   var HStrut = require( 'SUN/HStrut' );
   var Panel = require( 'SUN/Panel' );
@@ -19,7 +23,6 @@ define( function( require ) {
   // Strings and other variables
   var OptionFont = {font: new PhetFont( 12 )};
   var magnifyingString = require( 'string!QUANTUM_BOUND_STATES/top-chart-show-magnifying-glass' );
-
 
   function TopChartNode( model, options ) {
     Node.call( this, options );

@@ -6,6 +6,7 @@
   "bottom-plot-position": "Position (nm)",
   "bottom-plot-pd-title": "Probability Density",
   "bottom-plot-wf-title": "Wave Function",
+<<<<<<< HEAD
 
   "top-chart-potential-well": "Potential Well",
   "top-chart-potential-well-0": "Square",
@@ -18,4 +19,13 @@
   "top-chart-show-magnifying-glass": "Show Magnifying Glass (10x)"
 
 
+=======
+  
+  "potential-well": "Potential Well",
+  "square": "Square",
+  "asymmetric": "Asymmetric",
+  "coulomb_1d": "1D Coulomb",
+  "coulomb_3d": "3D Coulomb (L=0)",
+  "harmonic-oscillator": "Harmonic Oscillator"
+>>>>>>> f085f331580e55efcc9d2b74928243a71d01fa2c
 }

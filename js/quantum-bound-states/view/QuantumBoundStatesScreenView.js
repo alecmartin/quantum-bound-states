@@ -13,6 +13,7 @@ define( function( require ) {
   var ResetAllButton = require( 'SCENERY_PHET/buttons/ResetAllButton' );
   var EnergyPlotNode = require( 'QUANTUM_BOUND_STATES/quantum-bound-states/view/EnergyPlotNode' );
   var BottomPlotNode = require( 'QUANTUM_BOUND_STATES/quantum-bound-states/view/BottomPlotNode' );
+  var TopChartNode = require( 'QUANTUM_BOUND_STATES/quantum-bound-states/view/TopChartNode' );
 
   /**
    * @param {QuantumBoundStatesModel} quantumBoundStatesModel

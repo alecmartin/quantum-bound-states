@@ -134,6 +134,7 @@ define( function( require ) {
     
     isSuperpositionState: function( ) {
       return this.superpositionCoefficientsProperty.value.isSuperpositionState();
-    }
+    },
+    
   } );
 } );
