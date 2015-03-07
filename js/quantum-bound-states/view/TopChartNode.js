@@ -37,6 +37,7 @@ define( function( require ) {
       font: OptionFont,
       baseColor: 'white',
       xMargin: 10,
+      width: 75,
       listener: function() {
         
       }
@@ -46,6 +47,7 @@ define( function( require ) {
       font: OptionFont,
       baseColor: 'white',
       xMargin: 10,
+      width: 75,
       listener: function() {
         
       }
@@ -56,10 +58,10 @@ define( function( require ) {
     ], { boxWidth: 15, spacing: 5 } );
     // var titleToControlsVerticalSpace = 7;
     var viewTopChartVBox = new VBox( {
-      children: [
-        potentialWellComboBox,
-        configurePotentialButton,
-        superpositionStateButton,
+      children: [        
+        new HBox( { children: [ new HStrut( 10 ), potentialWellComboBox, new HStrut( 15 ) ] } ),
+        new HBox( { children: [ new HStrut( 10 ), configurePotentialButton, new HStrut( 15 ) ] } ),
+        new HBox( { children: [ new HStrut( 10 ), superpositionStateButton, new HStrut( 15 ) ] } ),
         new HBox( { children: [ new HStrut( 10 ), magnifyingCheckBoxGroup, new HStrut( 15 ) ] } )
       ],
       align: 'left'
