@@ -18,27 +18,26 @@ define( function( require ) {
   var SquareWellPotential = require( 'QUANTUM_BOUND_STATES/quantum-bound-states/model/SquareWellPotential' );
   var SuperpositionCoefficients = require( 'QUANTUM_BOUND_STATES/quantum-bound-states/model/SuperpositionCoefficients' );
   var Vector2 = require( 'DOT/Vector2' );
+  
+  var constants = new QuantumBoundStatesConstants();
 
   /**
    * Main constructor for QuantumBoundStatesModel, which contains all of the model logic for the entire sim screen.
    * @constructor
    */
   function QuantumBoundStatesModel() {
-    var constants = new QuantumBoundStatesConstants();
     this.minX = -3.5; // nm
     this.maxX = 3.5; // nm
-    var firstPotential = new SquareWellPotential( 0.0, 1.0, 10.0 );
-    var firstCoefficients = new SuperpositionCoefficients( this, firstPotential );
 
     PropertySet.call( this, {
       particleMass: 1*constants.electronMass,
-      currentEigenstate: 1,
+      currentEigenstate: 0,
       hoveredEigenstate: -1,
       currentEnergy: 0,
-      currentPotential: firstPotential,
+      currentPotential: null,
       potentialType: 0,
-      eigenvals: firstPotential.getEigenvalues(),
-      superpositionCoefficients: firstCoefficients,
+      eigenvals: null,
+      superpositionCoefficients: null,
       
       showMagnifyingGlass: false,
       showProbDensity: true,
@@ -47,6 +46,19 @@ define( function( require ) {
       showMagnitude: false,
       showPhase: false,
       } );
+    
+    var squareWell = new SquareWellPotential( 0.0, 1.0, 10.0 );
+    var asymWell = new AsymmetricPotential( 0.0, 1.0, 10.0 );
+    var coulomb1D = new Coulomb1DPotential( 0.0 );
+    var coulomb3D = new Coulomb3DPotential( 0.0 );
+    var oscillatorWell = new HarmonicOscillatorPotential( this, 0.0, 1.0 );
+    this.potentials = [squareWell, asymWell, coulomb1D, coulomb3D, oscillatorWell];
+    
+    this.currentPotentialProperty.value = squareWell;
+    this.eigenvalsProperty.value = squareWell.getEigenvalues();
+    
+    var coefficients = new SuperpositionCoefficients( this );
+    this.superpositionCoefficientsProperty.value = coefficients;
   }
 
   return inherit( PropertySet, QuantumBoundStatesModel, {
@@ -59,32 +71,13 @@ define( function( require ) {
     /**
      * Change the current potential being displayed
      */
-    setPotential: function( potential ) {
+    setPotential: function( type ) {
+      var potential = this.potentials[type];
       this.currentEigenstateProperty.value +=  potential.groundState - this.currentPotentialProperty.value.groundState;
       this.currentPotentialProperty.value = potential;
       this.eigenvalsProperty.value = potential.getEigenvalues();
       this.currentEnergyProperty.value = potential.getNthEigenvalue( this.currentEigenstateProperty.value );
-      
-      switch (typeof potential) {
-        case "SquareWellPotential":
-          this.potentialTypeProperty.value = 0;
-          break;
-        case "AsymmetricPotential":
-          this.potentialTypeProperty.value = 1;
-          break;
-        case "Coulomb1DPotential":
-          this.potentialTypeProperty.value = 2;
-          break;
-        case "Coulomb3DPotential":
-          this.potentialTypeProperty.value = 3;
-          break;
-        case "HarmonicOscillatorPotential":
-          this.potentialTypeProperty.value = 4;
-          break;
-        default:
-          console.log("This is bad");
-          break;
-      }
+      this.potentialTypeProperty.value = type;
     },
     
     /**
@@ -124,6 +117,19 @@ define( function( require ) {
     
     getEigenvalues: function( ) {
       return this.currentPotentialProperty.value.getEigenvalues();
+    },
+    
+    getSubscriptsAndCoefficients: function( ) {
+      var coeff = this.superpositionCoefficientsProperty.value;
+      var nonzero = []
+      var subscripts = []
+      for (var i = 0; i < coeff.coefficients.length; i++ ) {
+        if ( coeff.coefficients[i] != 0 ) {
+          nonzero.push(coeff.coefficients[i]);
+          subscripts.push(i + this.currentPotentialProperty.value.groundState);
+        }
+      }
+      return [subscripts,nonzero];
     }
   } );
 } );

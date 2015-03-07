@@ -18,8 +18,11 @@ define( function( require ) {
   /**
   * @constructor
   */
-  function SuperpositionCoefficients( model, potential ) {
-    this.coefficients = new FastArray( potential.getNumberOfEigenstates );
+  function SuperpositionCoefficients( model ) {
+    this.coefficients = new FastArray( model.currentPotentialProperty.value.getNumberOfEigenstates() );
+    for (var i = 0; i < this.coefficients.length; i++) {
+      this.coefficients[i] = 0.0;
+    }
     this.coefficients[0] = 1.0;
     this.normalized = new Property( true );
   }

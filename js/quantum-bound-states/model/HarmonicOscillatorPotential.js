@@ -32,13 +32,14 @@ define( function( require ) {
     this.eigenstates = new Array(this.getNumberOfEigenstates()); // array of (x, y) points that describe the eigenstate functions
     
     this.solver = new EigenstateSolver( this.model );
+    var thisNode = this;
     
     this.wellOffset.link( function() {
-      this.redrawEigenstates = true;
+      thisNode.redrawEigenstates = true;
     });
     
     this.frequency.link( function() {
-      this.redrawEigenstates = true;
+      thisNode.redrawEigenstates = true;
     });
   }
   
