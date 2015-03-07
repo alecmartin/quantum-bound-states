@@ -66,6 +66,8 @@ define( function( require ) {
       }
     });
 
+
+
     var units = new Text( positionString, {
       font: new PhetFont( 18 ),
       centerX: background.centerX,
@@ -73,7 +75,7 @@ define( function( require ) {
     });
     this.addChild( units );
     
-    var eigenSubString = psiString + "<sub>" + selectedEnergyLevel + "</sub>(x,t)" ;
+    var eigenSubString = model.isSuperpositionState() ? psiString + "<sub>" + selectedEnergyLevel + "</sub>(x,t)" : "Fix me!";
     var eigenString = pd ? "|" + eigenSubString + "|<sup>2</sup>" : eigenSubString ;
 
     var eigenText = new SubSupText( eigenString , {
