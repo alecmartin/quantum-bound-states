@@ -23,7 +23,7 @@ define( function( require ) {
     // strings
     var titleString = require( 'string!QUANTUM_BOUND_STATES/energy-plot-title' );
     
-    var background = new Rectangle(50, 0, width, height, 0, 0, {fill:'black'});
+    var background = new Rectangle(50, 0, width, height, 0, 0, {fill:'black', stroke: 'white'});
     this.addChild( background );
     
     var padding = 10;
@@ -33,9 +33,13 @@ define( function( require ) {
     var tickLength = 5;
     var yLoc = 5;
     for (var i = model.getMaxEnergy(); i >= model.getMinEnergy(); i -= 5) {
-      var tick = new Line(background.left, yLoc, background.left - tickLength, yLoc, {stroke: 'black'});
+      var tick = new Line(background.left, yLoc, background.left - tickLength, yLoc, {stroke: 'white'});
       this.addChild( tick );
-      this.addChild( new Text( i.toString(), {right: tick.left - 5, centerY: yLoc, font: new PhetFont( 12 )} ) );
+      this.addChild( new Text( i.toString(), {
+        right: tick.left - 5,
+        centerY: yLoc,
+        font: new PhetFont( 12 ),
+        fill: 'white'} ) );
       yLoc += ySpacing;
     }
     
@@ -57,6 +61,7 @@ define( function( require ) {
       rotation: -Math.PI / 2,
       centerY: background.centerY,
       x: background.left - 30,
+      fill: 'white'
     });
     this.addChild( title );
   }

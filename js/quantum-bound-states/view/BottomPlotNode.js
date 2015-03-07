@@ -30,7 +30,7 @@ define( function( require ) {
 
     Node.call( this, options );
     //create black background
-    var background = new Rectangle(50,0,width,height,0,0, {fill:'black'});
+    var background = new Rectangle(50,0,width,height,0,0, {fill:'black', stroke: 'white'});
     this.addChild( background );
     
     var divisors = (model.maxX - model.minX);
@@ -39,7 +39,11 @@ define( function( require ) {
     for (var i = model.minX + 0.5; i < divisors + model.minX; i += 1) {
       var tick = new Line(background.left + xLoc, background.top, background.left+xLoc, background.bottom, {stroke: 'gray'});
       this.addChild( tick );
-      this.addChild( new Text( i.toString(), {centerX: tick.centerX, top: background.bottom + 5, font: new PhetFont( 12 )} ) );
+      this.addChild( new Text( i.toString(), {
+        centerX: tick.centerX,
+        top: background.bottom + 5,
+        font: new PhetFont( 12 ),
+        fill: 'white'} ) );
       xLoc += xSpacing;
     }
 
@@ -51,6 +55,7 @@ define( function( require ) {
       rotation: -Math.PI / 2,
       centerY: background.centerY,
       x: background.left - 30,
+      fill: 'white'
     });
     this.addChild( title );
 
@@ -88,6 +93,7 @@ define( function( require ) {
       font: new PhetFont( 18 ),
       centerX: background.centerX,
       y: background.bottom + 40,
+      fill: 'white'
     });
     this.addChild( units );
     
@@ -100,21 +106,7 @@ define( function( require ) {
       right: background.right - 5,
       top: background.top + 5
     });
-
-
-
-    // var EigenText = new SubSupText( EigenString , {
-    //   font: new PhetFont( 18 ),
-    //   fill: "#ff0000",
-    //   y: background.right,
-    //   x: background.top
-    // });
     this.addChild( eigenText );
-
-
-
-
-
   }
 
   return inherit( Node, BottomPlotNode);

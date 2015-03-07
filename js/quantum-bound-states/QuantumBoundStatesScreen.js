@@ -28,7 +28,7 @@ define( function( require ) {
     Screen.call( this, quantumBoundStatesSimString, icon,
       function() { return new QuantumBoundStatesModel(); },
       function( model ) { return new QuantumBoundStatesScreenView( model ); },
-      { backgroundColor: 'white' }
+      { backgroundColor: 'black' }
     );
   }
 
