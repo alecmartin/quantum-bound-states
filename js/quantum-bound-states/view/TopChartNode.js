@@ -31,7 +31,7 @@ define( function( require ) {
   // Add the control panel that will allow users to control the visibility
   // of the plate charges and electric field lines
   var magnifyingCheckBoxGroup = new VerticalCheckBoxGroup( [
-    { content: new Text( magnifyingString, OptionFont ), property: capacitorLabModel.plateChargeVisibleProperty, label: magnifyingString },
+    { content: new Text( magnifyingString, OptionFont ), property: model.showMagnifyingGlassProperty, label: magnifyingString },
   ], { boxWidth: 15, spacing: 5 } );
   var titleToControlsVerticalSpace = 7;
   var viewVisibilityControlsVBox = new VBox( {
