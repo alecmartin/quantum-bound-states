@@ -29,10 +29,10 @@ define( function( require ) {
       var name = potentialNames[i];
       var node = new Node();
       var text = new Text( name, {font: new PhetFont(16) });
-      var icon = new Image( squareImage, {left: text.right + 3});
+      var icon = new Image( squareImage, {left: text.right + 3, top: text.top, scale: .25});
       node.addChild( text );
       node.addChild( icon );
-      return ComboBox.createItem( node, potential );
+      return ComboBox.createItem( node, i );
     }
     
     // items
@@ -42,7 +42,7 @@ define( function( require ) {
       items[ i ] = createItem( i, potential );
     }
     
-    ComboBox.call( this, items, model.currentPotentialProperty, parent, {
+    ComboBox.call( this, items, model.potentialTypeProperty, parent, {
       listPosition: 'below',
       itemYMargin: 12,
       itemHighlightFill: 'rgb(218,255,255)'

@@ -20,6 +20,7 @@ define( function( require ) {
   */
   function Coulomb3DPotential( model, wellOffset ) {
     this.wellOffset = new Property( wellOffset );
+    this.model = model;
     this.minEnergy = -15; // eV
     this.maxEnergy = 5; // eV
     this.groundState = 1;

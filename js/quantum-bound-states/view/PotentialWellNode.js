@@ -40,8 +40,8 @@ define( function( require ) {
             horizontalLineTo( (model.maxX - model.minX) * xScale );
           break;
         case 1: // Asymmetric well
-          var width = potential.wellWidth.value;
-          var height = potential.wellHeight.value;
+          var wellWidth = potential.wellWidth.value;
+          var wellHeight = potential.wellHeight.value;
           wellShape = new Shape().
             moveTo( 0, (maxEnergy - (wellHeight + offset)) * yScale ).
             horizontalLineTo( (model.maxX - wellWidth / 2) * xScale ).
@@ -68,6 +68,7 @@ define( function( require ) {
     thisNode.addChild( wellPath );
     
     model.currentPotentialProperty.link( function() {
+      potential = model.currentPotentialProperty.value;
       drawWell();
       wellPath.shape = wellShape;
     });

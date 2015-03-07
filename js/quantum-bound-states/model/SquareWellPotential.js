@@ -17,10 +17,11 @@ define( function( require ) {
   * @param {double} wellHeight
   * @constructor
   */
-  function SquareWellPotential( wellOffset, wellWidth, wellHeight ) {
+  function SquareWellPotential( model, wellOffset, wellWidth, wellHeight ) {
     this.wellOffset = new Property( wellOffset );
     this.wellWidth = new Property( wellWidth );
     this.wellHeight = new Property( wellHeight );
+    this.model = model;
     this.minEnergy = -5; // eV
     this.maxEnergy = 15; // eV
     this.groundState = 1;

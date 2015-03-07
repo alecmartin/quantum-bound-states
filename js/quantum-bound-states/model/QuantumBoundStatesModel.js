@@ -47,10 +47,10 @@ define( function( require ) {
       showPhase: false,
       } );
     
-    var squareWell = new SquareWellPotential( 0.0, 1.0, 10.0 );
-    var asymWell = new AsymmetricPotential( 0.0, 1.0, 10.0 );
-    var coulomb1D = new Coulomb1DPotential( 0.0 );
-    var coulomb3D = new Coulomb3DPotential( 0.0 );
+    var squareWell = new SquareWellPotential( this, 0.0, 1.0, 10.0 );
+    var asymWell = new AsymmetricPotential( this, 0.0, 1.0, 10.0 );
+    var coulomb1D = new Coulomb1DPotential( this, 0.0 );
+    var coulomb3D = new Coulomb3DPotential( this, 0.0 );
     var oscillatorWell = new HarmonicOscillatorPotential( this, 0.0, 1.0 );
     this.potentials = [squareWell, asymWell, coulomb1D, coulomb3D, oscillatorWell];
     
@@ -59,6 +59,11 @@ define( function( require ) {
     
     var coefficients = new SuperpositionCoefficients( this );
     this.superpositionCoefficientsProperty.value = coefficients;
+    
+    var thisNode = this;
+    this.potentialTypeProperty.link( function() {
+      thisNode.setPotential(thisNode.potentialTypeProperty.value);
+    });
   }
 
   return inherit( PropertySet, QuantumBoundStatesModel, {
