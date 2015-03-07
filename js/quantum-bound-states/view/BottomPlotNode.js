@@ -22,7 +22,7 @@ define( function( require ) {
     var psiString = "Ψ";
     var pd = false;
     // Temporarily setting selectedEnergyLevel to 1
-    var selectedEnergyLevel = 1;
+    // var selectedEnergyLevel = 1;
     var titleWFString = require( 'string!QUANTUM_BOUND_STATES/bottom-plot-wf-title' );
     var titlePDString = require( 'string!QUANTUM_BOUND_STATES/bottom-plot-pd-title' );
     var positionString = require( 'string!QUANTUM_BOUND_STATES/bottom-plot-position' );
@@ -66,7 +66,23 @@ define( function( require ) {
       }
     });
 
-
+    // gets the substring for the superposition
+    function superpositionEigenSubString() {
+      var arr = model.getSubscriptsAndCoefficients();
+      var string = "";
+      if(model.isSuperpositionState()){
+        for (var i = 0; i < arr[0].length ; i++ ) {
+          string += arr[1][i] + psiString + "<sub>" + arr[0][i] + "</sub>(x,t)";
+          if(i < arr[0].length -1){
+            string += "+";
+          }
+        }
+      }
+      else {
+        string += psiString + "<sub>" + arr[0][0] + "</sub>(x,t)";
+      }
+      return string;
+    }
 
     var units = new Text( positionString, {
       font: new PhetFont( 18 ),
@@ -75,7 +91,7 @@ define( function( require ) {
     });
     this.addChild( units );
     
-    var eigenSubString = model.isSuperpositionState() ? psiString + "<sub>" + selectedEnergyLevel + "</sub>(x,t)" : "Fix me!";
+    var eigenSubString =  superpositionEigenSubString();
     var eigenString = pd ? "|" + eigenSubString + "|<sup>2</sup>" : eigenSubString ;
 
     var eigenText = new SubSupText( eigenString , {
