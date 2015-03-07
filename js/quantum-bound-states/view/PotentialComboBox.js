@@ -25,6 +25,16 @@ define( function( require ) {
     
     var potentialNames = [squareString, asymString, coulomb1DString, coulomb3DString, harmonicString];
     
+    function createItem( i, potential ) {
+      var name = potentialNames[i];
+      var node = new Node();
+      var text = new Text( name, {font: new PhetFont(16) });
+      var icon = new Image( squareImage, {left: text.right + 3});
+      node.addChild( text );
+      node.addChild( icon );
+      return ComboBox.createItem( node, potential );
+    }
+    
     // items
     var items = [];
     for ( var i = 0; i < model.potentials.length; i++ ) {
@@ -37,16 +47,6 @@ define( function( require ) {
       itemYMargin: 12,
       itemHighlightFill: 'rgb(218,255,255)'
     } );
-    
-    function createItem( i, potential ) {
-      var name = potentialNames[i];
-      var node = new Node();
-      var text = new Text( name, {font: new PhetFont(16) });
-      var icon = new Image( squareImage, {left: text.right + 3});
-      node.addChild( text );
-      node.addChild( icon );
-      return ComboBox.createItem( node, potential );
-    }
   }
 
   return inherit( ComboBox, PotentialComboBox);

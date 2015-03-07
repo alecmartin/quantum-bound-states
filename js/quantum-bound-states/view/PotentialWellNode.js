@@ -56,7 +56,7 @@ define( function( require ) {
           var frequency = potential.frequency.value;
           break;
       }
-    }
+    };
     
     drawWell();
     var wellPath = new Path( wellShape,
@@ -64,7 +64,7 @@ define( function( require ) {
       stroke: 'purple',
       lineWidth: 3,
       lineJoin: 'round'
-    } )
+    } );
     thisNode.addChild( wellPath );
     
     model.currentPotentialProperty.link( function() {

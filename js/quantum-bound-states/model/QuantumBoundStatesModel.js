@@ -121,8 +121,8 @@ define( function( require ) {
     
     getSubscriptsAndCoefficients: function( ) {
       var coeff = this.superpositionCoefficientsProperty.value;
-      var nonzero = []
-      var subscripts = []
+      var nonzero = [];
+      var subscripts = [];
       for (var i = 0; i < coeff.coefficients.length; i++ ) {
         if ( coeff.coefficients[i] != 0 ) {
           nonzero.push(coeff.coefficients[i]);
