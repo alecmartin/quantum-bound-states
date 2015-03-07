@@ -130,6 +130,10 @@ define( function( require ) {
         }
       }
       return [subscripts,nonzero];
+    },
+    
+    isSuperpositionState: function( ) {
+      return this.superpositionCoefficientsProperty.value.isSuperpositionState();
     }
   } );
 } );
