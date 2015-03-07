@@ -75,12 +75,22 @@ define( function( require ) {
     
     var EigenSubString = psiString + "<sub>" + selectedEnergyLevel + "</sub>(x,t)" ;
     var EigenString = pd ? "|" + EigenSubString + "|<sup>2</sup>" : EigenSubString ;
+
     var EigenText = new SubSupText( EigenString , {
       font: new PhetFont( 18 ),
       fill: "#ff0000",
-      y: background.right,
-      x: background.top
+      right: background.right - 5,
+      top: background.top + 5
     });
+
+
+
+    // var EigenText = new SubSupText( EigenString , {
+    //   font: new PhetFont( 18 ),
+    //   fill: "#ff0000",
+    //   y: background.right,
+    //   x: background.top
+    // });
     this.addChild( EigenText );
 
 
