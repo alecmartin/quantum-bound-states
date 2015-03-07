@@ -24,29 +24,30 @@ define( function( require ) {
     var xScale = width / (model.maxX - model.minX);
     var yScale = height / (maxEnergy - model.getMinEnergy());
     var offset = potential.wellOffset.value;
+    var wellShape;
 
     var drawWell = function() {
       switch (model.potentialTypeProperty.value) {
         case 0: // Square well
           var wellWidth = potential.wellWidth.value;
           var wellHeight = potential.wellHeight.value;
-          var wellShape = new Shape().
+          wellShape = new Shape().
             moveTo( 0, (maxEnergy - (wellHeight + offset)) * yScale ).
             horizontalLineTo( (model.maxX - wellWidth / 2) * xScale ).
             verticalLineTo( (maxEnergy - offset)*yScale ).
             horizontalLineTo( (model.maxX + wellWidth / 2) * xScale ).
             verticalLineTo( (maxEnergy - (wellHeight + offset)) * yScale ).
             horizontalLineTo( (model.maxX - model.minX) * xScale );
-          thisNode.addChild( new Path( wellShape,
-          {
-            stroke: 'purple',
-            lineWidth: 3,
-            lineJoin: 'round'
-          } ) );
           break;
         case 1: // Asymmetric well
           var width = potential.wellWidth.value;
           var height = potential.wellHeight.value;
+          wellShape = new Shape().
+            moveTo( 0, (maxEnergy - (wellHeight + offset)) * yScale ).
+            horizontalLineTo( (model.maxX - wellWidth / 2) * xScale ).
+            verticalLineTo( (maxEnergy - offset)*yScale ).
+            lineTo( (model.maxX + wellWidth / 2) * xScale, (maxEnergy - (wellHeight + offset)) * yScale ).
+            horizontalLineTo( (model.maxX - model.minX) * xScale );
           break;
         case 2: // 1D Coulomb
         case 3: // 3D Coulomb
@@ -58,6 +59,18 @@ define( function( require ) {
     }
     
     drawWell();
+    var wellPath = new Path( wellShape,
+    {
+      stroke: 'purple',
+      lineWidth: 3,
+      lineJoin: 'round'
+    } )
+    thisNode.addChild( wellPath );
+    
+    model.currentPotentialProperty.link( function() {
+      drawWell();
+      wellPath.shape = wellShape;
+    });
   }
 
   return inherit( Node, PotentialWellNode );

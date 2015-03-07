@@ -5,11 +5,10 @@ define( function( require ) {
 
   // modules
   var ComboBox = require( 'SUN/ComboBox' );
+  var Image = require( 'SCENERY/nodes/Image' );
   var inherit = require( 'PHET_CORE/inherit' );
   var Node = require( 'SCENERY/nodes/Node' );
   var PhetFont = require( 'SCENERY_PHET/PhetFont' );
-  var Rectangle = require( 'SCENERY/nodes/Rectangle' );
-  var StringUtils = require( 'PHETCOMMON/util/StringUtils' );
   var Text = require( 'SCENERY/nodes/Text' );
 
   function PotentialComboBox( model, parent, options ) {
@@ -20,6 +19,9 @@ define( function( require ) {
     var coulomb1DString = require( 'string!QUANTUM_BOUND_STATES/coulomb_1d' );
     var coulomb3DString = require( 'string!QUANTUM_BOUND_STATES/coulomb_3d' );
     var harmonicString = require( 'string!QUANTUM_BOUND_STATES/harmonic-oscillator' );
+    
+    // images
+    var squareImage = require( 'image!QUANTUM_BOUND_STATES/SquareIcon.png' );
     
     var potentialNames = [squareString, asymString, coulomb1DString, coulomb3DString, harmonicString];
     
@@ -38,8 +40,12 @@ define( function( require ) {
     
     function createItem( i, potential ) {
       var name = potentialNames[i];
+      var node = new Node();
       var text = new Text( name, {font: new PhetFont(16) });
-      return ComboBox.createItem( text, potential );
+      var icon = new Image( squareImage, {left: text.right + 3});
+      node.addChild( text );
+      node.addChild( icon );
+      return ComboBox.createItem( node, potential );
     }
   }
 
