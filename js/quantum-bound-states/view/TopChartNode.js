@@ -26,7 +26,6 @@ define( function( require ) {
 
   function TopChartNode( model, options ) {
     Node.call( this, options );
-  }
 
   // Add the control panel that will allow users to control the visibility
   // of the plate charges and electric field lines
@@ -34,7 +33,7 @@ define( function( require ) {
     { content: new Text( magnifyingString, OptionFont ), property: model.showMagnifyingGlassProperty, label: magnifyingString },
   ], { boxWidth: 15, spacing: 5 } );
   var titleToControlsVerticalSpace = 7;
-  var viewVisibilityControlsVBox = new VBox( {
+  var viewTopChartVBox = new VBox( {
     children: [
       new Text( viewTitleString, titleFont ),
       new VStrut( titleToControlsVerticalSpace ),
@@ -42,7 +41,7 @@ define( function( require ) {
     ],
     align: 'left'
   } );
-  var viewVisibilityControlPanel = new Panel( viewVisibilityControlsVBox,
+  var viewTopChartPanel = new Panel( viewVisibilityControlsVBox,
   {
     xMargin: 5,
     fill: 'rgb( 0, 0, 0 )',
@@ -51,6 +50,9 @@ define( function( require ) {
   } );
   this.addChild( viewVisibilityControlPanel );
 
+
+
+  }
   return inherit( Node, TopChartNode);
 
 
