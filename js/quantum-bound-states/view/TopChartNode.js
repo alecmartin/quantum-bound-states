@@ -38,6 +38,7 @@ define( function( require ) {
       baseColor: 'white',
       xMargin: 10,
       width: 75,
+      height: 75,
       listener: function() {
         
       }
@@ -55,7 +56,7 @@ define( function( require ) {
 
     var magnifyingCheckBoxGroup = new VerticalCheckBoxGroup( [
       { content: new Text( magnifyingString, OptionFont ), property: model.showMagnifyingGlassProperty, label: magnifyingString },
-    ], { boxWidth: 15, spacing: 5 } );
+    ], { boxWidth: 30, spacing: 5 } );
     // var titleToControlsVerticalSpace = 7;
     var viewTopChartVBox = new VBox( {
       children: [        
