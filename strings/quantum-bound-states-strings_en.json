@@ -7,8 +7,8 @@
   "bottom-plot-pd-title": "Probability Density",
   "bottom-plot-wf-title": "Wave Function",
 
-  "top-chart-configure-potential": "Configure Potential...",
-  "top-chart-configure-superposition-state": "Configure Superposition State...",
+  "top-chart-configure-potential-well": "Configure Potential...",
+  "top-chart-superposition-state": "Configure Superposition State...",
   "top-chart-show-magnifying-glass": "Show Magnifying Glass (10x)",
 
   "potential-well": "Potential Well",

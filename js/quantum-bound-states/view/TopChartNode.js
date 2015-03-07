@@ -14,6 +14,7 @@ define( function( require ) {
   var Panel = require( 'SUN/Panel' );
   var VerticalCheckBoxGroup = require( 'SUN/VerticalCheckBoxGroup' );
   var VBox = require( 'SCENERY/nodes/VBox' );
+  var TextPushButton = require( 'SUN/buttons/TextPushButton' );
 
 
 
@@ -22,13 +23,34 @@ define( function( require ) {
     Node.call( this, options );
 
     // Strings and other variables
-    var OptionFont = {font: new PhetFont( 12 ), color: "white"};
+    var OptionFont = {font: new PhetFont( 12 ), fill: "White"};
     var magnifyingString = require( 'string!QUANTUM_BOUND_STATES/top-chart-show-magnifying-glass' );
+    var potentialWellString = require( 'string!QUANTUM_BOUND_STATES/top-chart-configure-potential-well' );
+    var superpositionStateString = require( 'string!QUANTUM_BOUND_STATES/top-chart-superposition-state' );
 
 
     // Add the control panel that will allow users to control the visibility
     // of the plate charges and electric field lines
     var potentialWellComboBox = new PotentialComboBox( model, this);
+    // 
+    var configurePotentialButton = new TextPushButton( potentialWellString, {
+      font: OptionFont,
+      baseColor: 'white',
+      xMargin: 10,
+      listener: function() {
+        
+      }
+    } );
+
+    var superpositionStateButton = new TextPushButton( superpositionStateString, {
+      font: OptionFont,
+      baseColor: 'white',
+      xMargin: 10,
+      listener: function() {
+        
+      }
+    } );
+
     var magnifyingCheckBoxGroup = new VerticalCheckBoxGroup( [
       { content: new Text( magnifyingString, OptionFont ), property: model.showMagnifyingGlassProperty, label: magnifyingString },
     ], { boxWidth: 15, spacing: 5 } );
@@ -36,6 +58,8 @@ define( function( require ) {
     var viewTopChartVBox = new VBox( {
       children: [
         potentialWellComboBox,
+        configurePotentialButton,
+        superpositionStateButton,
         new HBox( { children: [ new HStrut( 10 ), magnifyingCheckBoxGroup, new HStrut( 15 ) ] } )
       ],
       align: 'left'
@@ -43,7 +67,7 @@ define( function( require ) {
     var viewTopChartPanel = new Panel( viewTopChartVBox,
     {
       xMargin: 5,
-      fill: 'rgb( 0, 0, 0 )',
+      fill: 'rgb( 128, 128, 128 )',
       top: 5
     } );
     this.addChild( viewTopChartPanel );
