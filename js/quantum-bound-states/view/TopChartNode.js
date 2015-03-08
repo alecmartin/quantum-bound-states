@@ -15,26 +15,21 @@ define( function( require ) {
   var VerticalCheckBoxGroup = require( 'SUN/VerticalCheckBoxGroup' );
   var VBox = require( 'SCENERY/nodes/VBox' );
   var TextPushButton = require( 'SUN/buttons/TextPushButton' );
-
-
-
   
   function TopChartNode( model, options ) {
     Node.call( this, options );
 
     // Strings and other variables
-    var OptionFont = {font: new PhetFont( 12 ), fill: "White"};
+    var optionFont = {font: new PhetFont( 12 ), fill: "White"};
     var magnifyingString = require( 'string!QUANTUM_BOUND_STATES/top-chart-show-magnifying-glass' );
     var potentialWellString = require( 'string!QUANTUM_BOUND_STATES/top-chart-configure-potential-well' );
     var superpositionStateString = require( 'string!QUANTUM_BOUND_STATES/top-chart-superposition-state' );
 
-
-    // Add the control panel that will allow users to control the visibility
-    // of the plate charges and electric field lines
-    var potentialWellComboBox = new PotentialComboBox( model, this);
-    // 
+    var parent = new Node();
+    var potentialWellComboBox = new PotentialComboBox( model, parent );
+    
     var configurePotentialButton = new TextPushButton( potentialWellString, {
-      font: OptionFont,
+      font: optionFont,
       baseColor: 'white',
       xMargin: 10,
       width: 75,
@@ -45,7 +40,7 @@ define( function( require ) {
     } );
 
     var superpositionStateButton = new TextPushButton( superpositionStateString, {
-      font: OptionFont,
+      font: optionFont,
       baseColor: 'white',
       xMargin: 10,
       width: 75,
@@ -55,9 +50,9 @@ define( function( require ) {
     } );
 
     var magnifyingCheckBoxGroup = new VerticalCheckBoxGroup( [
-      { content: new Text( magnifyingString, OptionFont ), property: model.showMagnifyingGlassProperty, label: magnifyingString },
+      { content: new Text( magnifyingString, optionFont ), property: model.showMagnifyingGlassProperty, label: magnifyingString },
     ], { boxWidth: 30, spacing: 5 } );
-    // var titleToControlsVerticalSpace = 7;
+    
     var viewTopChartVBox = new VBox( {
       children: [        
         new HBox( { children: [ new HStrut( 10 ), potentialWellComboBox, new HStrut( 15 ) ] } ),
@@ -73,12 +68,12 @@ define( function( require ) {
       fill: 'rgb( 128, 128, 128 )',
       top: 5
     } );
+    
     this.addChild( viewTopChartPanel );
-
-
-
+    
+    this.addChild( parent );
   }
-  return inherit( Node, TopChartNode);
+  return inherit( Node, TopChartNode );
 
 
 } );

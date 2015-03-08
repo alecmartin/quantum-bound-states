@@ -22,14 +22,18 @@ define( function( require ) {
     
     // images
     var squareImage = require( 'image!QUANTUM_BOUND_STATES/SquareIcon.png' );
+    var asymImage = require( 'image!QUANTUM_BOUND_STATES/AsymIcon.png' );
+    var coulombImage = require( 'image!QUANTUM_BOUND_STATES/CoulombIcon.png' );
+    var harmonicImage = require( 'image!QUANTUM_BOUND_STATES/HarmonicIcon.png' );
     
     var potentialNames = [squareString, asymString, coulomb1DString, coulomb3DString, harmonicString];
+    var images = [squareImage, asymImage, coulombImage, coulombImage, harmonicImage];
     
-    function createItem( i, potential ) {
+    function createItem( i ) {
       var name = potentialNames[i];
       var node = new Node();
       var text = new Text( name, {font: new PhetFont(16) });
-      var icon = new Image( squareImage, {left: text.right + 3, top: text.top, scale: .25});
+      var icon = new Image( images[i], {left: text.right + 7, top: text.top, scale: .25});
       node.addChild( text );
       node.addChild( icon );
       return ComboBox.createItem( node, i );
@@ -38,13 +42,12 @@ define( function( require ) {
     // items
     var items = [];
     for ( var i = 0; i < model.potentials.length; i++ ) {
-      var potential = model.potentials[ i ];
-      items[ i ] = createItem( i, potential );
+      items[ i ] = createItem( i );
     }
     
     ComboBox.call( this, items, model.potentialTypeProperty, parent, {
       listPosition: 'below',
-      itemYMargin: 12,
+      itemYMargin: 5,
       itemHighlightFill: 'rgb(218,255,255)'
     } );
   }

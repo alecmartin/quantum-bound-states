@@ -31,6 +31,12 @@ define( function( require ) {
   
   return inherit( Object, AsymmetricPotential, {
     
+    reset: function( ) {
+      this.wellOffset.reset();
+      this.wellWidth.reset();
+      this.wellHeight.reset();
+    },
+    
     /**
     * Get the value of the potential well at a point x
     * @param {double} x: distance from center of well in nanometers

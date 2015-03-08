@@ -34,10 +34,10 @@ define( function( require ) {
       currentEigenstate: 0,
       hoveredEigenstate: -1,
       currentEnergy: 0,
-      currentPotential: null,
+      //currentPotential: null,
       potentialType: 0,
-      eigenvals: null,
-      superpositionCoefficients: null,
+      //eigenvals: null,
+      //superpositionCoefficients: null,
       
       showMagnifyingGlass: false,
       showProbDensity: true,
@@ -54,11 +54,11 @@ define( function( require ) {
     var oscillatorWell = new HarmonicOscillatorPotential( this, 0.0, 1.0 );
     this.potentials = [squareWell, asymWell, coulomb1D, coulomb3D, oscillatorWell];
     
-    this.currentPotentialProperty.value = squareWell;
-    this.eigenvalsProperty.value = squareWell.getEigenvalues();
+    this.addProperty("currentPotential", squareWell);
+    this.addProperty("eigenvals", squareWell.getEigenvalues());
     
     var coefficients = new SuperpositionCoefficients( this );
-    this.superpositionCoefficientsProperty.value = coefficients;
+    this.addProperty("superpositionCoefficients", coefficients);
     
     var thisNode = this;
     this.potentialTypeProperty.link( function() {
