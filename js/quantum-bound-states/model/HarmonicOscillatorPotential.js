@@ -56,7 +56,7 @@ define( function( require ) {
     */
     potentialValue: function( x ) {
       x = x * 1E-9;
-      w = this.frequencyProperty * 1E15;
+      var w = this.frequencyProperty.value * 1E15;
       return (1 / 2 * this.model.particleMassProperty.value * Math.pow(w * x, 2)) / constants.eVToJ + this.wellOffsetProperty;
     },
     
@@ -64,7 +64,7 @@ define( function( require ) {
      * Get the energy of the nth energy level, in eV
      */
     getNthEigenvalue: function( n ) {
-      w = this.frequencyProperty * 1E15;
+      var w = this.frequencyProperty.value * 1E15;
       return (constants.hbar * w * (n + 1 / 2)) / constants.eVToJ + this.wellOffsetProperty;
     },
     
