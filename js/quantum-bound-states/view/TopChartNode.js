@@ -30,11 +30,14 @@ define( function( require ) {
     var parent = new Node();
     var potentialWellComboBox = new PotentialComboBox( model, parent );
     
+    //boxwidth
+    var boxwidth = 280;
+
     var configurePotentialButton = new TextPushButton( configpotentialWellString, {
       font: optionFont,
       baseColor: 'lightgrey',
       xMargin: 10,
-      width: 75,
+      minWidth: 100,
       scale: 1.5,
       listener: function() {
         
@@ -45,7 +48,7 @@ define( function( require ) {
       font: optionFont,
       baseColor: 'lightgrey',
       xMargin: 10,
-      width: 75,
+      minWidth: 100,
       scale: 1.5,
       listener: function() {
         
@@ -57,9 +60,9 @@ define( function( require ) {
     ], { boxWidth: 20, spacing: 5, fill: 'black', checkBoxColor: 'white'} );
     
     var viewTopChartVBox = new VBox( {
-      children: [ 
+      children: [
+        new HBox( { children: [ new HStrut( boxwidth ) ] } ),
         new HBox( { children: [ new HStrut( 10 ), new VStrut( 10 ), new Text( potentialWellString, optionFont ), new HStrut( 15 ) ] } ), 
-        
         new VStrut( 10 ),
         new HBox( { children: [ new HStrut( 10 ), new VStrut( 10 ),potentialWellComboBox, new HStrut( 15 ) ] } ),
         new VStrut( 10 ),
