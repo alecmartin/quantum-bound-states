@@ -11,8 +11,11 @@ define( function( require ) {
   var inherit = require( 'PHET_CORE/inherit' );
   var Node = require( 'SCENERY/nodes/Node' );
   var Path = require( 'SCENERY/nodes/Path' );
-  var Shape = require( 'KITE/Shape' );
+  var QuantumBoundStatesConstants = require( 'QUANTUM_BOUND_STATES/quantum-bound-states/model/QuantumBoundStatesConstants' );
   var Rectangle = require( 'SCENERY/nodes/Rectangle' );
+  var Shape = require( 'KITE/Shape' );
+  
+  var constants = new QuantumBoundStatesConstants();
 
 
   function PotentialWellNode( model, width, height, options ) {
@@ -21,6 +24,8 @@ define( function( require ) {
     
     var potential = model.currentPotentialProperty.value;
     var maxEnergy = model.getMaxEnergy();
+    var mass = model.particleMassProperty.value;
+    var eVToJ = constants.eVToJ;
     var xScale = width / (model.maxX - model.minX);
     var yScale = height / (maxEnergy - model.getMinEnergy());
     var offset = potential.wellOffset.value;

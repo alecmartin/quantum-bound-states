@@ -18,9 +18,9 @@ define( function( require ) {
   * @constructor
   */
   function AsymmetricPotential( model, wellOffset, wellWidth, wellHeight ) {
-    this.wellOffset = new Property( wellOffset );
-    this.wellWidth = new Property( wellWidth );
-    this.wellHeight = new Property( wellHeight );
+    this.wellOffsetProperty = new Property( wellOffset );
+    this.wellWidthProperty = new Property( wellWidth );
+    this.wellHeightProperty = new Property( wellHeight );
     this.model = model;
     this.minEnergy = -5; // eV
     this.maxEnergy = 15; // eV
@@ -32,9 +32,9 @@ define( function( require ) {
   return inherit( Object, AsymmetricPotential, {
     
     reset: function( ) {
-      this.wellOffset.reset();
-      this.wellWidth.reset();
-      this.wellHeight.reset();
+      this.wellOffsetProperty.reset();
+      this.wellWidthProperty.reset();
+      this.wellHeightProperty.reset();
     },
     
     /**
@@ -42,11 +42,11 @@ define( function( require ) {
     * @param {double} x: distance from center of well in nanometers
     */
     potentialValue: function( x ) {
-      if ( Math.abs(x) < this.wellWidth / 2 ) {
-        return this.wellHeight / this.wellWidth * x + this.wellOffset + this.wellHeight / 2;
+      if ( Math.abs(x) < this.wellWidthProperty / 2 ) {
+        return this.wellHeightProperty / this.wellWidthProperty * x + this.wellOffsetProperty + this.wellHeightProperty / 2;
       }
       else {
-        return this.wellOffset + this.wellHeight;
+        return this.wellOffsetProperty + this.wellHeightProperty;
       }
     },
     
@@ -68,7 +68,7 @@ define( function( require ) {
         }
         var n = this.groundState;
         var energy = 0;
-        while ( energy <= this.wellHeight.value + this.wellOffset.value ) {
+        while ( energy <= this.wellHeightProperty.value + this.wellOffsetProperty.value ) {
           energy = this.getNthEigenvalue(n);
           this.eigenvals.push( energy );
           n++;

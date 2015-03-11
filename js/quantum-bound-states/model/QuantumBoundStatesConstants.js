@@ -18,6 +18,7 @@ define( function( require ) {
     this.electronMass = 9.10938E-31; //kg
     this.epsilon = 8.85419E-12; // F/m
     this.hbar = 1.05457E-34; // m^2 kg/s
+    this.eVToJ = 1.602176565E-19; // j/eV
   }
   
   return inherit( Object, QuantumBoundStatesConstants);

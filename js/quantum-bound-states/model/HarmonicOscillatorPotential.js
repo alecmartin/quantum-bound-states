@@ -22,8 +22,8 @@ define( function( require ) {
   */
   function HarmonicOscillatorPotential( model, wellOffset, frequency ) {
     this.model = model;
-    this.wellOffset = new Property( wellOffset );
-    this.frequency = new Property( frequency );
+    this.wellOffsetProperty = new Property( wellOffset );
+    this.frequencyProperty = new Property( frequency );
     this.minEnergy = -5; // eV
     this.maxEnergy = 15; // eV
     this.groundState = 0;
@@ -34,11 +34,11 @@ define( function( require ) {
     this.solver = new EigenstateSolver( this.model );
     var thisNode = this;
     
-    this.wellOffset.link( function() {
+    this.wellOffsetProperty.link( function() {
       thisNode.redrawEigenstates = true;
     });
     
-    this.frequency.link( function() {
+    this.frequencyProperty.link( function() {
       thisNode.redrawEigenstates = true;
     });
   }
@@ -46,23 +46,26 @@ define( function( require ) {
   return inherit( Object, HarmonicOscillatorPotential, {
     
     reset: function( ) {
-      this.wellOffset.reset();
-      this.frequency.reset();
+      this.wellOffsetProperty.reset();
+      this.frequencyProperty.reset();
     },
     
     /**
-    * Get the value of the potential well at a point x
+    * Get the value of the potential well at a point x, in eV
     * @param {double} x: distance from center of well in nanometers
     */
     potentialValue: function( x ) {
-      return 1 / 2 * this.model.particleMassProperty.value * Math.pow(this.frequency * x, 2) + this.wellOffset;
+      x = x * 1E-9;
+      w = this.frequencyProperty * 1E15;
+      return (1 / 2 * this.model.particleMassProperty.value * Math.pow(w * x, 2)) / constants.eVToJ + this.wellOffsetProperty;
     },
     
     /**
-     * Get the energy of the nth energy level
+     * Get the energy of the nth energy level, in eV
      */
     getNthEigenvalue: function( n ) {
-      return constants.hbar * this.frequency * (n + 1 / 2) + this.wellOffset;
+      w = this.frequencyProperty * 1E15;
+      return (constants.hbar * w * (n + 1 / 2)) / constants.eVToJ + this.wellOffsetProperty;
     },
     
     /**
