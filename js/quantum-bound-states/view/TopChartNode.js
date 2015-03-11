@@ -11,6 +11,7 @@ define( function( require ) {
   var PotentialComboBox = require( 'QUANTUM_BOUND_STATES/quantum-bound-states/view/PotentialComboBox' );
   var HBox = require( 'SCENERY/nodes/HBox' );
   var HStrut = require( 'SUN/HStrut' );
+  var VStrut = require( 'SUN/VStrut' );
   var Panel = require( 'SUN/Panel' );
   var VerticalCheckBoxGroup = require( 'SUN/VerticalCheckBoxGroup' );
   var VBox = require( 'SCENERY/nodes/VBox' );
@@ -20,20 +21,21 @@ define( function( require ) {
     Node.call( this, options );
 
     // Strings and other variables
-    var optionFont = {font: new PhetFont( 12 ), fill: "White"};
+    var optionFont = {font: new PhetFont( 16 ), fill: "palegoldenrod"};
+    var potentialWellString = require( 'string!QUANTUM_BOUND_STATES/potential-well' );
     var magnifyingString = require( 'string!QUANTUM_BOUND_STATES/top-chart-show-magnifying-glass' );
-    var potentialWellString = require( 'string!QUANTUM_BOUND_STATES/top-chart-configure-potential-well' );
+    var configpotentialWellString = require( 'string!QUANTUM_BOUND_STATES/top-chart-configure-potential-well' );
     var superpositionStateString = require( 'string!QUANTUM_BOUND_STATES/top-chart-superposition-state' );
 
     var parent = new Node();
     var potentialWellComboBox = new PotentialComboBox( model, parent );
     
-    var configurePotentialButton = new TextPushButton( potentialWellString, {
+    var configurePotentialButton = new TextPushButton( configpotentialWellString, {
       font: optionFont,
-      baseColor: 'white',
+      baseColor: 'lightgrey',
       xMargin: 10,
       width: 75,
-      height: 75,
+      scale: 1.5,
       listener: function() {
         
       }
@@ -41,9 +43,10 @@ define( function( require ) {
 
     var superpositionStateButton = new TextPushButton( superpositionStateString, {
       font: optionFont,
-      baseColor: 'white',
+      baseColor: 'lightgrey',
       xMargin: 10,
       width: 75,
+      scale: 1.5,
       listener: function() {
         
       }
@@ -51,21 +54,29 @@ define( function( require ) {
 
     var magnifyingCheckBoxGroup = new VerticalCheckBoxGroup( [
       { content: new Text( magnifyingString, optionFont ), property: model.showMagnifyingGlassProperty, label: magnifyingString },
-    ], { boxWidth: 30, spacing: 5 } );
+    ], { boxWidth: 20, spacing: 5, fill: 'black', checkBoxColor: 'white'} );
     
     var viewTopChartVBox = new VBox( {
-      children: [        
-        new HBox( { children: [ new HStrut( 10 ), potentialWellComboBox, new HStrut( 15 ) ] } ),
-        new HBox( { children: [ new HStrut( 10 ), configurePotentialButton, new HStrut( 15 ) ] } ),
-        new HBox( { children: [ new HStrut( 10 ), superpositionStateButton, new HStrut( 15 ) ] } ),
-        new HBox( { children: [ new HStrut( 10 ), magnifyingCheckBoxGroup, new HStrut( 15 ) ] } )
+      children: [ 
+        new HBox( { children: [ new HStrut( 10 ), new VStrut( 10 ), new Text( potentialWellString, optionFont ), new HStrut( 15 ) ] } ), 
+        
+        new VStrut( 10 ),
+        new HBox( { children: [ new HStrut( 10 ), new VStrut( 10 ),potentialWellComboBox, new HStrut( 15 ) ] } ),
+        new VStrut( 10 ),
+        new HBox( { children: [ new HStrut( 10 ), new VStrut( 10 ),configurePotentialButton, new HStrut( 15 ) ] } ),
+        new VStrut( 10 ),
+        new HBox( { children: [ new HStrut( 10 ), new VStrut( 10 ),superpositionStateButton, new HStrut( 15 ) ] } ),
+        new VStrut( 10 ),
+        new HBox( { children: [ new HStrut( 10 ), new VStrut( 10 ),magnifyingCheckBoxGroup, new HStrut( 15 ) ] } ),
+        new VStrut( 10 ),
       ],
       align: 'left'
     } );
     var viewTopChartPanel = new Panel( viewTopChartVBox,
     {
-      xMargin: 5,
-      fill: 'rgb( 128, 128, 128 )',
+      fill: 'black',
+      stroke: 'white',
+      lineWidth: 2,
       top: 5
     } );
     

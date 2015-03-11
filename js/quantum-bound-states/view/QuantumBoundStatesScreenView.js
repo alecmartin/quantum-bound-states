@@ -14,6 +14,7 @@ define( function( require ) {
   var EnergyPlotNode = require( 'QUANTUM_BOUND_STATES/quantum-bound-states/view/EnergyPlotNode' );
   var BottomPlotNode = require( 'QUANTUM_BOUND_STATES/quantum-bound-states/view/BottomPlotNode' );
   var TopChartNode = require( 'QUANTUM_BOUND_STATES/quantum-bound-states/view/TopChartNode' );
+  var BottomChartNode = require( 'QUANTUM_BOUND_STATES/quantum-bound-states/view/BottomChartNode' );
 
   /**
    * @param {QuantumBoundStatesModel} quantumBoundStatesModel
@@ -36,10 +37,18 @@ define( function( require ) {
     this.addChild( bottomPlotNode );
 
     var topChartNode = new TopChartNode( quantumBoundStatesModel, {
-      x: 650,
+      x: this.layoutBounds.maxX - 200,
       y: 50,
+
     });
     this.addChild( topChartNode );
+
+    var bottomChartNode = new BottomChartNode( quantumBoundStatesModel, {
+      x: this.layoutBounds.maxX - 200,
+      y: 480,
+
+    });
+    this.addChild( bottomChartNode );
 
     // Create and add the Reset All Button in the bottom right, which resets the model
     var resetAllButton = new ResetAllButton( {

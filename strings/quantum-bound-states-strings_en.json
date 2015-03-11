@@ -8,8 +8,10 @@
   "bottom-plot-wf-title": "Wave Function",
 
   "top-chart-configure-potential-well": "Configure Potential...",
-  "top-chart-superposition-state": "Configure Superposition State...",
-  "top-chart-show-magnifying-glass": "Show Magnifying Glass (10x)",
+  "top-chart-superposition-state": "Superposition State...",
+  "top-chart-show-magnifying-glass": "Magnifying Glass",
+
+  "bottom-chart-particle-mass" : "Particle Mass",
 
   "potential-well": "Potential Well",
   "square": "Square",
