@@ -19,7 +19,7 @@ define( function( require ) {
   * @constructor
   */
   function Coulomb1DPotential( model, wellOffset ) {
-    this.wellOffset = new Property( wellOffset );
+    this.wellOffsetProperty = new Property( wellOffset );
     this.model = model;
     this.minEnergy = -15; // eV
     this.maxEnergy = 5; // eV
@@ -31,16 +31,16 @@ define( function( require ) {
   return inherit( Object, Coulomb1DPotential, {
     
     reset: function( ) {
-      this.wellOffset.reset();
+      this.wellOffsetProperty.reset();
     },
     
     /**
-    * Get the value of the potential well at a point x
+    * Get the value of the potential well at a point x, in eV
     * @param {double} x: distance from center of well in nanometers
     */
     potentialValue: function( x ) {
       var k = 1 / (4 * Math.PI * constants.epsilon);
-      return -k * constants.electronCharge * constants.electronCharge / Math.abs(x) + this.wellOffset;
+      return (-k * constants.electronCharge * constants.electronCharge / Math.abs(x)) / constants.eVToJ + this.wellOffsetProperty;
     },
     
     /**
@@ -51,7 +51,7 @@ define( function( require ) {
       var e = constants.electronCharge;
       var hbar = constants.hbar;
       var e0 = constants.epsilon;
-      return -m * Math.pow(e, 4) / (2 * Math.pow(n * hbar * 4 * Math.PI * e0, 2)) + this.wellOffset;
+      return (-m * Math.pow(e, 4) / (2 * Math.pow(n * hbar * 4 * Math.PI * e0, 2))) / constants.eVToJ + this.wellOffsetProperty;
     },
     
     /**

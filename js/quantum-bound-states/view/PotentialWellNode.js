@@ -11,8 +11,11 @@ define( function( require ) {
   var inherit = require( 'PHET_CORE/inherit' );
   var Node = require( 'SCENERY/nodes/Node' );
   var Path = require( 'SCENERY/nodes/Path' );
-  var Shape = require( 'KITE/Shape' );
+  var QuantumBoundStatesConstants = require( 'QUANTUM_BOUND_STATES/quantum-bound-states/model/QuantumBoundStatesConstants' );
   var Rectangle = require( 'SCENERY/nodes/Rectangle' );
+  var Shape = require( 'KITE/Shape' );
+  
+  var constants = new QuantumBoundStatesConstants();
 
 
   function PotentialWellNode( model, width, height, options ) {
@@ -21,16 +24,18 @@ define( function( require ) {
     
     var potential = model.currentPotentialProperty.value;
     var maxEnergy = model.getMaxEnergy();
+    var mass = model.particleMassProperty.value;
+    var eVToJ = constants.eVToJ;
     var xScale = width / (model.maxX - model.minX);
     var yScale = height / (maxEnergy - model.getMinEnergy());
-    var offset = potential.wellOffset.value;
+    var offset = potential.wellOffsetProperty.value;
     var wellShape;
 
     var drawWell = function() {
       switch (model.potentialTypeProperty.value) {
         case 0: // Square well
-          var wellWidth = potential.wellWidth.value;
-          var wellHeight = potential.wellHeight.value;
+          var wellWidth = potential.wellWidthProperty.value;
+          var wellHeight = potential.wellHeightProperty.value;
           wellShape = new Shape().
             moveTo( 0, (maxEnergy - (wellHeight + offset)) * yScale ).
             horizontalLineTo( (model.maxX - wellWidth / 2) * xScale ).
@@ -40,8 +45,8 @@ define( function( require ) {
             horizontalLineTo( (model.maxX - model.minX) * xScale );
           break;
         case 1: // Asymmetric well
-          var wellWidth = potential.wellWidth.value;
-          var wellHeight = potential.wellHeight.value;
+          var wellWidth = potential.wellWidthProperty.value;
+          var wellHeight = potential.wellHeightProperty.value;
           wellShape = new Shape().
             moveTo( 0, (maxEnergy - (wellHeight + offset)) * yScale ).
             horizontalLineTo( (model.maxX - wellWidth / 2) * xScale ).
@@ -53,7 +58,7 @@ define( function( require ) {
         case 3: // 3D Coulomb
           break;
         case 4: // Harmonic oscillator
-          var frequency = potential.frequency.value;
+          var frequency = potential.frequencyProperty.value;
           break;
       }
     };
