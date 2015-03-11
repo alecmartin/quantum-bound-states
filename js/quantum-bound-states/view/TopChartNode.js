@@ -31,7 +31,7 @@ define( function( require ) {
     var potentialWellComboBox = new PotentialComboBox( model, parent );
     
     //boxwidth
-    var boxwidth = 280;
+    var boxwidth = 240;
 
     var configurePotentialButton = new TextPushButton( configpotentialWellString, {
       font: optionFont,

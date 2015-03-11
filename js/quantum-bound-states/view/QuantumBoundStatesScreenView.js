@@ -37,14 +37,14 @@ define( function( require ) {
     this.addChild( bottomPlotNode );
 
     var topChartNode = new TopChartNode( quantumBoundStatesModel, {
-      x: this.layoutBounds.maxX - 280,
+      x: this.layoutBounds.maxX - 240,
       y: 50,
 
     });
     this.addChild( topChartNode );
 
     var bottomChartNode = new BottomChartNode( quantumBoundStatesModel, {
-      x: this.layoutBounds.maxX - 280,
+      x: this.layoutBounds.maxX - 240,
       y: 480,
 
     });

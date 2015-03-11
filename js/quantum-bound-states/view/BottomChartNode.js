@@ -28,7 +28,7 @@ define( function( require ) {
     var particleMassString = require( 'string!QUANTUM_BOUND_STATES/bottom-chart-particle-mass' );
 
     //boxwidth
-    var boxwidth = 280;
+    var boxwidth = 240;
     var sliderpadding = 40;
 
     var parent = new Node();
