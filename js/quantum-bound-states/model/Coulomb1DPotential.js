@@ -9,6 +9,7 @@ define( function( require ) {
   
   // modules
   var inherit = require( 'PHET_CORE/inherit' );
+  var PotentialWell = require( 'QUANTUM_BOUND_STATES/quantum-bound-states/model/PotentialWell' );
   var Property = require( 'AXON/Property' );
   var QuantumBoundStatesConstants = require( 'QUANTUM_BOUND_STATES/quantum-bound-states/model/QuantumBoundStatesConstants' );
   
@@ -19,6 +20,8 @@ define( function( require ) {
   * @constructor
   */
   function Coulomb1DPotential( model, wellOffset ) {
+    PotentialWell.call( this, model );
+    
     this.wellOffsetProperty = new Property( wellOffset );
     this.model = model;
     this.minEnergy = -15; // eV
@@ -28,30 +31,31 @@ define( function( require ) {
     this.redrawEigenstates = false;
   }
   
-  return inherit( Object, Coulomb1DPotential, {
+  return inherit( PotentialWell, Coulomb1DPotential, {
     
     reset: function( ) {
       this.wellOffsetProperty.reset();
     },
     
     /**
-    * Get the value of the potential well at a point x, in eV
+    * Get the value of the potential well at a point x, in J
     * @param {double} x: distance from center of well in nanometers
     */
     potentialValue: function( x ) {
       var k = 1 / (4 * Math.PI * constants.epsilon);
-      return (-k * constants.electronCharge * constants.electronCharge / Math.abs(x)) / constants.eVToJ + this.wellOffsetProperty;
+      x *= 1E-9;
+      return -k * constants.electronCharge * constants.electronCharge / Math.abs(x) + this.wellOffsetProperty * constants.eVToJ;
     },
     
     /**
-     * Get the energy of the nth energy level
+     * Get the energy of the nth energy level, in J
      */
     getNthEigenvalue: function( n ) {
       var m = this.model.particleMassProperty.value;
       var e = constants.electronCharge;
       var hbar = constants.hbar;
       var e0 = constants.epsilon;
-      return (-m * Math.pow(e, 4) / (2 * Math.pow(n * hbar * 4 * Math.PI * e0, 2))) / constants.eVToJ + this.wellOffsetProperty;
+      return -m * Math.pow(e, 4) / (2 * Math.pow(n * hbar * 4 * Math.PI * e0, 2)) + this.wellOffsetProperty * constants.eVToJ;
     },
     
     /**
@@ -73,16 +77,6 @@ define( function( require ) {
       }
       this.redrawEigenstates = false;
       return this.eigenvals;
-    },
-    
-    /**
-     * Get the number of eigenstates available
-     */
-    getNumberOfEigenstates: function() {
-      if ( this.eigenvals.length === 0 ) {
-        this.getEigenvalues();
-      }
-      return this.eigenvals.length;
     },
   } );
 } );

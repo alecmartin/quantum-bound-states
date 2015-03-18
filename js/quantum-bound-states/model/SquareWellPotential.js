@@ -10,6 +10,7 @@ define( function( require ) {
   // modules
   var inherit = require( 'PHET_CORE/inherit' );
   var Property = require( 'AXON/Property' );
+  var PotentialWell = require( 'QUANTUM_BOUND_STATES/quantum-bound-states/model/PotentialWell' );
   
   /**
   * @param {double} wellOffset
@@ -18,6 +19,8 @@ define( function( require ) {
   * @constructor
   */
   function SquareWellPotential( model, wellOffset, wellWidth, wellHeight ) {
+    PotentialWell.call( this, model );
+    
     this.wellOffsetProperty = new Property( wellOffset );
     this.wellWidthProperty = new Property( wellWidth );
     this.wellHeightProperty = new Property( wellHeight );
@@ -29,7 +32,7 @@ define( function( require ) {
     this.redrawEigenstates = false;
   }
   
-  return inherit( Object, SquareWellPotential, {
+  return inherit( PotentialWell, SquareWellPotential, {
     
     reset: function( ) {
       this.wellOffsetProperty.reset();
@@ -38,15 +41,15 @@ define( function( require ) {
     },
     
     /**
-    * Get the value of the potential well at a point x
+    * Get the value of the potential well at a point x, in J
     * @param {double} x: distance from center of well in nanometers
     */
     potentialValue: function( x ) {
       if ( Math.abs(x) < this.wellWidthProperty / 2 ) {
-        return this.wellOffsetProperty;
+        return this.wellOffsetProperty * constants.eVToJ;
       }
       else {
-        return this.wellOffsetProperty + this.wellHeightProperty;
+        return (this.wellOffsetProperty + this.wellHeightProperty) * constants.eVToJ;
       }
     },
     
@@ -76,16 +79,6 @@ define( function( require ) {
       }
       this.redrawEigenstates = false;
       return this.eigenvals;
-    },
-    
-    /**
-     * Get the number of eigenstates available
-     */
-    getNumberOfEigenstates: function() {
-      if ( this.eigenvals.length === 0 ) {
-        this.getEigenvalues();
-      }
-      return this.eigenvals.length;
     },
   } );
 } );

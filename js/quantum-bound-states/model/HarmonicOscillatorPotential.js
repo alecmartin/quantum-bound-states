@@ -9,6 +9,7 @@ define( function( require ) {
   
   // modules
   var inherit = require( 'PHET_CORE/inherit' );
+  var PotentialWell = require( 'QUANTUM_BOUND_STATES/quantum-bound-states/model/PotentialWell' );
   var Property = require( 'AXON/Property' );
   var QuantumBoundStatesConstants = require( 'QUANTUM_BOUND_STATES/quantum-bound-states/model/QuantumBoundStatesConstants' );
   var EigenstateSolver = require( 'QUANTUM_BOUND_STATES/quantum-bound-states/model/EigenstateSolver' );
@@ -21,6 +22,8 @@ define( function( require ) {
   * @constructor
   */
   function HarmonicOscillatorPotential( model, wellOffset, frequency ) {
+    PotentialWell.call( this, model );
+    
     this.model = model;
     this.wellOffsetProperty = new Property( wellOffset );
     this.frequencyProperty = new Property( frequency );
@@ -29,9 +32,7 @@ define( function( require ) {
     this.groundState = 0;
     this.eigenvals = []; // array of eigenstate energies
     this.redrawEigenstates = false;
-    this.eigenstates = new Array(this.getNumberOfEigenstates()); // array of (x, y) points that describe the eigenstate functions
     
-    this.solver = new EigenstateSolver( this.model );
     var thisNode = this;
     
     this.wellOffsetProperty.link( function() {
@@ -43,7 +44,7 @@ define( function( require ) {
     });
   }
   
-  return inherit( Object, HarmonicOscillatorPotential, {
+  return inherit( PotentialWell, HarmonicOscillatorPotential, {
     
     reset: function( ) {
       this.wellOffsetProperty.reset();
@@ -51,21 +52,21 @@ define( function( require ) {
     },
     
     /**
-    * Get the value of the potential well at a point x, in eV
+    * Get the value of the potential well at a point x, in J
     * @param {double} x: distance from center of well in nanometers
     */
     potentialValue: function( x ) {
-      x = x * 1E-9;
+      x *= 1E-9;
       var w = this.frequencyProperty.value * 1E15;
-      return (1 / 2 * this.model.particleMassProperty.value * Math.pow(w * x, 2)) / constants.eVToJ + this.wellOffsetProperty;
+      return 1 / 2 * this.model.particleMassProperty.value * Math.pow(w * x, 2) + this.wellOffsetProperty * constants.eVToJ;
     },
     
     /**
-     * Get the energy of the nth energy level, in eV
+     * Get the energy of the nth energy level, in J
      */
     getNthEigenvalue: function( n ) {
       var w = this.frequencyProperty.value * 1E15;
-      return (constants.hbar * w * (n + 1 / 2)) / constants.eVToJ + this.wellOffsetProperty;
+      return constants.hbar * w * (n + 1 / 2) + this.wellOffsetProperty * constants.eVToJ;
     },
     
     /**
@@ -79,7 +80,7 @@ define( function( require ) {
         }
         var n = this.groundState;
         var energy = 0;
-        while ( energy <= this.maxEnergy ) {
+        while ( energy <= this.maxEnergy * constants.eVToJ ) {
           energy = this.getNthEigenvalue(n);
           this.eigenvals.push( energy );
           n++;
@@ -88,19 +89,5 @@ define( function( require ) {
       this.redrawEigenstates = false;
       return this.eigenvals;
     },
-    
-    /**
-     * Get the number of eigenstates available
-     */
-    getNumberOfEigenstates: function() {
-      if ( this.eigenvals.length === 0 ) {
-        this.getEigenvalues();
-      }
-      return this.eigenvals.length;
-    },
-    
-    /**
-     * Get the array of (x, y) points representing the nth eigenstate equation
-     */
   } );
 } );

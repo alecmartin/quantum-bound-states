@@ -17,70 +17,240 @@ define( function( require ) {
   var constants = new QuantumBoundStatesConstants();
   var FastArray = dot.FastArray;
   
+  function EnergyTester( nodes, derivative ) {
+    this.nodes = nodes;
+    this.derivative = derivative;
+  }
+  
+  inherit( Object, EnergyTester, {
+    isUpper: function( nodes ) {
+      return (this.nodes > nodes || (this.nodes === nodes && this.derivative < 0.0));
+    }
+  });
+  
   /**
-  * @constructor
+  * @constructor for the eigenstate solver
+  * @param n the number of points to produce in a wavefunction
   */
-  function EigenstateSolver( model ) {
-    this.model = model;  
+  function EigenstateSolver( model, n, potential ) {
+    this.model = model;
+    this.n = n;
+    this.small = 1.0E-10;
+    this.maxTries = 100;
+    this.hb = constants.hbar * constants.hbar / (2 * model.particleMassProperty.value);
+    this.potential = potential;
+    this.potentialPoints = potential.getPotentialPoints( n );
+    
+    var thisNode = this;
+    
+    model.particleMassProperty.link( function () {
+      thisNode.hb = constants.hbar * constants.hbar / (2 * model.particleMassProperty.value);
+    })
   }
   
   return inherit( Object, EigenstateSolver, {
     
     /**
-     * Runge Kutta solver for eigenstate functions at t=0
-     * @param potentialValue: function that returns the value of the potential at any point x
-     * @param n: number of points to produce
-     * @param psi_o: initial vector [psi, psi']
-     * For even functions, assume psi(x=0)=1, psi'(0)=0
-     * For odd functions, assume psi(0)=0, psi'(0)=1
-     * Normalize later
-     * @energy: energy of the eigenstate
+     * Integrate the wavefunction for a guessed value of energy
      */
-    getEigenstate: function( potentialValue, n, psi_o, energy ) {
-      var eigen = new FastArray( n );
-      var psi = psi_o;
-      var x = this.model.minX;
-      var delta = (this.model.maxX - this.model.minX) / (n - 1);
-      for (var i = 0; i < n; i++) {
-        eigen[ i ] = new Vector2( x, psi[0] );
-        x += delta;
-        psi = this.step( potentialValue, delta, x, psi, energy );
+    testEnergy: function( energy ) {
+      var n = this.n;
+      var hbInverse = 1 / this.hb;
+      var matchPoint = n * 0.53;
+      var dx = (this.model.maxX - this.model.minX) / (n - 1);
+      var h12 = dx * dx / 12;
+      
+      // initial and final boundary conditions
+      var u1 = 0.0;
+      var u2 = 0.0;
+      var u3 = dx;
+      var u1Final = 0.0;
+      var u2Final = dx;
+      var nodes = 0;
+      var v1 = 0.0;
+      var v2 = 0.0;
+      var v3 = hbInverse * (this.potentialPoints[1] - energy);
+      
+      for (var i = 2; i <= matchPoint + 1; i++) {
+        u1 = u2;
+        u2 = u3;
+        v1 = v2;
+        v2 = v3;
+        v3 = hbInverse * (this.potentialPoints[i] - energy);
+        u3 = (u2 * (2 + 10 * h12 * v2) - u1 * (1 - h12 * v1)) / (1 - h12 * v3);
+        if ( i <= matchPoint && ((u3 < 0 && u2 > 0) || (u3 > 0 && u2 < 0))) {
+          nodes++;
+        }
       }
-      return eigen;
+      
+      var approximateDerivative = (u3 - u1) / (2 * dx * u2);
+      u2 = u1Final;
+      u3 = u2Final;
+      v2 = 0.0;
+      v3 = hbInverse * (this.potentialPoints[n - 2] - energy);
+      
+      for (var j = n - 3; j >= matchPoint - 1; j--) {
+        u1 = u2;
+        u2 = u3;
+        v1 = v2;
+        v2 = v3;
+        v3 = hbInverse * (this.potentialPoints[j] - energy);
+        u3 = (u2 * (2 + 10 * h12 * v2) - u1 * (1 - h12 * v1)) / (1 - h12 * v3);
+        if ( j >= matchPoint && ((u3 < 0 && u2 > 0) || (u3 > 0 && u2 < 0))) {
+          nodes++;
+        }
+      }
+      
+      approximateDerivative += (u3 - u1) / (2 * dx * u2);
+      
+      return new EnergyTester( nodes, approximateDerivative );
     },
     
     /**
-     * Takes a single RK4 step from initial point (x, psi)
-     * @param potentialValue: function that returns the value of the potential at any point x
-     * @param delta: step size
-     * @param x: position of point to step from
-     * @param psi: array of [psi, psi']
-     * @param energy: energy of the eigenstate
+     * Calculate the energy of an eigenstate with the specified number of nodes
      */
-    step: function( potentialValue, delta, x, psi, energy ) {
-      var k1 = this.fprime(potentialValue, x, psi, energy);
-      var k2 = this.fprime(potentialValue, x + delta/2, [psi[0] + k1[0]*delta/2, psi[1] + k1[1]*delta/2], energy);
-      var k3 = this.fprime(potentialValue, x + delta/2, [psi[0] + k2[0]*delta/2, psi[1] + k2[1]*delta/2], energy);
-      var k4 = this.fprime(potentialValue, x + delta, [psi[0] + k3[0]*delta, psi[1] + k3[1]*delta], energy);
-      var ksum = [k1[0] + 2*k2[0] + 2*k3[0] + k4[0], k1[1] + 2*k2[1] + 2*k3[1] + k4[1]];
-      return [x[0] + ksum[0]*delta/6, x[1] + ksum[1]*delta/6];
+    calculateEnergy: function( nodes ) {
+      var i = 0;
+      var upperTester;
+      var lowerTester;
+      // find upper bound
+      var upperEnergy = this.hb * 10.0 * Math.pow((nodes + 1) / (this.model.maxX - this.model.minX), 2);
+      for (i = 0; i < this.maxTries; i++) {
+        upperEnergy *= 2.0;
+        upperTester = this.testEnergy( upperEnergy );
+        if (upperTester.isUpper( nodes )) {
+          break;
+        }
+      }
+      if (i === this.maxTries) {
+        console.log("Couldn't find upper bound, nodes = "+nodes);
+      }
+      
+      // find lower bound
+      var lowerEnergy = -this.hb * 10.0 * Math.pow((nodes + 1) / (this.model.maxX - this.model.minX), 2);
+      var lowerNodes = 0;
+      for (i = 0; i < this.maxTries; i++) {
+        lowerEnergy *= 2.0;
+        lowerTester = this.testEnergy( lowerEnergy );
+        if (!lowerTester.isUpper( nodes )) {
+          break;
+        }
+      }
+      if (i === this.maxTries) {
+        console.log("Couldn't find lower bound, nodes = "+nodes);
+      }
+      
+      // binary chop to get close to exact energy
+      var midEnergy = 0;
+      var midTester;
+      for (i = 0; i < this.maxTries && (upperTester.nodes !== lowerTester.nodes); i++) {
+        midEnergy = 0.5 * (lowerEnergy + upperEnergy);
+        midTester = this.testEnergy( midEnergy );
+        if (midTester.isUpper( nodes )) {
+          upperEnergy = midEnergy;
+          upperTester = midTester;
+        }
+        else {
+          lowerEnergy = midEnergy;
+          lowerTester = midTester;
+        }
+      }
+      if (i === this.maxTries) {
+        console.log("No convergence in binary chop, nodes = "+nodes);
+        return midEnergy;
+      }
+      
+      // linearly interpolate for better convergence to exact energy
+      for (i = 0; i < this.maxTries && (Math.abs(upperTester.derivative - lowerTester.derivative)) < this.small; i++) {
+        midEnergy = upperEnergy - (upperEnergy - lowerEnergy) * upperTester.derivative / (lowerTester.derivative - upperTester.derivative);
+        if (midEnergy > upperEnergy || midEnergy < lowerEnergy) {
+          midEnergy = 0.5 * (lowerEnergy + upperEnergy);
+        }
+        midTester = testEnergy( midEnergy );
+        if ( midTester.isupper( nodes ) ) {
+          upperEnergy = midEnergy;
+          upperTester = midTester;
+        }
+        else {
+          lowerEnergy = midEnergy;
+          lowerTester = midTester;
+        }
+      }
+      if (i === this.maxTries) {
+        console.log("No convergence in interpolation, nodes = "+nodes);
+        return midEnergy;
+      }
+      
+      return midEnergy;
     },
     
     /**
-     * Derivative function for RK4 to use
-     * @param potentialValue: function that returns the value of the potential at any point x
-     * @param x: position of the point
-     * @param psi: array of [psi, psi']
-     * returns an array of [psi', psi'']
+     * Calculate the wavefunction points for a given energy
      */
-    fprime: function( potentialValue, x, psi, energy ) {
-      var E = energy;
-      var m = this.model.particleMassProperty.value;
-      var hbar = constants.hbar;
-      var y = psi[1];
-      var yprime = (potentialValue( x ) - E) * 2 * m / (hbar * hbar) * psi;
-      return [y, yprime];
-    },
-    
+    calculateWavefunction: function( energy ) {
+      var n = this.n;
+      var psi = new FastArray( n );
+      var hbInverse = 1 / this.hb;
+      var matchPoint = n * 0.53;
+      var dx = (this.model.maxX - this.model.minX) / (n - 1);
+      var h12 = dx * dx / 12;
+      
+      // initial and final boundary conditions
+      var u1 = 0.0;
+      var u2 = 0.0;
+      var u3 = dx;
+      var u1Final = 0.0;
+      var u2Final = dx;
+      psi[0] = u2;
+      psi[1] = u3;
+      psi[n-1] = u1Final;
+      psi[n-2] = u2Final;
+      var v1 = 0.0;
+      var v2 = 0.0;
+      var v3 = hbInverse * (this.potentialPoints[1] - energy);
+      
+      for (var i = 2; i <= matchPoint + 1; i++) {
+        u1 = u2;
+        u2 = u3;
+        v1 = v2;
+        v2 = v3;
+        v3 = hbInverse * (this.potentialPoints[i] - energy);
+        u3 = (u2 * (2 + 10 * h12 * v2) - u1 * (1 - h12 * v1)) / (1 - h12 * v3);
+        psi[i] = u3;
+      }
+      
+      var uAve = u3;
+      u2 = u1Final;
+      u3 = u2Final;
+      v2 = 0.0;
+      v3 = hbInverse * (this.potentialPoints[n - 2] - energy);
+      
+      for (var j = n - 3; j >= matchPoint - 1; j--) {
+        u1 = u2;
+        u2 = u3;
+        v1 = v2;
+        v2 = v3;
+        v3 = hbInverse * (this.potentialPoints[j] - energy);
+        u3 = (u2 * (2 + 10 * h12 * v2) - u1 * (1 - h12 * v1)) / (1 - h12 * v3);
+        psi[j] = u3;
+      }
+      
+      uAve /= u3;
+      var k;
+      var uAbs;
+      for (k = n - 2; k >= matchPoint; k--) {
+        psi[k] *= uAve;
+      }
+      uAve = 0.0;
+      for (k = 0; k < n; k++) {
+        uAbs = Math.abs(psi[k]);
+        uAve = (uAve > uAbs ) ? uAve : uAbs;
+      }
+      uAve = 1 / uAve;
+      for (k = 0; k < n; k++) {
+        psi[k] *= uAve;
+      }
+      return psi;
+    }
   } );
 } );

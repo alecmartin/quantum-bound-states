@@ -11,6 +11,8 @@ define( function( require ) {
   var AsymmetricPotential = require( 'QUANTUM_BOUND_STATES/quantum-bound-states/model/AsymmetricPotential' );
   var Coulomb1DPotential = require( 'QUANTUM_BOUND_STATES/quantum-bound-states/model/Coulomb1DPotential' );
   var Coulomb3DPotential = require( 'QUANTUM_BOUND_STATES/quantum-bound-states/model/Coulomb3DPotential' );
+  var dot = require( 'DOT/dot' );
+  var EigenstateSolver = require( 'QUANTUM_BOUND_STATES/quantum-bound-states/model/EigenstateSolver' );
   var HarmonicOscillatorPotential = require( 'QUANTUM_BOUND_STATES/quantum-bound-states/model/HarmonicOscillatorPotential' );
   var inherit = require( 'PHET_CORE/inherit' );
   var PropertySet = require( 'AXON/PropertySet' );
@@ -20,6 +22,7 @@ define( function( require ) {
   var Vector2 = require( 'DOT/Vector2' );
   
   var constants = new QuantumBoundStatesConstants();
+  var FastArray = dot.FastArray;
 
   /**
    * Main constructor for QuantumBoundStatesModel, which contains all of the model logic for the entire sim screen.
@@ -30,14 +33,9 @@ define( function( require ) {
     this.maxX = 3.5; // nm
 
     PropertySet.call( this, {
-      particleMass: 1*constants.electronMass,
-      currentEigenstate: 0,
+      particleMass: constants.electronMass,
       hoveredEigenstate: -1,
-      currentEnergy: 0,
-      //currentPotential: null,
       potentialType: 0,
-      //eigenvals: null,
-      //superpositionCoefficients: null,
       
       showMagnifyingGlass: false,
       showProbDensity: true,
@@ -78,26 +76,9 @@ define( function( require ) {
      */
     setPotential: function( type ) {
       var potential = this.potentials[type];
-      this.currentEigenstateProperty.value +=  potential.groundState - this.currentPotentialProperty.value.groundState;
       this.currentPotentialProperty.value = potential;
       this.eigenvalsProperty.value = potential.getEigenvalues();
-      this.currentEnergyProperty.value = potential.getNthEigenvalue( this.currentEigenstateProperty.value );
       this.potentialTypeProperty.value = type;
-    },
-    
-    /**
-     * Get a set of n points (x, y) to draw the potential well
-     */
-    getPotentialPoints: function( n ) {
-      var points = [];
-      var delta = (this.maxX - this.minX) / n;
-      var x = this.minX;
-      var potential = this.currentPotentialProperty.value;
-      for (var i = 0; i < n; i++ ) {
-        points.push( new Vector2( x, potential.potentialValue(x) ) );
-        x += delta;
-      }
-      return points;
     },
     
     getMinEnergy: function( ) {
@@ -110,10 +91,6 @@ define( function( require ) {
     
     setHoveredEigenstate: function( n ) {
       this.hoveredEigenstateProperty.value = n;
-    },
-    
-    setCurrentEigenstate: function( n ) {
-      this.currentEigenstateProperty.value = n;
     },
     
     getNumberOfEigenstates: function( ) {
@@ -141,5 +118,27 @@ define( function( require ) {
       return this.superpositionCoefficientsProperty.value.isSuperpositionState();
     },
     
+    getWavefunctionPoints: function( n ) {
+      var potential = this.currentPotentialProperty.value;
+      var solver = new EigenstateSolver( this, n, potential );
+      var superposition = this.getSubscriptsAndCoefficients();
+      var nodeArray = superposition[0];
+      var coefficients = superposition[1];
+      var psi = potential.getNthEigenstate( nodeArray[0] - this.currentPotentialProperty.value.groundState );
+      if (coefficients.length === 1) {
+        return psi;
+      }
+      for (var k = 0; k < psi.length; k++) {
+        psi[k] *= coefficients[0];
+      }
+      var psiNew;
+      for (var i = 1; i < coefficients.length; i++) {
+        psiNew = potential.getNthEigenstate( nodeArray[0] - this.currentPotentialProperty.value.groundState );
+        for (var j = 0; j < psi.length; j++) {
+          psi[j] += psiNew[j] * coefficients[j];
+        }
+      }
+      return psi;
+    }
   } );
 } );
