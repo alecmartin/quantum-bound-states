@@ -45,7 +45,7 @@ define( function( require ) {
 
     var bottomChartNode = new BottomChartNode( quantumBoundStatesModel, {
       x: this.layoutBounds.maxX - 240,
-      y: 480,
+      y: 460,
 
     });
     this.addChild( bottomChartNode );

@@ -1,6 +1,8 @@
 {
   "quantum-bound-states.name": "Quantum Bound States",
   "energy-plot-title": "Energy (eV)",
+  "energy-plot-total-energy": "Total Energy",
+  "energy-plot-potential-energy": "Potential Energy",
 
 
   "bottom-plot-position": "Position (nm)",

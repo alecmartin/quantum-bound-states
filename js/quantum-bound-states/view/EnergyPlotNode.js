@@ -8,6 +8,8 @@ define( function( require ) {
   'use strict';
 
   // modules
+  var HBox = require( 'SCENERY/nodes/HBox' );
+  var HStrut = require( 'SUN/HStrut' );
   var inherit = require( 'PHET_CORE/inherit' );
   var Line = require( 'SCENERY/nodes/Line' );
   var Node = require( 'SCENERY/nodes/Node' );
@@ -22,6 +24,8 @@ define( function( require ) {
     
     // strings
     var titleString = require( 'string!QUANTUM_BOUND_STATES/energy-plot-title' );
+    var totalenergyString = require( 'string!QUANTUM_BOUND_STATES/energy-plot-total-energy' );
+    var potentialenergyString = require( 'string!QUANTUM_BOUND_STATES/energy-plot-potential-energy' );
     
     var background = new Rectangle(50, 0, width, height, 0, 0, {fill:'black', stroke: 'white'});
     this.addChild( background );
@@ -56,6 +60,9 @@ define( function( require ) {
     var well = new PotentialWellNode( model, width, height+padding, {x: 50} );
     this.addChild( well );
     
+
+
+
     var title = new Text( titleString, {
       font: new PhetFont( 18 ),
       rotation: -Math.PI / 2,
@@ -64,7 +71,40 @@ define( function( require ) {
       fill: 'white'
     });
     this.addChild( title );
+
+    var totalenergy = new Text( totalenergyString, {
+      font: new PhetFont( 18 ),
+      fill: 'white'
+    });
+
+    var totalenergyline = new Line(0, 0, 20, 0, {stroke: 'green',lineWidth: 3});
+
+    var potentialenergy = new Text( potentialenergyString, {
+      font: new PhetFont( 18 ),
+      fill: 'white'
+    });
+
+    var potentialenergyline = new Line(0, 0, 20, 0, {stroke: 'purple',lineWidth: 3});
+
+    var units = new HBox( {
+      x: background.left,
+      y: background.top - 20,
+      children: [ 
+      new HStrut( 10 ), 
+      totalenergyline, 
+      new HStrut( 5 ) ,
+      totalenergy,
+      new HStrut( 30 ) , 
+      potentialenergyline, 
+      new HStrut( 5 ) ,
+      potentialenergy 
+      ]
+    });
+    this.addChild( units );
+
   }
+
+  
 
   return inherit( Node, EnergyPlotNode );
 } );
