@@ -32,8 +32,8 @@ define( function( require ) {
     function createItem( i ) {
       var name = potentialNames[i];
       var node = new Node();
-      var text = new Text( name, {font: new PhetFont(14) });
-      var icon = new Image( images[i], {left: text.right + 7, top: text.top, scale: .2});
+      var text = new Text( name, {font: new PhetFont(12) });
+      var icon = new Image( images[i], {left: text.right + 7, top: text.top, scale: 0.2});
       node.addChild( text );
       node.addChild( icon );
       return ComboBox.createItem( node, i );

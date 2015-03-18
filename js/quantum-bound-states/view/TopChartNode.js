@@ -57,11 +57,11 @@ define( function( require ) {
 
     var magnifyingCheckBoxGroup = new VerticalCheckBoxGroup( [
       { content: new Text( magnifyingString, optionFont ), property: model.showMagnifyingGlassProperty, label: magnifyingString },
-    ], { boxWidth: 20, spacing: 5, fill: 'black', checkBoxColor: 'white'} );
+    ], { boxWidth: 20, spacing: 5, checkBoxColorBackground: 'red', checkBoxColor: 'white'} );
     
     var viewTopChartVBox = new VBox( {
       children: [
-        new HBox( { children: [ new HStrut( boxwidth ) ] } ),
+        new HBox( { children: [ new HStrut( boxwidth - 20 ) ] } ),
         new HBox( { children: [ new HStrut( 10 ), new VStrut( 10 ), new Text( potentialWellString, optionFont ), new HStrut( 15 ) ] } ), 
         new VStrut( 10 ),
         new HBox( { children: [ new HStrut( 10 ), new VStrut( 10 ),potentialWellComboBox, new HStrut( 15 ) ] } ),

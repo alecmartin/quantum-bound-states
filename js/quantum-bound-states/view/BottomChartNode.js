@@ -71,7 +71,7 @@ define( function( require ) {
     
     var viewBottomChartVBox = new VBox( {
       children: [ 
-        new HBox( { children: [ new HStrut( boxwidth ) ] } ),
+        new HBox( { children: [ new HStrut( boxwidth - 20 ) ] } ),
         new HBox( { children: [ new HStrut( 20 ), new VStrut( 10 ), new Text( particleMassString, optionFont ), new HStrut( 15 ) ] } ), 
         new VStrut( 10 ),
         new HBox( { children: [ new HStrut( 20 ), new VStrut( 10 ), hSlider, new HStrut( 20 ) ] } ),
