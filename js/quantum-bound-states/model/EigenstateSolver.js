@@ -39,7 +39,7 @@ define( function( require ) {
     this.maxTries = 100;
     this.hb = constants.hbar * constants.hbar / (2 * model.particleMassProperty.value);
     this.potential = potential;
-    this.potentialPoints = potential.getPotentialPoints( n );
+    this.potentialPoints = potential.getPotentialPoints( n )[1];
     
     var thisNode = this;
     
@@ -125,6 +125,7 @@ define( function( require ) {
       if (i === this.maxTries) {
         console.log("Couldn't find upper bound, nodes = "+nodes);
       }
+      console.log("uppperE="+upperEnergy);
       
       // find lower bound
       var lowerEnergy = -this.hb * 10.0 * Math.pow((nodes + 1) / (this.model.maxX - this.model.minX), 2);
@@ -139,6 +140,7 @@ define( function( require ) {
       if (i === this.maxTries) {
         console.log("Couldn't find lower bound, nodes = "+nodes);
       }
+      console.log("lowerE="+lowerEnergy);
       
       // binary chop to get close to exact energy
       var midEnergy = 0;
@@ -159,15 +161,16 @@ define( function( require ) {
         console.log("No convergence in binary chop, nodes = "+nodes);
         return midEnergy;
       }
+      console.log("midE="+midEnergy);
       
       // linearly interpolate for better convergence to exact energy
-      for (i = 0; i < this.maxTries && (Math.abs(upperTester.derivative - lowerTester.derivative)) < this.small; i++) {
+      for (i = 0; i < this.maxTries && (Math.abs(upperTester.derivative - lowerTester.derivative)) > this.small; i++) {
         midEnergy = upperEnergy - (upperEnergy - lowerEnergy) * upperTester.derivative / (lowerTester.derivative - upperTester.derivative);
         if (midEnergy > upperEnergy || midEnergy < lowerEnergy) {
           midEnergy = 0.5 * (lowerEnergy + upperEnergy);
         }
-        midTester = testEnergy( midEnergy );
-        if ( midTester.isupper( nodes ) ) {
+        midTester = this.testEnergy( midEnergy );
+        if ( midTester.isUpper( nodes ) ) {
           upperEnergy = midEnergy;
           upperTester = midTester;
         }
@@ -180,6 +183,7 @@ define( function( require ) {
         console.log("No convergence in interpolation, nodes = "+nodes);
         return midEnergy;
       }
+      console.log("midE="+midEnergy);
       
       return midEnergy;
     },
@@ -189,7 +193,7 @@ define( function( require ) {
      */
     calculateWavefunction: function( energy ) {
       var n = this.n;
-      var psi = new FastArray( n );
+      var wave = new FastArray(n);
       var hbInverse = 1 / this.hb;
       var matchPoint = n * 0.53;
       var dx = (this.model.maxX - this.model.minX) / (n - 1);
@@ -201,10 +205,10 @@ define( function( require ) {
       var u3 = dx;
       var u1Final = 0.0;
       var u2Final = dx;
-      psi[0] = u2;
-      psi[1] = u3;
-      psi[n-1] = u1Final;
-      psi[n-2] = u2Final;
+      wave[0] = u2;
+      wave[1] = u3;
+      wave[n-1] = u1Final;
+      wave[n-2] = u2Final;
       var v1 = 0.0;
       var v2 = 0.0;
       var v3 = hbInverse * (this.potentialPoints[1] - energy);
@@ -216,7 +220,7 @@ define( function( require ) {
         v2 = v3;
         v3 = hbInverse * (this.potentialPoints[i] - energy);
         u3 = (u2 * (2 + 10 * h12 * v2) - u1 * (1 - h12 * v1)) / (1 - h12 * v3);
-        psi[i] = u3;
+        wave[i] = u3;
       }
       
       var uAve = u3;
@@ -232,25 +236,25 @@ define( function( require ) {
         v2 = v3;
         v3 = hbInverse * (this.potentialPoints[j] - energy);
         u3 = (u2 * (2 + 10 * h12 * v2) - u1 * (1 - h12 * v1)) / (1 - h12 * v3);
-        psi[j] = u3;
+        wave[j] = u3;
       }
       
       uAve /= u3;
       var k;
       var uAbs;
       for (k = n - 2; k >= matchPoint; k--) {
-        psi[k] *= uAve;
+        wave[k] *= uAve;
       }
       uAve = 0.0;
       for (k = 0; k < n; k++) {
-        uAbs = Math.abs(psi[k]);
+        uAbs = Math.abs(wave[k]);
         uAve = (uAve > uAbs ) ? uAve : uAbs;
       }
       uAve = 1 / uAve;
       for (k = 0; k < n; k++) {
-        psi[k] *= uAve;
+        wave[k] *= uAve;
       }
-      return psi;
+      return wave;
     }
   } );
 } );

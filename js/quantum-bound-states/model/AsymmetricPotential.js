@@ -11,6 +11,10 @@ define( function( require ) {
   var inherit = require( 'PHET_CORE/inherit' );
   var PotentialWell = require( 'QUANTUM_BOUND_STATES/quantum-bound-states/model/PotentialWell' );
   var Property = require( 'AXON/Property' );
+  var QuantumBoundStatesConstants = require( 'QUANTUM_BOUND_STATES/quantum-bound-states/model/QuantumBoundStatesConstants' );
+  
+  // constants
+  var constants = new QuantumBoundStatesConstants();
   
   /**
   * @param {double} wellOffset
@@ -19,11 +23,12 @@ define( function( require ) {
   * @constructor
   */
   function AsymmetricPotential( model, wellOffset, wellWidth, wellHeight ) {
-    PotentialWell.call( this, model );
-    
     this.wellOffsetProperty = new Property( wellOffset );
     this.wellWidthProperty = new Property( wellWidth );
     this.wellHeightProperty = new Property( wellHeight );
+    
+    PotentialWell.call( this, model );
+    
     this.model = model;
     this.minEnergy = -5; // eV
     this.maxEnergy = 15; // eV
@@ -45,19 +50,13 @@ define( function( require ) {
     * @param {double} x: distance from center of well in nanometers
     */
     potentialValue: function( x ) {
-      if ( Math.abs(x) < this.wellWidthProperty / 2 ) {
-        return (this.wellHeightProperty / this.wellWidthProperty * x + this.wellOffsetProperty + this.wellHeightProperty / 2) * constants.eVToJ;
+      if ( Math.abs(x) < this.wellWidthProperty.value / 2 ) {
+        return this.wellHeightProperty.value / this.wellWidthProperty.value * x +
+                this.wellOffsetProperty.value + this.wellHeightProperty.value / 2;
       }
       else {
-        return (this.wellOffsetProperty + this.wellHeightProperty) * constants.eVToJ;
+        return this.wellOffsetProperty.value + this.wellHeightProperty.value;
       }
-    },
-    
-    /**
-     * Get the energy of the nth energy level
-     */
-    getNthEigenvalue: function( n ) {
-      return n; // not calculated yet
     },
     
     /**

@@ -22,11 +22,12 @@ define( function( require ) {
   * @constructor
   */
   function HarmonicOscillatorPotential( model, wellOffset, frequency ) {
-    PotentialWell.call( this, model );
-    
     this.model = model;
     this.wellOffsetProperty = new Property( wellOffset );
     this.frequencyProperty = new Property( frequency );
+    
+    PotentialWell.call( this, model );
+    
     this.minEnergy = -5; // eV
     this.maxEnergy = 15; // eV
     this.groundState = 0;
@@ -52,21 +53,20 @@ define( function( require ) {
     },
     
     /**
-    * Get the value of the potential well at a point x, in J
+    * Get the value of the potential well at a point x, in eV
     * @param {double} x: distance from center of well in nanometers
     */
     potentialValue: function( x ) {
-      x *= 1E-9;
-      var w = this.frequencyProperty.value * 1E15;
-      return 1 / 2 * this.model.particleMassProperty.value * Math.pow(w * x, 2) + this.wellOffsetProperty * constants.eVToJ;
+      var w = this.frequencyProperty.value;
+      return 1 / 2 * this.model.particleMassProperty.value * Math.pow(w * x, 2) + this.wellOffsetProperty.value;
     },
     
     /**
-     * Get the energy of the nth energy level, in J
+     * Get the energy of the nth energy level, in eV
      */
     getNthEigenvalue: function( n ) {
-      var w = this.frequencyProperty.value * 1E15;
-      return constants.hbar * w * (n + 1 / 2) + this.wellOffsetProperty * constants.eVToJ;
+      var w = this.frequencyProperty.value;
+      return constants.hbar * w * (n + 1 / 2) + this.wellOffsetProperty.value;
     },
     
     /**

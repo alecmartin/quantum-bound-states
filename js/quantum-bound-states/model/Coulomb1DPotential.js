@@ -8,6 +8,7 @@ define( function( require ) {
   'use strict';
   
   // modules
+  var Coulomb1DSolver = require( 'QUANTUM_BOUND_STATES/quantum-bound-states/model/Coulomb1DSolver' );
   var inherit = require( 'PHET_CORE/inherit' );
   var PotentialWell = require( 'QUANTUM_BOUND_STATES/quantum-bound-states/model/PotentialWell' );
   var Property = require( 'AXON/Property' );
@@ -20,9 +21,10 @@ define( function( require ) {
   * @constructor
   */
   function Coulomb1DPotential( model, wellOffset ) {
+    this.wellOffsetProperty = new Property( wellOffset );
+    
     PotentialWell.call( this, model );
     
-    this.wellOffsetProperty = new Property( wellOffset );
     this.model = model;
     this.minEnergy = -15; // eV
     this.maxEnergy = 5; // eV
@@ -38,24 +40,19 @@ define( function( require ) {
     },
     
     /**
-    * Get the value of the potential well at a point x, in J
+    * Get the value of the potential well at a point x
     * @param {double} x: distance from center of well in nanometers
     */
     potentialValue: function( x ) {
-      var k = 1 / (4 * Math.PI * constants.epsilon);
-      x *= 1E-9;
-      return -k * constants.electronCharge * constants.electronCharge / Math.abs(x) + this.wellOffsetProperty * constants.eVToJ;
+      return -1 * constants.ke2 / Math.abs(x) + this.wellOffsetProperty.value;
     },
     
     /**
-     * Get the energy of the nth energy level, in J
+     * Get the energy of the nth energy level
      */
     getNthEigenvalue: function( n ) {
       var m = this.model.particleMassProperty.value;
-      var e = constants.electronCharge;
-      var hbar = constants.hbar;
-      var e0 = constants.epsilon;
-      return -m * Math.pow(e, 4) / (2 * Math.pow(n * hbar * 4 * Math.PI * e0, 2)) + this.wellOffsetProperty * constants.eVToJ;
+      return -m * constants.ke2 * constants.ke2 / (2 * constants.hbar * constants.hbar * n * n) + this.wellOffsetProperty.value;
     },
     
     /**
@@ -77,6 +74,23 @@ define( function( require ) {
       }
       this.redrawEigenstates = false;
       return this.eigenvals;
+    },
+    
+    /**
+     * Get an array of wavefunction points for the nth energy level
+     * Wavefunction will have n nodes
+     */
+    getNthEigenstate: function( n ) {
+      var energy = this.getNthEigenvalue( n );
+      var solver = new Coulomb1DSolver( this.model, this.numPoints, this );
+      var pointsY = solver.calculateWavefunction( energy );
+      var pointsX = [];
+      var x = this.model.minX;
+      for (var i = 0; i < this.numPoints; i++) {
+        pointsX.push[x];
+        x += (this.model.maxX - this.model.minX) / this.numPoints - 1;
+      }
+      return [pointsX, pointsY];
     },
   } );
 } );

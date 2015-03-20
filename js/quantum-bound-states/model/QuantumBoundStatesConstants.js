@@ -14,11 +14,9 @@ define( function( require ) {
   * @constructor
   */
   function QuantumBoundStatesConstants( ) {
-    this.electronCharge = 1.60217E-19; // C
-    this.electronMass = 9.10938E-31; //kg
-    this.epsilon = 8.85419E-12; // F/m
-    this.hbar = 1.05457E-34; // m^2 kg/s
-    this.eVToJ = 1.602176565E-19; // j/eV
+    this.electronMass = 5.68;
+    this.hbar = 0.658;
+    this.ke2 = 1.44; // electronCharge * electronCharge / (4 * PI * epsilon_not)
   }
   
   return inherit( Object, QuantumBoundStatesConstants);

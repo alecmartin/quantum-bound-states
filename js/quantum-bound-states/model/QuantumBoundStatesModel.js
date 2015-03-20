@@ -54,6 +54,8 @@ define( function( require ) {
     
     this.addProperty("currentPotential", squareWell);
     this.addProperty("eigenvals", squareWell.getEigenvalues());
+    console.log("eigenvals");
+    console.log(this.eigenvalsProperty.value);
     
     var coefficients = new SuperpositionCoefficients( this );
     this.addProperty("superpositionCoefficients", coefficients);
@@ -62,6 +64,10 @@ define( function( require ) {
     this.potentialTypeProperty.link( function() {
       thisNode.setPotential(thisNode.potentialTypeProperty.value);
     });
+    //var eig = oscillatorWell.getNthEigenstate(2);
+    /*for (var i = 0; i < eig.length; i++) {
+      console.log(eig[i]);
+    }*/
   }
 
   return inherit( PropertySet, QuantumBoundStatesModel, {
