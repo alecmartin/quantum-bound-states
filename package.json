@@ -10,10 +10,11 @@
   },
   "devDependencies": {
     "grunt": "~0.4.1",
-    "grunt-requirejs": "~0.4.0",
     "grunt-contrib-jshint": "~0.6.4",
-    "uglify-js": "~2.4.0",
-    "requirejs": "~2.1.8"
+    "grunt-requirejs": "~0.4.0",
+    "jpeg-js": "^0.1.1",
+    "requirejs": "~2.1.8",
+    "uglify-js": "~2.4.0"
   },
   "simTitleStringKey": "QUANTUM_BOUND_STATES/quantum-bound-states.name"
 }

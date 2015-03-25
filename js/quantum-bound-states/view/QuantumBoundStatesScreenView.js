@@ -11,6 +11,7 @@ define( function( require ) {
   var inherit = require( 'PHET_CORE/inherit' );
   var ScreenView = require( 'JOIST/ScreenView' );
   var ResetAllButton = require( 'SCENERY_PHET/buttons/ResetAllButton' );
+  var EnergyLine = require( 'QUANTUM_BOUND_STATES/quantum-bound-states/view/EnergyLine' );
   var EnergyPlotNode = require( 'QUANTUM_BOUND_STATES/quantum-bound-states/view/EnergyPlotNode' );
   var BottomPlotNode = require( 'QUANTUM_BOUND_STATES/quantum-bound-states/view/BottomPlotNode' );
   var TopChartNode = require( 'QUANTUM_BOUND_STATES/quantum-bound-states/view/TopChartNode' );
@@ -29,6 +30,13 @@ define( function( require ) {
       y: 50,
     });
     this.addChild( energyPlotNode );
+
+    // not working because cris is a chump
+    // var energyLine = new EnergyLine( quantumBoundStatesModel, 600, 250, {
+    //   x: 0,
+    //   y: 50,
+    // });
+    // this.addChild( energyLine );
 
     var bottomPlotNode = new BottomPlotNode( quantumBoundStatesModel, 600, 200, {
       x: 0,
