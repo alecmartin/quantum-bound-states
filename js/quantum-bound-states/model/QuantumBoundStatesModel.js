@@ -54,8 +54,6 @@ define( function( require ) {
     
     this.addProperty("currentPotential", squareWell);
     this.addProperty("eigenvals", squareWell.getEigenvalues());
-    console.log("eigenvals");
-    console.log(this.eigenvalsProperty.value);
     
     var coefficients = new SuperpositionCoefficients( this );
     this.addProperty("superpositionCoefficients", coefficients);
@@ -64,10 +62,6 @@ define( function( require ) {
     this.potentialTypeProperty.link( function() {
       thisNode.setPotential(thisNode.potentialTypeProperty.value);
     });
-    //var eig = oscillatorWell.getNthEigenstate(2);
-    /*for (var i = 0; i < eig.length; i++) {
-      console.log(eig[i]);
-    }*/
   }
 
   return inherit( PropertySet, QuantumBoundStatesModel, {
@@ -87,26 +81,48 @@ define( function( require ) {
       this.potentialTypeProperty.value = type;
     },
     
+    /**
+     * Return the minimum energy to be displayed on the potential graph
+     */
     getMinEnergy: function( ) {
       return this.currentPotentialProperty.value.minEnergy;
     },
     
+    /**
+     * Return the maximum energy to be displayed on the potential graph
+     */
     getMaxEnergy: function( ) {
       return this.currentPotentialProperty.value.maxEnergy;
     },
     
+    /**
+     * Called when the user mouses over an eigenstate line
+     * Should be set to -1 when no state is hovered
+     */
     setHoveredEigenstate: function( n ) {
       this.hoveredEigenstateProperty.value = n;
     },
     
+    /**
+     * Return the number of possible eigenstates, given the current parameters
+     */
     getNumberOfEigenstates: function( ) {
       return this.currentPotentialProperty.value.getNumberOfEigenstates();
     },
     
+    /**
+     * Get a list of the energies of the eigenstates for the current potential
+     */
     getEigenvalues: function( ) {
       return this.currentPotentialProperty.value.getEigenvalues();
     },
     
+    /**
+     * Get two arrays containing the subscripts for the current superposition state
+     *  and the coefficients of each eigenstate
+     * Subscripts contains the integers that describe each eigenstate
+     * Coefficients contains floats between 0 and 1
+     */
     getSubscriptsAndCoefficients: function( ) {
       var coeff = this.superpositionCoefficientsProperty.value;
       var nonzero = [];
@@ -117,32 +133,125 @@ define( function( require ) {
           subscripts.push(i + this.currentPotentialProperty.value.groundState);
         }
       }
-      return [subscripts,nonzero];
+      return [subscripts, nonzero];
     },
     
+    /**
+     * Returns the property that determines if the superposition coefficients are normalized
+     */
+    getNormalizedProperty: function( ) {
+      return this.superpositionCoefficientsProperty.value.normalizedProperty;
+    },
+    
+    /**
+     * Set a single coefficient of a superposition state
+     * Called when the user inputs a number into the superposition dialogue box
+     */
+    setCoefficient: function( i, value ) {
+      this.superpositionCoefficientsProperty.value.setCoefficient( i, value );
+    },
+    
+    /**
+     * Set the selected eigenstate's coefficient to one
+     * Set all the rest of the coefficients to zero
+     * Called when the user clicks on an eigenstate
+     */
+    setOneCoefficient: function( i ) {
+      this.superpositionCoefficientsProperty.value.setOneCoefficient( i );
+    },
+    
+    /**
+     * Normalize the superposition coefficients
+     */
+    normalize: function( ) {
+      this.superpositionCoefficientsProperty.value.normalize();
+    },
+    
+    /**
+     * Returns true if more than one eigenstate is selected
+     */
     isSuperpositionState: function( ) {
       return this.superpositionCoefficientsProperty.value.isSuperpositionState();
     },
     
-    getWavefunctionPoints: function( n ) {
+    /**
+     * Returns an array of x values and the corresponding y values of the superposition wavefunction at time t
+     * t: time in fs (0 for the magnitude and the probability density)
+     * isReal: real or imaginary part of the wavefunction (true for the magnitude and the probability density)
+     */
+    getWavefunctionPoints: function( t, isReal ) {
       var potential = this.currentPotentialProperty.value;
-      var solver = new EigenstateSolver( this, n, potential );
       var superposition = this.getSubscriptsAndCoefficients();
       var nodeArray = superposition[0];
       var coefficients = superposition[1];
       var psi = potential.getNthEigenstate( nodeArray[0] - this.currentPotentialProperty.value.groundState );
+      var energy = potential.getNthEigenvalue( nodeArray[0] - this.currentPotentialProperty.value.groundState );
+      
+      // multiply by the propagator
+      for (var l = 0; l < psi[1].length; l++) {
+        if (isReal) {
+          psi[1][l] *= Math.cos(-energy * t / constants.hbar);
+        }
+        else {
+          psi[1][l] *= Math.sin(-energy * t / constants.hbar);
+        }
+      }
+      // If there's only one selected eigenstate, return the wavefunction
       if (coefficients.length === 1) {
         return psi;
       }
-      for (var k = 0; k < psi.length; k++) {
-        psi[k] *= coefficients[0];
+      // Else, add up the superposition states
+      for (var k = 0; k < psi[1].length; k++) {
+        psi[1][k] *= coefficients[0];
       }
       var psiNew;
       for (var i = 1; i < coefficients.length; i++) {
-        psiNew = potential.getNthEigenstate( nodeArray[0] - this.currentPotentialProperty.value.groundState );
+        psiNew = potential.getNthEigenstate( nodeArray[0] - this.currentPotentialProperty.value.groundState )[1];
+        energy = potential.getNthEigenvalue( nodeArray[0] - this.currentPotentialProperty.value.groundState );
         for (var j = 0; j < psi.length; j++) {
-          psi[j] += psiNew[j] * coefficients[j];
+          if (isReal) {
+            psi[1][j] += psiNew[j] * coefficients[j] * Math.cos(-energy * t / constants.hbar);
+          }
+          else {
+            psi[1][j] += psiNew[j] * coefficients[j] * Math.sin(-energy * t / constants.hbar);
+          }
         }
+      }
+      return psi;
+    },
+    
+    /**
+     * Get the probability density function
+     */
+    getProbabilityDensity: function( ) {
+      var psi = this.getWavefunctionPoints( 0, true );
+      for (var i = 0; i < psi[1].length; i++) {
+        psi[1][i] = psi[1][i] * psi[1][i];
+      }
+      return psi;
+    },
+    
+    /**
+     * Get the real wave function at time t
+     */
+    getRealWave: function( t ) {
+      return this.getWavefunctionPoints( t, true );
+    },
+    
+    /**
+     * Get the imaginary wave function at time t
+     */
+    getImaginaryWave: function( t ) {
+      return this.getWavefunctionPoints( t, false );
+    },
+    
+    /**
+     * Get the magnitude of the wave function
+     */
+    getMagnitude: function( ) {
+      var psi = this.getWavefunctionPoints( 0, true );
+      for (var i = 0; i < psi[1].length; i++) {
+        psi[1][i] = Math.abs(psi[1][i]);
       }
       return psi;
     }

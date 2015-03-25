@@ -22,7 +22,6 @@ define( function( require ) {
   * @constructor
   */
   function HarmonicOscillatorPotential( model, wellOffset, frequency ) {
-    this.model = model;
     this.wellOffsetProperty = new Property( wellOffset );
     this.frequencyProperty = new Property( frequency );
     
@@ -31,18 +30,11 @@ define( function( require ) {
     this.minEnergy = -5; // eV
     this.maxEnergy = 15; // eV
     this.groundState = 0;
-    this.eigenvals = []; // array of eigenstate energies
-    this.redrawEigenstates = false;
     
     var thisNode = this;
+    this.wellOffsetProperty.link( thisNode.redrawEigenstates );
     
-    this.wellOffsetProperty.link( function() {
-      thisNode.redrawEigenstates = true;
-    });
-    
-    this.frequencyProperty.link( function() {
-      thisNode.redrawEigenstates = true;
-    });
+    this.frequencyProperty.link( thisNode.redrawEigenstates );
   }
   
   return inherit( PotentialWell, HarmonicOscillatorPotential, {
@@ -74,19 +66,13 @@ define( function( require ) {
      * Returns an array of energy values
      */
     getEigenvalues: function() {
-      if ( this.eigenvals.length === 0 || this.redrawEigenstates ) {
-        if ( this.redrawEigenstates ) {
-          this.eigenvals = [];
-        }
-        var n = this.groundState;
-        var energy = 0;
-        while ( energy <= this.maxEnergy * constants.eVToJ ) {
-          energy = this.getNthEigenvalue(n);
-          this.eigenvals.push( energy );
-          n++;
-        }
+      var n = 0;
+      var energy = this.getNthEigenvalue( n );
+      while ( energy < this.maxEnergy ) {
+        this.eigenvals[n] = energy;
+        n++;
+        energy = this.getNthEigenvalue( n );
       }
-      this.redrawEigenstates = false;
       return this.eigenvals;
     },
   } );

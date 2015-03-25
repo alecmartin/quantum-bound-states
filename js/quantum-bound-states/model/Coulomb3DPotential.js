@@ -14,7 +14,9 @@ define( function( require ) {
   var Property = require( 'AXON/Property' );
   var QuantumBoundStatesConstants = require( 'QUANTUM_BOUND_STATES/quantum-bound-states/model/QuantumBoundStatesConstants' );
   
+  // constants
   var constants = new QuantumBoundStatesConstants();
+  var maxEigenstates = 10;
   
   /**
   * @param {double} wellOffset
@@ -25,12 +27,12 @@ define( function( require ) {
     
     PotentialWell.call( this, model );
     
-    this.model = model;
     this.minEnergy = -15; // eV
     this.maxEnergy = 5; // eV
     this.groundState = 1;
-    this.eigenvals = [];
-    this.redrawEigenstates = false;
+    
+    var thisNode = this;
+    this.wellOffsetProperty.link( thisNode.redrawEigenstates );
   }
   
   return inherit( Object, Coulomb3DPotential, {
@@ -60,37 +62,33 @@ define( function( require ) {
      * Returns an array of energy values
      */
     getEigenvalues: function() {
-      if ( this.eigenvals.length === 0 || this.redrawEigenstates ) {
-        if ( this.redrawEigenstates ) {
-          this.eigenvals = [];
-        }
-        var n = this.groundState;
-        var energy = 0;
-        while ( n <= 10 ) {
-          energy = this.getNthEigenvalue(n);
-          this.eigenvals.push( energy );
-          n++;
-        }
+      var n = this.groundState;
+      var energy = this.getNthEigenvalue( n );
+      while ( n <= maxEigenstates ) {
+        this.eigenvals[n - this.groundState] = energy;
+        n++;
+        energy = this.getNthEigenvalue(n);
       }
-      this.redrawEigenstates = false;
       return this.eigenvals;
     },
     
     /**
      * Get an array of wavefunction points for the nth energy level
-     * Wavefunction will have n nodes
+     * Wavefunction will have n-1 nodes
+     * n starts at 1
      */
     getNthEigenstate: function( n ) {
-      var energy = this.getNthEigenvalue( n );
-      var solver = new Coulomb3DSolver( this.model, this.numPoints, this );
-      var pointsY = solver.calculateWavefunction( energy );
-      var pointsX = [];
-      var x = this.model.minX;
-      for (var i = 0; i < this.numPoints; i++) {
-        pointsX.push[x];
-        x += (this.model.maxX - this.model.minX) / this.numPoints - 1;
+      var pointsY;
+      if ( this.eigenstateCache[n] ) {
+        pointsY = this.eigenstateCache[n];
       }
-      return [pointsX, pointsY];
+      else {
+        var energy = this.getNthEigenvalue( n );
+        var solver = new Coulomb3DSolver( this.model, this.numPoints, this );
+        pointsY = solver.calculateWavefunction( energy );
+        this.cacheEigenstate( n-1, pointsY );
+      }
+      return [this.pointsX, pointsY];
     },
   } );
 } );

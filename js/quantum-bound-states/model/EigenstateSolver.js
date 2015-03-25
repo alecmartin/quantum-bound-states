@@ -125,7 +125,6 @@ define( function( require ) {
       if (i === this.maxTries) {
         console.log("Couldn't find upper bound, nodes = "+nodes);
       }
-      console.log("uppperE="+upperEnergy);
       
       // find lower bound
       var lowerEnergy = -this.hb * 10.0 * Math.pow((nodes + 1) / (this.model.maxX - this.model.minX), 2);
@@ -140,7 +139,6 @@ define( function( require ) {
       if (i === this.maxTries) {
         console.log("Couldn't find lower bound, nodes = "+nodes);
       }
-      console.log("lowerE="+lowerEnergy);
       
       // binary chop to get close to exact energy
       var midEnergy = 0;
@@ -161,7 +159,6 @@ define( function( require ) {
         console.log("No convergence in binary chop, nodes = "+nodes);
         return midEnergy;
       }
-      console.log("midE="+midEnergy);
       
       // linearly interpolate for better convergence to exact energy
       for (i = 0; i < this.maxTries && (Math.abs(upperTester.derivative - lowerTester.derivative)) > this.small; i++) {
@@ -183,7 +180,6 @@ define( function( require ) {
         console.log("No convergence in interpolation, nodes = "+nodes);
         return midEnergy;
       }
-      console.log("midE="+midEnergy);
       
       return midEnergy;
     },

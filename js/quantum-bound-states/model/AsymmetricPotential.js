@@ -29,12 +29,16 @@ define( function( require ) {
     
     PotentialWell.call( this, model );
     
-    this.model = model;
     this.minEnergy = -5; // eV
     this.maxEnergy = 15; // eV
     this.groundState = 1;
-    this.eigenvals = []; // array of eigenstate energies
-    this.redrawEigenstates = false;
+    
+    var thisNode = this;
+    this.wellOffsetProperty.link( thisNode.redrawEigenstates );
+    
+    this.wellWidthProperty.link( thisNode.redrawEigenstates );
+    
+    this.wellHeightProperty.link( thisNode.redrawEigenstates );
   }
   
   return inherit( PotentialWell, AsymmetricPotential, {
@@ -64,19 +68,13 @@ define( function( require ) {
      * Returns an array of energy values
      */
     getEigenvalues: function() {
-      if ( this.eigenvals.length === 0 || this.redrawEigenstates ) {
-        if ( this.redrawEigenstates ) {
-          this.eigenvals = [];
-        }
-        var n = this.groundState;
-        var energy = 0;
-        while ( energy <= this.wellHeightProperty.value + this.wellOffsetProperty.value ) {
-          energy = this.getNthEigenvalue(n);
-          this.eigenvals.push( energy );
-          n++;
-        }
+      var n = this.groundState;
+      var energy = this.getNthEigenvalue( n );
+      while ( energy < this.wellHeightProperty.value + this.wellOffsetProperty.value ) {
+        this.eigenvals[n] = energy;
+        n++;
+        energy = this.getNthEigenvalue( n );
       }
-      this.redrawEigenstates = false;
       return this.eigenvals;
     },
   } );
