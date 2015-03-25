@@ -21,6 +21,29 @@ define( function( require ) {
   function PotentialWell( model ) {
     this.model = model;
     this.numPoints = 1350;
+    this.eigenstateCache = [];
+    this.eigenvals = [];
+    
+    this.pointsX = new FastArray( this.numPoints );
+    var x = this.model.minX;
+    for (var i = 0; i < this.numPoints; i++) {
+      this.pointsX[i] = x;
+      x += (this.model.maxX - this.model.minX) / (this.numPoints - 1);
+    }
+    
+    var thisNode = this;
+    
+    /**
+     * Recalculate eigenstates when variables change
+     */
+    this.redrawEigenstates = function() {
+      if (thisNode.groundState) {
+        thisNode.getEigenvalues();
+        thisNode.eigenstateCache = [];
+      }
+    };
+    
+    this.model.particleMassProperty.link( thisNode.redrawEigenstates );
   }
   
   return inherit( Object, PotentialWell, {
@@ -56,26 +79,33 @@ define( function( require ) {
      * Wavefunction will have n nodes
      */
     getNthEigenstate: function( n ) {
-      var energy = this.getNthEigenvalue( n );
-      console.log( "n is "+n+", energy is "+energy );
-      var solver = new EigenstateSolver( this.model, this.numPoints, this );
-      var pointsY = solver.calculateWavefunction( energy );
-      var pointsX = [];
-      var x = this.model.minX;
-      for (var i = 0; i < this.numPoints; i++) {
-        pointsX.push[x];
-        x += (this.model.maxX - this.model.minX) / this.numPoints - 1;
+      var pointsY;
+      if ( this.eigenstateCache[n] ) {
+        pointsY = this.eigenstateCache[n];
       }
-      return [pointsX, pointsY];
+      else {
+        var energy = this.getNthEigenvalue( n );
+        var solver = new EigenstateSolver( this.model, this.numPoints, this );
+        pointsY = solver.calculateWavefunction( energy );
+        this.cacheEigenstate( n, pointsY );
+      }
+      return [this.pointsX, pointsY];
     },
     
     /**
      * Get the energy of the nth energy level for wells without an analytic solution
+     * Solution will have n-this.groundState nodes
      */
     getNthEigenvalue: function( n ) {
-      console.log("calculating eigenval for n="+n);
       var solver = new EigenstateSolver( this.model, this.numPoints, this );
-      return solver.calculateEnergy( n );
+      return solver.calculateEnergy( n - this.groundState );
+    },
+    
+    /**
+     * Save the eigenstate in a cache
+     */
+    cacheEigenstate: function( n, eigenstate ) {
+      this.eigenstateCache[n] = eigenstate;
     },
   } );
 } );

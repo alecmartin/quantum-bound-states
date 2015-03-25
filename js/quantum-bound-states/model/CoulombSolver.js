@@ -26,8 +26,9 @@ define( function( require ) {
     this.ab = this.getBohrRadius();
     this.n = n;
     
+    var thisNode = this;
     model.particleMassProperty.link( function () {
-      this.ab = this.getBohrRadius();
+      thisNode.ab = thisNode.getBohrRadius();
     });
   }
   
