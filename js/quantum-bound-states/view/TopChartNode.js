@@ -21,7 +21,7 @@ define( function( require ) {
     Node.call( this, options );
 
     // Strings and other variables
-    var optionFont = {font: new PhetFont( 16 ), fill: "palegoldenrod"};
+    var optionFont = {font: new PhetFont( 14 ), fill: "palegoldenrod"};
     var potentialWellString = require( 'string!QUANTUM_BOUND_STATES/potential-well' );
     var magnifyingString = require( 'string!QUANTUM_BOUND_STATES/top-chart-show-magnifying-glass' );
     var configpotentialWellString = require( 'string!QUANTUM_BOUND_STATES/top-chart-configure-potential-well' );
