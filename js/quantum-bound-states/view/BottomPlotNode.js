@@ -1,8 +1,7 @@
 //  Copyright 2002-2014, University of Colorado Boulder
 
 /**
- *
- * @author Emily Randall
+ * Constructor for the plot of the probability density function and the wavefunctions
  */
 define( function( require ) {
   'use strict';
@@ -21,8 +20,6 @@ define( function( require ) {
     // strings
     var psiString = "Ψ";
     var pd = false;
-    // Temporarily setting selectedEnergyLevel to 1
-    // var selectedEnergyLevel = 1;
     var titleWFString = require( 'string!QUANTUM_BOUND_STATES/bottom-plot-wf-title' );
     var titlePDString = require( 'string!QUANTUM_BOUND_STATES/bottom-plot-pd-title' );
     var positionString = require( 'string!QUANTUM_BOUND_STATES/bottom-plot-position' );

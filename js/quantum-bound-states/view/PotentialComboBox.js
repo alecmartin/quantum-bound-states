@@ -1,5 +1,10 @@
 //  Copyright 2002-2014, University of Colorado Boulder
 
+/**
+* Combo box to choose between 5 types of potentials
+*
+* @author Emily Randall
+*/
 define( function( require ) {
   'use strict';
 

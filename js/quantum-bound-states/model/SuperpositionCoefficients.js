@@ -1,4 +1,5 @@
 // Copyright 2002-2013, University of Colorado Boulder
+
 /**
 * Superposition coefficients
 *
@@ -16,6 +17,7 @@ define( function( require ) {
   var FastArray = dot.FastArray;
   
   /**
+  * @param {QuantumBoundStatesModel} model
   * @constructor
   */
   function SuperpositionCoefficients( model ) {

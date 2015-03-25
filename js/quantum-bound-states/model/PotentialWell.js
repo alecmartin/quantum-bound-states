@@ -1,6 +1,6 @@
 // Copyright 2002-2013, University of Colorado Boulder
 /**
-* Square well potential
+* Parent class for all potential wells
 *
 * @author Emily Randall
 */
@@ -16,6 +16,7 @@ define( function( require ) {
   var FastArray = dot.FastArray;
   
   /**
+  * @param {QuantumBoundStatesModel} model
   * @constructor
   */
   function PotentialWell( model ) {

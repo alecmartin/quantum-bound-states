@@ -1,5 +1,9 @@
 //  Copyright 2002-2014, University of Colorado Boulder
 
+/**
+* Draws the top panel containing the configure potential button and the superposition state button
+* Also holds the potential combo box to switch between potentials
+*/
 define( function( require ) {
   'use strict';
 

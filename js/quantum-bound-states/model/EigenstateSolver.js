@@ -1,6 +1,6 @@
 // Copyright 2002-2013, University of Colorado Boulder
 /**
-* Square well potential
+* Numerical solver for eigenstates and eigenvalues
 *
 * @author Emily Randall
 */
@@ -17,12 +17,18 @@ define( function( require ) {
   var constants = new QuantumBoundStatesConstants();
   var FastArray = dot.FastArray;
   
+  /**
+   * @constructor for helper class
+   */
   function EnergyTester( nodes, derivative ) {
     this.nodes = nodes;
     this.derivative = derivative;
   }
   
   inherit( Object, EnergyTester, {
+    /**
+     * Return true if the energy being tested is higher than the eigenvalue energy
+     */
     isUpper: function( nodes ) {
       return (this.nodes > nodes || (this.nodes === nodes && this.derivative < 0.0));
     }
@@ -30,7 +36,9 @@ define( function( require ) {
   
   /**
   * @constructor for the eigenstate solver
-  * @param n the number of points to produce in a wavefunction
+  * @param {QuantumBoundStatesModel} model
+  * @param {int} n: the number of points to produce in a wavefunction
+  * @param {PotentialWell} potential
   */
   function EigenstateSolver( model, n, potential ) {
     this.model = model;

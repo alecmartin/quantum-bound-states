@@ -18,6 +18,9 @@ define( function( require ) {
   var sqrt4Pi = Math.sqrt(4 * Math.PI);
   
   /**
+  * @param {QuantumBoundStatesModel} model
+  * @param {int} n: the number of points to return in a calculated wavefunction
+  * @param {Coulomb1DPotential} potential
   * @constructor
   */
   function CoulombSolver( model, n, potential ) {
@@ -37,6 +40,9 @@ define( function( require ) {
       return constants.hbar * constants.hbar / (this.model.particleMassProperty.value * constants.ke2);
     },
     
+    /**
+     * Return the scaled wavefunction
+     */
     calculateWavefunction: function( nodes ) {
       var dx = (this.model.maxX - this.model.minX) / (this.n - 1);
       var x = this.model.minX;

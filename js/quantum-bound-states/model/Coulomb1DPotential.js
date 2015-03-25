@@ -1,6 +1,6 @@
 // Copyright 2002-2013, University of Colorado Boulder
 /**
-* Square well potential
+* 1-dimensional Coulomb well potential
 *
 * @author Emily Randall
 */
@@ -17,6 +17,7 @@ define( function( require ) {
   var constants = new QuantumBoundStatesConstants();
   
   /**
+  * @param {QuantumBoundStatesModel} model
   * @param {double} wellOffset
   * @constructor
   */

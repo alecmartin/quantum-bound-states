@@ -1,7 +1,7 @@
 //  Copyright 2002-2014, University of Colorado Boulder
 
 /**
- *
+ * Constructor to draw the potential wells
  * @author Emily Randall
  */
 define( function( require ) {
@@ -25,7 +25,6 @@ define( function( require ) {
     var potential = model.currentPotentialProperty.value;
     var maxEnergy = model.getMaxEnergy();
     var mass = model.particleMassProperty.value;
-    var eVToJ = constants.eVToJ;
     var xScale = width / (model.maxX - model.minX);
     var yScale = height / (maxEnergy - model.getMinEnergy());
     var offset = potential.wellOffsetProperty.value;

@@ -1,8 +1,8 @@
 //  Copyright 2002-2014, University of Colorado Boulder
 
 /**
- *
- * @author Emily Randall
+ * Constructor for the top plot
+ * Contains the drawing of the potential well and the energy lines
  */
 define( function( require ) {
   'use strict';
@@ -24,8 +24,8 @@ define( function( require ) {
     
     // strings
     var titleString = require( 'string!QUANTUM_BOUND_STATES/energy-plot-title' );
-    var totalenergyString = require( 'string!QUANTUM_BOUND_STATES/energy-plot-total-energy' );
-    var potentialenergyString = require( 'string!QUANTUM_BOUND_STATES/energy-plot-potential-energy' );
+    var totalEnergyString = require( 'string!QUANTUM_BOUND_STATES/energy-plot-total-energy' );
+    var potentialEnergyString = require( 'string!QUANTUM_BOUND_STATES/energy-plot-potential-energy' );
     
     var background = new Rectangle(50, 0, width, height, 0, 0, {fill:'black', stroke: 'white'});
     this.addChild( background );
@@ -57,12 +57,9 @@ define( function( require ) {
       xLoc += xSpacing;
     }
     
-    var well = new PotentialWellNode( model, width, height+padding, {x: 50} );
+    var well = new PotentialWellNode( model, width, height + padding, {x: 50} );
     this.addChild( well );
     
-
-
-
     var title = new Text( titleString, {
       font: new PhetFont( 18 ),
       rotation: -Math.PI / 2,
@@ -72,39 +69,36 @@ define( function( require ) {
     });
     this.addChild( title );
 
-    var totalenergy = new Text( totalenergyString, {
+    var totalEnergy = new Text( totalEnergyString, {
       font: new PhetFont( 18 ),
       fill: 'white'
     });
 
-    var totalenergyline = new Line(0, 0, 20, 0, {stroke: 'green',lineWidth: 3});
+    var totalEnergyLine = new Line(0, 0, 20, 0, {stroke: 'green', lineWidth: 3});
 
-    var potentialenergy = new Text( potentialenergyString, {
+    var potentialEnergy = new Text( potentialEnergyString, {
       font: new PhetFont( 18 ),
       fill: 'white'
     });
 
-    var potentialenergyline = new Line(0, 0, 20, 0, {stroke: 'purple',lineWidth: 3});
+    var potentialEnergyLine = new Line(0, 0, 20, 0, {stroke: 'purple', lineWidth: 3});
 
     var units = new HBox( {
       x: background.left,
       y: background.top - 20,
       children: [ 
-      new HStrut( 10 ), 
-      totalenergyline, 
-      new HStrut( 5 ) ,
-      totalenergy,
-      new HStrut( 30 ) , 
-      potentialenergyline, 
-      new HStrut( 5 ) ,
-      potentialenergy 
+        new HStrut( 10 ), 
+        totalEnergyLine, 
+        new HStrut( 5 ) ,
+        totalEnergy,
+        new HStrut( 30 ) , 
+        potentialEnergyLine, 
+        new HStrut( 5 ) ,
+        potentialEnergy 
       ]
     });
     this.addChild( units );
-
   }
-
   
-
   return inherit( Node, EnergyPlotNode );
 } );

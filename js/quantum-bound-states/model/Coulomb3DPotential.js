@@ -1,6 +1,6 @@
 // Copyright 2002-2013, University of Colorado Boulder
 /**
-* Square well potential
+* 3D Coulomb well potential
 *
 * @author Emily Randall
 */
@@ -19,6 +19,7 @@ define( function( require ) {
   var maxEigenstates = 10;
   
   /**
+  * @param {QuantumBoundStatesModel} model
   * @param {double} wellOffset
   * @constructor
   */
@@ -51,6 +52,7 @@ define( function( require ) {
     
     /**
      * Get the energy of the nth energy level
+     * n starts at 1
      */
     getNthEigenvalue: function( n ) {
       var m = this.model.particleMassProperty.value;

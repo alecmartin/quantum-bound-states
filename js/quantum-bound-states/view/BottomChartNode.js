@@ -1,5 +1,8 @@
 //  Copyright 2002-2014, University of Colorado Boulder
 
+/**
+* Constructor for the chart that holds the mass slider
+*/
 define( function( require ) {
   'use strict';
 
@@ -29,18 +32,18 @@ define( function( require ) {
     var optionFont = {font: new PhetFont( 16 ), fill: "palegoldenrod"};
     var particleMassString = require( 'string!QUANTUM_BOUND_STATES/bottom-chart-particle-mass' );
 
-    //boxwidth
-    var boxwidth = 240;
+    //boxWidth
+    var boxWidth = 240;
 
-    var sliderpadding = 40;
+    var sliderPadding = 40;
     var arrowHeight = 15;
     var arrowWidth = arrowHeight * (Math.sqrt( 3 ) / 2); // height of equilateral triangle
-    var rightarrow = new Path( null, { fill: 'black' } );
-    var leftarrow = new Path( null, { fill: 'black' } );
-    rightarrow.shape = new Shape().moveTo( 0, 0 ).lineTo( 0, arrowHeight ).lineTo( arrowWidth, arrowHeight /2 ).close(); 
-    leftarrow.shape = new Shape().moveTo( arrowWidth, 0 ).lineTo( arrowWidth, arrowHeight ).lineTo( 0, arrowHeight /2 ).close(); // down arrow
+    var rightArrow = new Path( null, { fill: 'black' } );
+    var leftArrow = new Path( null, { fill: 'black' } );
+    rightArrow.shape = new Shape().moveTo( 0, 0 ).lineTo( 0, arrowHeight ).lineTo( arrowWidth, arrowHeight /2 ).close(); 
+    leftArrow.shape = new Shape().moveTo( arrowWidth, 0 ).lineTo( arrowWidth, arrowHeight ).lineTo( 0, arrowHeight /2 ).close(); // down arrow
     var leftbutton = new RectangularPushButton({
-      content: leftarrow, 
+      content: leftArrow, 
       listener: function(){
 
       },
@@ -49,8 +52,8 @@ define( function( require ) {
       yMargin: 2,
       baseColor: 'white'
     });
-    var rightbutton = new RectangularPushButton({
-      content: rightarrow, 
+    var rightButton = new RectangularPushButton({
+      content: rightArrow, 
       listener: function(){
 
       },
@@ -64,16 +67,13 @@ define( function( require ) {
     var height = 20;
     var background = new Rectangle( 0, 0, width, height, 4, 4,
       { fill: 'white', stroke: 'gray', lineWidth: 1 } );
-
-
-    var parent = new Node();
     
     // horizontal slider
     var hSlider = new HSlider( model.particleMassProperty, { min: 0.5, max: 1.5 }, {
       left: 10,
       top: 10,
       thumbSize: new Dimension2( 11, 22 ),
-      trackSize: new Dimension2( boxwidth - (2 * sliderpadding), 2 ),
+      trackSize: new Dimension2( boxWidth - (2 * sliderPadding), 2 ),
     } );
     
 
@@ -105,10 +105,10 @@ define( function( require ) {
     
     var viewBottomChartVBox = new VBox( {
       children: [ 
-        new HBox( { children: [ new HStrut( boxwidth - 20 ) ] } ),
+        new HBox( { children: [ new HStrut( boxWidth - 20 ) ] } ),
         new HBox( { children: [ new HStrut( 20 ), new VStrut( 10 ), new Text( particleMassString, optionFont ), new HStrut( 15 ) ] } ), 
         new VStrut( 10 ),
-        new HBox( { children: [ new HStrut( 20 ), new HStrut( 25 ), leftbutton, new HStrut( 5 ),  background, new HStrut( 5 ),  rightbutton, new HStrut( 15 ) ] } ), 
+        new HBox( { children: [ new HStrut( 20 ), new HStrut( 25 ), leftbutton, new HStrut( 5 ),  background, new HStrut( 5 ),  rightButton, new HStrut( 15 ) ] } ), 
         new VStrut( 10 ),
         new HBox( { children: [ new HStrut( 20 ), new VStrut( 10 ), hSlider, new HStrut( 20 ) ] } ),
         // new HBox( { children: [ new HStrut( 10 ), new VStrut( 10 ),configurePotentialButton, new HStrut( 15 ) ] } ),
@@ -129,8 +129,6 @@ define( function( require ) {
     } );
     
     this.addChild( viewBottomChartPanel );
-    
-    this.addChild( parent );
   }
   return inherit( Node, BottomChartNode );
 
