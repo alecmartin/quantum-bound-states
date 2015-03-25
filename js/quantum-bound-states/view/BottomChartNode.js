@@ -29,13 +29,14 @@ define( function( require ) {
     Node.call( this, options );
 
     // Strings and other variables
-    var optionFont = {font: new PhetFont( 16 ), fill: "palegoldenrod"};
+    var optionFont = {font: new PhetFont( 14 ), fill: "palegoldenrod"};
+    var labelFont = {font: new PhetFont( 12 ), fill: "white"};
     var particleMassString = require( 'string!QUANTUM_BOUND_STATES/bottom-chart-particle-mass' );
 
     //boxWidth
     var boxWidth = 240;
 
-    var sliderPadding = 40;
+    var sliderPadding = 32;
     var arrowHeight = 15;
     var arrowWidth = arrowHeight * (Math.sqrt( 3 ) / 2); // height of equilateral triangle
     var rightArrow = new Path( null, { fill: 'black' } );
@@ -63,7 +64,7 @@ define( function( require ) {
       baseColor: 'white'
     });
     // button background
-    var width = 60;
+    var width = 80;
     var height = 20;
     var background = new Rectangle( 0, 0, width, height, 4, 4,
       { fill: 'white', stroke: 'gray', lineWidth: 1 } );
@@ -72,9 +73,17 @@ define( function( require ) {
     var hSlider = new HSlider( model.particleMassProperty, { min: 0.5, max: 1.5 }, {
       left: 10,
       top: 10,
+      trackLineWidth: 0.2,
+      // trackFill: 'white',
+      trackStroke: 'white',
+      minorTickStroke: 'white',
       thumbSize: new Dimension2( 11, 22 ),
-      trackSize: new Dimension2( boxWidth - (2 * sliderPadding), 2 ),
+      trackSize: new Dimension2( boxwidth - (2 * sliderPadding), 2 ),
+      // tick: { step: 1, minText: "tiny", maxText: "big" }
     } );
+    hSlider.addMinorTick( 0.5, new Text( "0.50", labelFont ) );
+    hSlider.addMinorTick( 1.5, new Text( "1.10", labelFont ) );
+
     
 
     // var configurePotentialButton = new TextPushButton( configpotentialWellString, {
@@ -103,14 +112,15 @@ define( function( require ) {
     //   { content: new Text( magnifyingString, optionFont ), property: model.showMagnifyingGlassProperty, label: magnifyingString },
     // ], { boxWidth: 20, spacing: 5, fill: 'black', checkBoxColor: 'white'} );
     
+    var midpush  = (boxwidth - 20 - 50 - width) / 2;
+
     var viewBottomChartVBox = new VBox( {
       children: [ 
-        new HBox( { children: [ new HStrut( boxWidth - 20 ) ] } ),
-        new HBox( { children: [ new HStrut( 20 ), new VStrut( 10 ), new Text( particleMassString, optionFont ), new HStrut( 15 ) ] } ), 
+        new HBox( { children: [ new HStrut( boxwidth - 20 ) ] } ),
+        new HBox( { children: [ new HStrut( 10 ), new VStrut( 10 ), new Text( particleMassString, optionFont ), new HStrut( 15 ) ] } ), 
         new VStrut( 10 ),
-        new HBox( { children: [ new HStrut( 20 ), new HStrut( 25 ), leftbutton, new HStrut( 5 ),  background, new HStrut( 5 ),  rightButton, new HStrut( 15 ) ] } ), 
-        new VStrut( 10 ),
-        new HBox( { children: [ new HStrut( 20 ), new VStrut( 10 ), hSlider, new HStrut( 20 ) ] } ),
+        new HBox( { children: [ new HStrut( 40 ), leftbutton, new HStrut( 5 ),  background, new HStrut( 5 ),  rightbutton ] } ), 
+        new HBox( { children: [ new HStrut( 10 ), hSlider, new HStrut( 10 ) ] } ),
         // new HBox( { children: [ new HStrut( 10 ), new VStrut( 10 ),configurePotentialButton, new HStrut( 15 ) ] } ),
         // new VStrut( 10 ),
         // new HBox( { children: [ new HStrut( 10 ), new VStrut( 10 ),superpositionStateButton, new HStrut( 15 ) ] } ),
