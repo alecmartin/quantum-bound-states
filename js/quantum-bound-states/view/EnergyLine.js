@@ -6,9 +6,9 @@ define( function( require ){
   var Text = require( 'SCENERY/nodes/Text' );
   var SubSupText = require( 'SCENERY_PHET/SubSupText' );
   
-  var mouse = require( 'SCENERY/input/mouse' );
+  var mouse = require( 'SCENERY/input/Mouse' );
 
-  function EnergyLine( width, options ){
+  function EnergyLine( model, width, height, options ){
 	  
     Line.call(this, options);
     var x1 = 0;
