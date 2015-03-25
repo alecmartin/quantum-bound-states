@@ -43,7 +43,7 @@ define( function( require ) {
     var leftArrow = new Path( null, { fill: 'black' } );
     rightArrow.shape = new Shape().moveTo( 0, 0 ).lineTo( 0, arrowHeight ).lineTo( arrowWidth, arrowHeight /2 ).close(); 
     leftArrow.shape = new Shape().moveTo( arrowWidth, 0 ).lineTo( arrowWidth, arrowHeight ).lineTo( 0, arrowHeight /2 ).close(); // down arrow
-    var leftbutton = new RectangularPushButton({
+    var leftButton = new RectangularPushButton({
       content: leftArrow, 
       listener: function(){
 
@@ -78,7 +78,7 @@ define( function( require ) {
       trackStroke: 'white',
       minorTickStroke: 'white',
       thumbSize: new Dimension2( 11, 22 ),
-      trackSize: new Dimension2( boxwidth - (2 * sliderPadding), 2 ),
+      trackSize: new Dimension2( boxWidth - (2 * sliderPadding), 2 ),
       // tick: { step: 1, minText: "tiny", maxText: "big" }
     } );
     hSlider.addMinorTick( 0.5, new Text( "0.50", labelFont ) );
@@ -112,14 +112,14 @@ define( function( require ) {
     //   { content: new Text( magnifyingString, optionFont ), property: model.showMagnifyingGlassProperty, label: magnifyingString },
     // ], { boxWidth: 20, spacing: 5, fill: 'black', checkBoxColor: 'white'} );
     
-    var midpush  = (boxwidth - 20 - 50 - width) / 2;
+    var midpush  = (boxWidth - 20 - 50 - width) / 2;
 
     var viewBottomChartVBox = new VBox( {
       children: [ 
-        new HBox( { children: [ new HStrut( boxwidth - 20 ) ] } ),
+        new HBox( { children: [ new HStrut( boxWidth - 20 ) ] } ),
         new HBox( { children: [ new HStrut( 10 ), new VStrut( 10 ), new Text( particleMassString, optionFont ), new HStrut( 15 ) ] } ), 
         new VStrut( 10 ),
-        new HBox( { children: [ new HStrut( 40 ), leftbutton, new HStrut( 5 ),  background, new HStrut( 5 ),  rightbutton ] } ), 
+        new HBox( { children: [ new HStrut( 40 ), leftButton, new HStrut( 5 ),  background, new HStrut( 5 ),  rightButton ] } ), 
         new HBox( { children: [ new HStrut( 10 ), hSlider, new HStrut( 10 ) ] } ),
         // new HBox( { children: [ new HStrut( 10 ), new VStrut( 10 ),configurePotentialButton, new HStrut( 15 ) ] } ),
         // new VStrut( 10 ),
