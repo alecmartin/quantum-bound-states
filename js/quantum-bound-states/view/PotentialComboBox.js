@@ -53,6 +53,7 @@ define( function( require ) {
     ComboBox.call( this, items, model.potentialTypeProperty, parent, {
       listPosition: 'below',
       itemYMargin: 3,
+      itemXMargin: 0,
       itemHighlightFill: 'rgb(218,255,255)'
     } );
   }
