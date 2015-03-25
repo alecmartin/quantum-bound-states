@@ -6,7 +6,7 @@ define( function( require ){
   var Text = require( 'SCENERY/nodes/Text' );
   var SubSupText = require( 'SCENERY_PHET/SubSupText' );
   
-  var mouse = require( 'SCENERY/input/mouse' );
+  var mouse = require( 'SCENERY/input/Mouse' );
 
   function EnergyLine( width, options ){
 	  
@@ -18,16 +18,16 @@ define( function( require ){
     var line = new Line(x1, y1, width, y2, {fill:'green'});
     this.addChild(line);
   
-    while(mouse.over(width, this)){
-	  var line = new Line(x1, y1, width, y2, {fill:'red'});
-	  this.addChild(line);
+   //  while(mouse.over(width, this)){
+	  // var line = new Line(x1, y1, width, y2, {fill:'red'});
+	  // this.addChild(line);
 	 
-	  var texts = new Text( positionString, {
-      font: new PhetFont( 9 ),
-      fill: 'red',
-      });
-      this.addChild( texts );
-    }
+	  // var texts = new Text( positionString, {
+   //    font: new PhetFont( 9 ),
+   //    fill: 'red',
+   //    });
+   //    this.addChild( texts );
+   //  }
   
   
   }
