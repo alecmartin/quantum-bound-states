@@ -57,13 +57,6 @@ define( function( require ) {
       showPhase: false,
       } );
     
-    
-    //this.addProperty("currentPotential", squareWell);
-    //this.addProperty("eigenvals", squareWell.getEigenvalues());
-    
-    
-    //this.addProperty("superpositionCoefficients", coefficients);
-    
     var thisNode = this;
     this.potentialTypeProperty.link( function() {
       thisNode.setPotential(thisNode.potentialTypeProperty.value);
