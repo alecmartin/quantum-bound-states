@@ -40,7 +40,7 @@ define( function( require ) {
     this.groundState = 1;
   }
   
-  return inherit( Object, Coulomb3DPotential, {
+  return inherit( PotentialWell, Coulomb3DPotential, {
     
     /**
     * Get the value of the potential well at a point r
