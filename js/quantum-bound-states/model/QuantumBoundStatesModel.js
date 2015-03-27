@@ -13,23 +13,41 @@ define( function( require ) {
   var Coulomb3DPotential = require( 'QUANTUM_BOUND_STATES/quantum-bound-states/model/Coulomb3DPotential' );
   var HarmonicOscillatorPotential = require( 'QUANTUM_BOUND_STATES/quantum-bound-states/model/HarmonicOscillatorPotential' );
   var inherit = require( 'PHET_CORE/inherit' );
+  var Particle = require( 'QUANTUM_BOUND_STATES/quantum-bound-states/model/Particle' );
   var PropertySet = require( 'AXON/PropertySet' );
   var QuantumBoundStatesConstants = require( 'QUANTUM_BOUND_STATES/quantum-bound-states/model/QuantumBoundStatesConstants' );
   var SquareWellPotential = require( 'QUANTUM_BOUND_STATES/quantum-bound-states/model/SquareWellPotential' );
   var SuperpositionCoefficients = require( 'QUANTUM_BOUND_STATES/quantum-bound-states/model/SuperpositionCoefficients' );
+  
+  // constants
+  var MIN_X = -3.5; // nm
+  var MAX_X = 3.5; // nm
 
   /**
    * Main constructor for QuantumBoundStatesModel, which contains all of the model logic for the entire sim screen.
    * @constructor
    */
   function QuantumBoundStatesModel() {
-    this.minX = -3.5; // nm
-    this.maxX = 3.5; // nm
-
+    var particle = new Particle();
+    var squareWell = new SquareWellPotential( MIN_X, MAX_X, particle, 0.0, 1.0, 10.0 );
+    var asymWell = new AsymmetricPotential( MIN_X, MAX_X, particle, 0.0, 1.0, 10.0 );
+    var coulomb1D = new Coulomb1DPotential( MIN_X, MAX_X, particle, 0.0 );
+    var coulomb3D = new Coulomb3DPotential( MIN_X, MAX_X, particle, 0.0 );
+    var oscillatorWell = new HarmonicOscillatorPotential( MIN_X, MAX_X, particle, 0.0, 1.0 );
+    this.potentials = [squareWell, asymWell, coulomb1D, coulomb3D, oscillatorWell];
+    var coefficients = new SuperpositionCoefficients( squareWell );
+    
+    this.minX = MIN_X;
+    this.maxX = MAX_X;
+    
     PropertySet.call( this, {
+      particle: particle,
       particleMass: QuantumBoundStatesConstants.ELECTRON_MASS,
       hoveredEigenstate: -1,
       potentialType: 0,
+      currentPotential: squareWell,
+      eigenvals: squareWell.getEigenvalues(),
+      superpositionCoefficients: coefficients,
       
       showMagnifyingGlass: false,
       showProbDensity: true,
@@ -39,18 +57,12 @@ define( function( require ) {
       showPhase: false,
       } );
     
-    var squareWell = new SquareWellPotential( this, 0.0, 1.0, 10.0 );
-    var asymWell = new AsymmetricPotential( this, 0.0, 1.0, 10.0 );
-    var coulomb1D = new Coulomb1DPotential( this, 0.0 );
-    var coulomb3D = new Coulomb3DPotential( this, 0.0 );
-    var oscillatorWell = new HarmonicOscillatorPotential( this, 0.0, 1.0 );
-    this.potentials = [squareWell, asymWell, coulomb1D, coulomb3D, oscillatorWell];
     
-    this.addProperty("currentPotential", squareWell);
-    this.addProperty("eigenvals", squareWell.getEigenvalues());
+    //this.addProperty("currentPotential", squareWell);
+    //this.addProperty("eigenvals", squareWell.getEigenvalues());
     
-    var coefficients = new SuperpositionCoefficients( this );
-    this.addProperty("superpositionCoefficients", coefficients);
+    
+    //this.addProperty("superpositionCoefficients", coefficients);
     
     var thisNode = this;
     this.potentialTypeProperty.link( function() {
@@ -128,6 +140,13 @@ define( function( require ) {
         }
       }
       return [subscripts, nonzero];
+    },
+    
+    /**
+     * Return the property that governs the mass of the particle
+     */
+    getParticleMassProperty: function( ) {
+      return this.particleProperty.value.particleMassProperty;
     },
     
     /**

@@ -21,6 +21,10 @@ define( function( require ) {
   var VBox = require( 'SCENERY/nodes/VBox' );
   var TextPushButton = require( 'SUN/buttons/TextPushButton' );
   
+  /**
+  * @param {QuantumBoundStatesModel} model
+  * @constructor
+  */
   function TopChartNode( model, options ) {
     Node.call( this, options );
 
@@ -32,7 +36,7 @@ define( function( require ) {
     var superpositionStateString = require( 'string!QUANTUM_BOUND_STATES/top-chart-superposition-state' );
 
     var parent = new Node();
-    var potentialWellComboBox = new PotentialComboBox( model, parent );
+    var potentialWellComboBox = new PotentialComboBox( model.potentials, model.potentialTypeProperty, parent );
     
     //boxwidth
     var boxwidth = 240;

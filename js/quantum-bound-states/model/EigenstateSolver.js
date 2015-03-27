@@ -36,21 +36,24 @@ define( function( require ) {
   
   /**
   * @constructor for the eigenstate solver
-  * @param {QuantumBoundStatesModel} model
+  * @param {float} minX
+  * @param {float} maxX
+  * @param {Particle} particle
   * @param {int} n: the number of points to produce in a wavefunction
   * @param {PotentialWell} potential
   */
-  function EigenstateSolver( model, n, potential ) {
-    this.model = model;
+  function EigenstateSolver( minX, maxX, particle, n, potential ) {
+    this.maxX = maxX;
+    this.minX = minX;
     this.n = n;
-    this.hb = QuantumBoundStatesConstants.HBAR * QuantumBoundStatesConstants.HBAR / (2 * model.particleMassProperty.value);
+    this.hb = QuantumBoundStatesConstants.HBAR * QuantumBoundStatesConstants.HBAR / (2 * particle.particleMassProperty.value);
     this.potential = potential;
     this.potentialPoints = potential.getPotentialPoints( n )[1];
     
     var thisNode = this;
     
-    model.particleMassProperty.link( function () {
-      thisNode.hb = QuantumBoundStatesConstants.HBAR * QuantumBoundStatesConstants.HBAR / (2 * model.particleMassProperty.value);
+    particle.particleMassProperty.link( function () {
+      thisNode.hb = QuantumBoundStatesConstants.HBAR * QuantumBoundStatesConstants.HBAR / (2 * particle.particleMassProperty.value);
     });
   }
   
@@ -63,7 +66,7 @@ define( function( require ) {
       var n = this.n;
       var hbInverse = 1 / this.hb;
       var matchPoint = n * 0.53;
-      var dx = (this.model.maxX - this.model.minX) / (n - 1);
+      var dx = (this.maxX - this.minX) / (n - 1);
       var h12 = dx * dx / 12;
       
       // initial and final boundary conditions
@@ -120,7 +123,7 @@ define( function( require ) {
       var upperTester;
       var lowerTester;
       // find upper bound
-      var upperEnergy = this.hb * 10.0 * Math.pow((nodes + 1) / (this.model.maxX - this.model.minX), 2);
+      var upperEnergy = this.hb * 10.0 * Math.pow((nodes + 1) / (this.maxX - this.minX), 2);
       for (i = 0; i < MAX_TRIES; i++) {
         upperEnergy *= 2.0;
         upperTester = this.testEnergy( upperEnergy );
@@ -133,7 +136,7 @@ define( function( require ) {
       }
       
       // find lower bound
-      var lowerEnergy = -this.hb * 10.0 * Math.pow((nodes + 1) / (this.model.maxX - this.model.minX), 2);
+      var lowerEnergy = -this.hb * 10.0 * Math.pow((nodes + 1) / (this.maxX - this.minX), 2);
       for (i = 0; i < MAX_TRIES; i++) {
         lowerEnergy *= 2.0;
         lowerTester = this.testEnergy( lowerEnergy );
@@ -197,7 +200,7 @@ define( function( require ) {
       var wave = new FastArray(n);
       var hbInverse = 1 / this.hb;
       var matchPoint = n * 0.53;
-      var dx = (this.model.maxX - this.model.minX) / (n - 1);
+      var dx = (this.maxX - this.minX) / (n - 1);
       var h12 = dx * dx / 12;
       
       // initial and final boundary conditions

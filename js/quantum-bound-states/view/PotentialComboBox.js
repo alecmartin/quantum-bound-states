@@ -16,7 +16,13 @@ define( function( require ) {
   var PhetFont = require( 'SCENERY_PHET/PhetFont' );
   var Text = require( 'SCENERY/nodes/Text' );
 
-  function PotentialComboBox( model, parent, options ) {
+  /**
+  * @param {PotentialWell[]} potentials
+  * @param {Property} potentialTypeProperty
+  * @param {Node} parent
+  * @constructor
+  */
+  function PotentialComboBox( potentials, potentialTypeProperty, parent, options ) {
     
     // strings
     var squareString = require( 'string!QUANTUM_BOUND_STATES/square' );
@@ -46,11 +52,11 @@ define( function( require ) {
     
     // items
     var items = [];
-    for ( var i = 0; i < model.potentials.length; i++ ) {
+    for ( var i = 0; i < potentials.length; i++ ) {
       items[ i ] = createItem( i );
     }
     
-    ComboBox.call( this, items, model.potentialTypeProperty, parent, {
+    ComboBox.call( this, items, potentialTypeProperty, parent, {
       listPosition: 'below',
       itemYMargin: 3,
       itemXMargin: 0,

@@ -25,6 +25,8 @@ define( function( require ) {
 
     ScreenView.call( this );
     
+    var particleMassProperty = quantumBoundStatesModel.getParticleMassProperty();
+    
     var energyPlotNode = new EnergyPlotNode( quantumBoundStatesModel, 600, 250, {
       x: 0,
       y: 50,
@@ -51,7 +53,7 @@ define( function( require ) {
     });
     this.addChild( topChartNode );
 
-    var bottomChartNode = new BottomChartNode( quantumBoundStatesModel, {
+    var bottomChartNode = new BottomChartNode( particleMassProperty, {
       x: this.layoutBounds.maxX - 240,
       y: 450,
 

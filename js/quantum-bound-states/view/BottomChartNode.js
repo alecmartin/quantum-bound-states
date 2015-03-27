@@ -24,8 +24,11 @@ define( function( require ) {
   var VBox = require( 'SCENERY/nodes/VBox' );
   var VStrut = require( 'SUN/VStrut' );
   
-  
-  function BottomChartNode( model, options ) {
+  /**
+  * @param {Property} particleMassProperty
+  * @constructor
+  */
+  function BottomChartNode( particleMassProperty, options ) {
     Node.call( this, options );
 
     // Strings and other variables
@@ -70,7 +73,7 @@ define( function( require ) {
       { fill: 'white', stroke: 'gray', lineWidth: 1 } );
     
     // horizontal slider
-    var hSlider = new HSlider( model.particleMassProperty, {
+    var hSlider = new HSlider( particleMassProperty, {
       min: 0.5 * QuantumBoundStatesConstants.ELECTRON_MASS,
       max: 1.1 * QuantumBoundStatesConstants.ELECTRON_MASS }, {
       left: 10,

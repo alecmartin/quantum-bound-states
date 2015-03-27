@@ -13,25 +13,25 @@ define( function( require ) {
   var Property = require( 'AXON/Property' );
   
   /**
-  * @param {QuantumBoundStatesModel} model
+  * @param {float} minX
+  * @param {float} maxX
+  * @param {Particle} particle
   * @param {double} wellOffset
   * @param {double} wellWidth
   * @param {double} wellHeight
   * @constructor
   */
-  function AsymmetricPotential( model, wellOffset, wellWidth, wellHeight ) {
-    this.wellOffsetProperty = new Property( wellOffset );
+  function AsymmetricPotential( minX, maxX, particle, wellOffset, wellWidth, wellHeight ) {
     this.wellWidthProperty = new Property( wellWidth );
     this.wellHeightProperty = new Property( wellHeight );
     
-    PotentialWell.call( this, model );
+    PotentialWell.call( this, minX, maxX, particle, wellOffset );
     
     this.minEnergy = -5; // eV
     this.maxEnergy = 15; // eV
     this.groundState = 1;
     
     var thisNode = this;
-    this.wellOffsetProperty.link( thisNode.redrawEigenstates );
     
     this.wellWidthProperty.link( thisNode.redrawEigenstates );
     
@@ -41,7 +41,6 @@ define( function( require ) {
   return inherit( PotentialWell, AsymmetricPotential, {
     
     reset: function( ) {
-      this.wellOffsetProperty.reset();
       this.wellWidthProperty.reset();
       this.wellHeightProperty.reset();
     },

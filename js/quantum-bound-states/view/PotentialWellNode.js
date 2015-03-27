@@ -13,7 +13,12 @@ define( function( require ) {
   var Path = require( 'SCENERY/nodes/Path' );
   var Shape = require( 'KITE/Shape' );
 
-
+  /**
+  * @param {QuantumBoundStatesModel} model
+  * @param {int} width
+  * @param {int} height
+  * @constructor
+  */
   function PotentialWellNode( model, width, height, options ) {
     Node.call( this, options );
     var thisNode = this;

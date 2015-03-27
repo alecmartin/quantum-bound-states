@@ -18,28 +18,21 @@ define( function( require ) {
   var MAX_EIGENSTATES = 10;
   
   /**
-  * @param {QuantumBoundStatesModel} model
+  * @param {float} minX
+  * @param {float} maxX
+  * @param {Particle} particle
   * @param {double} wellOffset
   * @constructor
   */
-  function Coulomb3DPotential( model, wellOffset ) {
-    this.wellOffsetProperty = new Property( wellOffset );
-    
-    PotentialWell.call( this, model );
+  function Coulomb3DPotential( minX, maxX, particle, wellOffset ) {    
+    PotentialWell.call( this, minX, maxX, particle, wellOffset );
     
     this.minEnergy = -15; // eV
     this.maxEnergy = 5; // eV
     this.groundState = 1;
-    
-    var thisNode = this;
-    this.wellOffsetProperty.link( thisNode.redrawEigenstates );
   }
   
   return inherit( Object, Coulomb3DPotential, {
-    
-    reset: function( ) {
-      this.wellOffsetProperty.reset();
-    },
     
     /**
     * Get the value of the potential well at a point r
@@ -54,7 +47,7 @@ define( function( require ) {
      * n starts at 1
      */
     getNthEigenvalue: function( n ) {
-      var m = this.model.particleMassProperty.value;
+      var m = this.particle.particleMassProperty.value;
       return -m * QuantumBoundStatesConstants.KE2 * QuantumBoundStatesConstants.KE2 /
       (2 * QuantumBoundStatesConstants.HBAR * QuantumBoundStatesConstants.HBAR * n * n) + this.wellOffsetProperty.value;
     },
@@ -86,7 +79,7 @@ define( function( require ) {
       }
       else {
         var energy = this.getNthEigenvalue( n );
-        var solver = new Coulomb3DSolver( this.model, this.numPoints, this );
+        var solver = new Coulomb3DSolver( this.minX, this.maxX, this.particle, this.numPoints );
         pointsY = solver.calculateWavefunction( energy );
         this.cacheEigenstate( n-1, pointsY );
       }

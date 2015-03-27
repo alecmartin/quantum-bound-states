@@ -14,31 +14,29 @@ define( function( require ) {
   var QuantumBoundStatesConstants = require( 'QUANTUM_BOUND_STATES/quantum-bound-states/model/QuantumBoundStatesConstants' );
   
   /**
-  * @param {QuantumBoundStatesModel} model
+  * @param {float} minX
+  * @param {float} maxX
+  * @param {Particle} particle
   * @param {double} wellOffset
   * @param {double} frequency
   * @constructor
   */
-  function HarmonicOscillatorPotential( model, wellOffset, frequency ) {
-    this.wellOffsetProperty = new Property( wellOffset );
+  function HarmonicOscillatorPotential( minX, maxX, particle, wellOffset, frequency ) {
     this.frequencyProperty = new Property( frequency );
     
-    PotentialWell.call( this, model );
+    PotentialWell.call( this, minX, maxX, particle, wellOffset );
     
     this.minEnergy = -5; // eV
     this.maxEnergy = 15; // eV
     this.groundState = 0;
     
-    var thisNode = this;
-    this.wellOffsetProperty.link( thisNode.redrawEigenstates );
-    
+    var thisNode = this;    
     this.frequencyProperty.link( thisNode.redrawEigenstates );
   }
   
   return inherit( PotentialWell, HarmonicOscillatorPotential, {
     
     reset: function( ) {
-      this.wellOffsetProperty.reset();
       this.frequencyProperty.reset();
     },
     
@@ -48,7 +46,7 @@ define( function( require ) {
     */
     potentialValue: function( x ) {
       var w = this.frequencyProperty.value;
-      return 1 / 2 * this.model.particleMassProperty.value * Math.pow(w * x, 2) + this.wellOffsetProperty.value;
+      return 1 / 2 * this.particle.particleMassProperty.value * Math.pow(w * x, 2) + this.wellOffsetProperty.value;
     },
     
     /**

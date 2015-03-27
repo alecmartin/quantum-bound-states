@@ -17,11 +17,11 @@ define( function( require ) {
   var FastArray = dot.FastArray;
   
   /**
-  * @param {QuantumBoundStatesModel} model
+  * @param {PotentialWell} potential
   * @constructor
   */
-  function SuperpositionCoefficients( model ) {
-    this.coefficients = new FastArray( model.currentPotentialProperty.value.getNumberOfEigenstates() );
+  function SuperpositionCoefficients( potential ) {
+    this.coefficients = new FastArray( potential.getNumberOfEigenstates() );
     for (var i = 0; i < this.coefficients.length; i++) {
       this.coefficients[i] = 0.0;
     }

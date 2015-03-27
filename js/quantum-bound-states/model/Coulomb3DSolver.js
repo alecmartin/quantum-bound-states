@@ -16,13 +16,15 @@ define( function( require ) {
   var SQRT_PI = Math.sqrt(Math.PI);
   
   /**
-  * @param {QuantumBoundStatesModel} model
+  * @param {float} minX
+  * @param {float} maxX
+  * @param {Particle} particle
   * @param {int} n: the number of points to return in a calculated wavefunction
   * @param {Coulomb3DPotential} potential
   * @constructor
   */
-  function Coulomb3DSolver( model, n, potential ) {
-    CoulombSolver.call( this, model, n, potential );
+  function Coulomb3DSolver( minX, maxX, particle, n ) {
+    CoulombSolver.call( this, minX, maxX, particle, n );
   }
   
   return inherit( CoulombSolver, Coulomb3DSolver, {

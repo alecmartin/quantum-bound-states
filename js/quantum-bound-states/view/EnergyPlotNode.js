@@ -18,6 +18,12 @@ define( function( require ) {
   var Rectangle = require( 'SCENERY/nodes/Rectangle' );
   var Text = require( 'SCENERY/nodes/Text' );
 
+  /**
+  * @param {QuantumBoundStatesModel} model
+  * @param {int} width
+  * @param {int} height
+  * @constructor
+  */
   function EnergyPlotNode( model, width, height, options ) {
 
     Node.call( this, options );

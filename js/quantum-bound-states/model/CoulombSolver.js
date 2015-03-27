@@ -17,19 +17,22 @@ define( function( require ) {
   var SQRT_4_PI = Math.sqrt(4 * Math.PI);
   
   /**
-  * @param {QuantumBoundStatesModel} model
+  * @param {float} minX
+  * @param {float} maxX
+  * @param {Particle} particle
   * @param {int} n: the number of points to return in a calculated wavefunction
-  * @param {Coulomb1DPotential} potential
+  * @param {PotentialWell} potential
   * @constructor
   */
-  function CoulombSolver( model, n, potential ) {
-    this.model = model;
-    this.potential = potential;
+  function CoulombSolver( minX, maxX, particle, n ) {
+    this.minX = minX;
+    this.maxX = maxX;
+    this.particle = particle;
     this.ab = this.getBohrRadius();
     this.n = n;
     
     var thisNode = this;
-    model.particleMassProperty.link( function () {
+    particle.particleMassProperty.link( function () {
       thisNode.ab = thisNode.getBohrRadius();
     });
   }
@@ -37,15 +40,15 @@ define( function( require ) {
   return inherit( Object, CoulombSolver, {
     getBohrRadius: function() {
       return QuantumBoundStatesConstants.HBAR * QuantumBoundStatesConstants.HBAR /
-      (this.model.particleMassProperty.value * QuantumBoundStatesConstants.KE2);
+      (this.particle.particleMassProperty.value * QuantumBoundStatesConstants.KE2);
     },
     
     /**
      * Return the scaled wavefunction
      */
     calculateWavefunction: function( nodes ) {
-      var dx = (this.model.maxX - this.model.minX) / (this.n - 1);
-      var x = this.model.minX;
+      var dx = (this.maxX - this.minX) / (this.n - 1);
+      var x = this.minX;
       var wave = new FastArray( this.n );
       for (var i = 0; i < this.n; i++) {
         wave[i] = this.psiScaled( nodes, x );
