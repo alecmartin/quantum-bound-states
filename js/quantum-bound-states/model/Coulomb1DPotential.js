@@ -14,8 +14,6 @@ define( function( require ) {
   var Property = require( 'AXON/Property' );
   var QuantumBoundStatesConstants = require( 'QUANTUM_BOUND_STATES/quantum-bound-states/model/QuantumBoundStatesConstants' );
   
-  var constants = new QuantumBoundStatesConstants();
-  
   /**
   * @param {QuantumBoundStatesModel} model
   * @param {double} wellOffset
@@ -45,7 +43,7 @@ define( function( require ) {
     * @param {double} x: distance from center of well in nanometers
     */
     potentialValue: function( x ) {
-      return -1 * constants.ke2 / Math.abs(x) + this.wellOffsetProperty.value;
+      return -1 * QuantumBoundStatesConstants.KE2 / Math.abs(x) + this.wellOffsetProperty.value;
     },
     
     /**
@@ -53,7 +51,8 @@ define( function( require ) {
      */
     getNthEigenvalue: function( n ) {
       var m = this.model.particleMassProperty.value;
-      return -m * constants.ke2 * constants.ke2 / (2 * constants.hbar * constants.hbar * n * n) + this.wellOffsetProperty.value;
+      return -m * QuantumBoundStatesConstants.KE2 * QuantumBoundStatesConstants.KE2 /
+      (2 * QuantumBoundStatesConstants.HBAR * QuantumBoundStatesConstants.HBAR * n * n) + this.wellOffsetProperty.value;
     },
     
     /**

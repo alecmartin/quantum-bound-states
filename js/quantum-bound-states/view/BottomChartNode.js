@@ -24,9 +24,6 @@ define( function( require ) {
   var VBox = require( 'SCENERY/nodes/VBox' );
   var VStrut = require( 'SUN/VStrut' );
   
-  // constants
-  var constants = new QuantumBoundStatesConstants();
-  
   
   function BottomChartNode( model, options ) {
     Node.call( this, options );
@@ -74,8 +71,8 @@ define( function( require ) {
     
     // horizontal slider
     var hSlider = new HSlider( model.particleMassProperty, {
-      min: 0.5 * constants.electronMass,
-      max: 1.1 * constants.electronMass }, {
+      min: 0.5 * QuantumBoundStatesConstants.ELECTRON_MASS,
+      max: 1.1 * QuantumBoundStatesConstants.ELECTRON_MASS }, {
       left: 10,
       top: 10,
       trackLineWidth: 0.2,
@@ -84,8 +81,8 @@ define( function( require ) {
       thumbSize: new Dimension2( 11, 22 ),
       trackSize: new Dimension2( boxWidth - (2 * sliderPadding), 2 )
     } );
-    hSlider.addMinorTick( 0.5 * constants.electronMass, new Text( "0.50", labelFont ) );
-    hSlider.addMinorTick( 1.1 * constants.electronMass, new Text( "1.10", labelFont ) );
+    hSlider.addMinorTick( 0.5 * QuantumBoundStatesConstants.ELECTRON_MASS, new Text( "0.50", labelFont ) );
+    hSlider.addMinorTick( 1.1 * QuantumBoundStatesConstants.ELECTRON_MASS, new Text( "1.10", labelFont ) );
     
     var viewBottomChartVBox = new VBox( {
       children: [ 

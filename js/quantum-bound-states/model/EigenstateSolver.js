@@ -13,7 +13,6 @@ define( function( require ) {
   var QuantumBoundStatesConstants = require( 'QUANTUM_BOUND_STATES/quantum-bound-states/model/QuantumBoundStatesConstants' );
   
   // constants
-  var constants = new QuantumBoundStatesConstants();
   var FastArray = dot.FastArray;
   var SMALL = 1.0E-10;
   var MAX_TRIES = 100;
@@ -44,14 +43,14 @@ define( function( require ) {
   function EigenstateSolver( model, n, potential ) {
     this.model = model;
     this.n = n;
-    this.hb = constants.hbar * constants.hbar / (2 * model.particleMassProperty.value);
+    this.hb = QuantumBoundStatesConstants.HBAR * QuantumBoundStatesConstants.HBAR / (2 * model.particleMassProperty.value);
     this.potential = potential;
     this.potentialPoints = potential.getPotentialPoints( n )[1];
     
     var thisNode = this;
     
     model.particleMassProperty.link( function () {
-      thisNode.hb = constants.hbar * constants.hbar / (2 * model.particleMassProperty.value);
+      thisNode.hb = QuantumBoundStatesConstants.HBAR * QuantumBoundStatesConstants.HBAR / (2 * model.particleMassProperty.value);
     });
   }
   

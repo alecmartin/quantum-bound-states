@@ -13,8 +13,6 @@ define( function( require ) {
   var Property = require( 'AXON/Property' );
   var QuantumBoundStatesConstants = require( 'QUANTUM_BOUND_STATES/quantum-bound-states/model/QuantumBoundStatesConstants' );
   
-  var constants = new QuantumBoundStatesConstants();
-  
   /**
   * @param {QuantumBoundStatesModel} model
   * @param {double} wellOffset
@@ -58,7 +56,7 @@ define( function( require ) {
      */
     getNthEigenvalue: function( n ) {
       var w = this.frequencyProperty.value;
-      return constants.hbar * w * (n + 1 / 2) + this.wellOffsetProperty.value;
+      return QuantumBoundStatesConstants.HBAR * w * (n + 1 / 2) + this.wellOffsetProperty.value;
     },
     
     /**

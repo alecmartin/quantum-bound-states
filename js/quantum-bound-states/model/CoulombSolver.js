@@ -13,7 +13,6 @@ define( function( require ) {
   var QuantumBoundStatesConstants = require( 'QUANTUM_BOUND_STATES/quantum-bound-states/model/QuantumBoundStatesConstants' );
   
   // constants
-  var constants = new QuantumBoundStatesConstants();
   var FastArray = dot.FastArray;
   var SQRT_4_PI = Math.sqrt(4 * Math.PI);
   
@@ -37,7 +36,8 @@ define( function( require ) {
   
   return inherit( Object, CoulombSolver, {
     getBohrRadius: function() {
-      return constants.hbar * constants.hbar / (this.model.particleMassProperty.value * constants.ke2);
+      return QuantumBoundStatesConstants.HBAR * QuantumBoundStatesConstants.HBAR /
+      (this.model.particleMassProperty.value * QuantumBoundStatesConstants.KE2);
     },
     
     /**

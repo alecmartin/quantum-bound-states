@@ -17,8 +17,6 @@ define( function( require ) {
   var QuantumBoundStatesConstants = require( 'QUANTUM_BOUND_STATES/quantum-bound-states/model/QuantumBoundStatesConstants' );
   var SquareWellPotential = require( 'QUANTUM_BOUND_STATES/quantum-bound-states/model/SquareWellPotential' );
   var SuperpositionCoefficients = require( 'QUANTUM_BOUND_STATES/quantum-bound-states/model/SuperpositionCoefficients' );
-  
-  var constants = new QuantumBoundStatesConstants();
 
   /**
    * Main constructor for QuantumBoundStatesModel, which contains all of the model logic for the entire sim screen.
@@ -29,7 +27,7 @@ define( function( require ) {
     this.maxX = 3.5; // nm
 
     PropertySet.call( this, {
-      particleMass: constants.electronMass,
+      particleMass: QuantumBoundStatesConstants.ELECTRON_MASS,
       hoveredEigenstate: -1,
       potentialType: 0,
       
@@ -186,10 +184,10 @@ define( function( require ) {
       // multiply by the propagator
       for (var l = 0; l < psi[1].length; l++) {
         if (isReal) {
-          psi[1][l] *= Math.cos(-energy * t / constants.hbar);
+          psi[1][l] *= Math.cos(-energy * t / QuantumBoundStatesConstants.HBAR);
         }
         else {
-          psi[1][l] *= Math.sin(-energy * t / constants.hbar);
+          psi[1][l] *= Math.sin(-energy * t / QuantumBoundStatesConstants.HBAR);
         }
       }
       // If there's only one selected eigenstate, return the wavefunction
@@ -206,10 +204,10 @@ define( function( require ) {
         energy = potential.getNthEigenvalue( nodeArray[0] - this.currentPotentialProperty.value.groundState );
         for (var j = 0; j < psi.length; j++) {
           if (isReal) {
-            psi[1][j] += psiNew[j] * coefficients[j] * Math.cos(-energy * t / constants.hbar);
+            psi[1][j] += psiNew[j] * coefficients[j] * Math.cos(-energy * t / QuantumBoundStatesConstants.HBAR);
           }
           else {
-            psi[1][j] += psiNew[j] * coefficients[j] * Math.sin(-energy * t / constants.hbar);
+            psi[1][j] += psiNew[j] * coefficients[j] * Math.sin(-energy * t / QuantumBoundStatesConstants.HBAR);
           }
         }
       }

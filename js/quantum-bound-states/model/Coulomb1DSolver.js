@@ -14,7 +14,6 @@ define( function( require ) {
   var QuantumBoundStatesConstants = require( 'QUANTUM_BOUND_STATES/quantum-bound-states/model/QuantumBoundStatesConstants' );
   
   // constants
-  var constants = new QuantumBoundStatesConstants();
   var SCALING_COEFFICIENTS = [1.10851, -1.86636,  2.55958, -3.21387,  3.84064, -4.44633,  5.03504, -5.60960,  6.17208, -6.72406];
   
   /**
@@ -51,7 +50,7 @@ define( function( require ) {
     psiScaled: function( nodes, x ) {
       var coeff = this.getScalingCoefficient( nodes );
       var mass = this.model.particleMassProperty.value;
-      return Math.sqrt(constants.electronMass / mass) * coeff * x * this.calculatePsi( nodes, x );
+      return Math.sqrt(QuantumBoundStatesConstants.ELECTRON_MASS / mass) * coeff * x * this.calculatePsi( nodes, x );
     }
   } );
 } );

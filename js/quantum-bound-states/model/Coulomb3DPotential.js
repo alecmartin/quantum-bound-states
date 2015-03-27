@@ -15,7 +15,6 @@ define( function( require ) {
   var QuantumBoundStatesConstants = require( 'QUANTUM_BOUND_STATES/quantum-bound-states/model/QuantumBoundStatesConstants' );
   
   // constants
-  var constants = new QuantumBoundStatesConstants();
   var MAX_EIGENSTATES = 10;
   
   /**
@@ -47,7 +46,7 @@ define( function( require ) {
     * @param {double} r: distance from center of well (origin) in nanometers
     */
     potentialValue: function( r ) {
-      return -1 * constants.ke2 / Math.abs(r) + this.wellOffsetProperty.value;
+      return -1 * QuantumBoundStatesConstants.KE2 / Math.abs(r) + this.wellOffsetProperty.value;
     },
     
     /**
@@ -56,7 +55,8 @@ define( function( require ) {
      */
     getNthEigenvalue: function( n ) {
       var m = this.model.particleMassProperty.value;
-      return -m * constants.ke2 * constants.ke2 / (2 * constants.hbar * constants.hbar * n * n) + this.wellOffsetProperty.value;
+      return -m * QuantumBoundStatesConstants.KE2 * QuantumBoundStatesConstants.KE2 /
+      (2 * QuantumBoundStatesConstants.HBAR * QuantumBoundStatesConstants.HBAR * n * n) + this.wellOffsetProperty.value;
     },
     
     /**
