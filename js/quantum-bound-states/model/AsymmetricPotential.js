@@ -11,10 +11,6 @@ define( function( require ) {
   var inherit = require( 'PHET_CORE/inherit' );
   var PotentialWell = require( 'QUANTUM_BOUND_STATES/quantum-bound-states/model/PotentialWell' );
   var Property = require( 'AXON/Property' );
-  var QuantumBoundStatesConstants = require( 'QUANTUM_BOUND_STATES/quantum-bound-states/model/QuantumBoundStatesConstants' );
-  
-  // constants
-  var constants = new QuantumBoundStatesConstants();
   
   /**
   * @param {QuantumBoundStatesModel} model

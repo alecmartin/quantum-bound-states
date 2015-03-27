@@ -65,12 +65,12 @@ define( function( require ) {
      */
     normalize: function( ) {
       var sum = 0;
-      for (var i = 0; i < coefficients.length; i++) {
-        sum += coefficients[i] * coefficients[i];
+      for (var i = 0; i < this.coefficients.length; i++) {
+        sum += this.coefficients[i] * this.coefficients[i];
       }
       sum = Math.sqrt(sum);
-      for (var j = 0; j < coefficients.length; j++) {
-        coefficients[i] = coefficients[i] / sum;
+      for (var j = 0; j < this.coefficients.length; j++) {
+        this.coefficients[i] = this.coefficients[i] / sum;
       }
       this.normalizedProperty.value = true;
     },
@@ -81,7 +81,7 @@ define( function( require ) {
     getNumNonZeroCoefficients: function( ) {
       var count = 0;
       for (var i = 0; i < this.coefficients.length; i++ ) {
-        if ( this.coefficients[i] != 0 ) {
+        if ( this.coefficients[i] !== 0 ) {
           count++;
         }
       }

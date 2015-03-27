@@ -11,7 +11,6 @@ define( function( require ) {
   var dot = require( 'DOT/dot' );
   var inherit = require( 'PHET_CORE/inherit' );
   var QuantumBoundStatesConstants = require( 'QUANTUM_BOUND_STATES/quantum-bound-states/model/QuantumBoundStatesConstants' );
-  var Vector2 = require( 'DOT/Vector2' );
   
   // constants
   var constants = new QuantumBoundStatesConstants();
@@ -53,7 +52,7 @@ define( function( require ) {
     
     model.particleMassProperty.link( function () {
       thisNode.hb = constants.hbar * constants.hbar / (2 * model.particleMassProperty.value);
-    })
+    });
   }
   
   return inherit( Object, EigenstateSolver, {
@@ -136,7 +135,6 @@ define( function( require ) {
       
       // find lower bound
       var lowerEnergy = -this.hb * 10.0 * Math.pow((nodes + 1) / (this.model.maxX - this.model.minX), 2);
-      var lowerNodes = 0;
       for (i = 0; i < this.maxTries; i++) {
         lowerEnergy *= 2.0;
         lowerTester = this.testEnergy( lowerEnergy );

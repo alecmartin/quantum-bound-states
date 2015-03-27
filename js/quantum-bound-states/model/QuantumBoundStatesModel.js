@@ -11,18 +11,14 @@ define( function( require ) {
   var AsymmetricPotential = require( 'QUANTUM_BOUND_STATES/quantum-bound-states/model/AsymmetricPotential' );
   var Coulomb1DPotential = require( 'QUANTUM_BOUND_STATES/quantum-bound-states/model/Coulomb1DPotential' );
   var Coulomb3DPotential = require( 'QUANTUM_BOUND_STATES/quantum-bound-states/model/Coulomb3DPotential' );
-  var dot = require( 'DOT/dot' );
-  var EigenstateSolver = require( 'QUANTUM_BOUND_STATES/quantum-bound-states/model/EigenstateSolver' );
   var HarmonicOscillatorPotential = require( 'QUANTUM_BOUND_STATES/quantum-bound-states/model/HarmonicOscillatorPotential' );
   var inherit = require( 'PHET_CORE/inherit' );
   var PropertySet = require( 'AXON/PropertySet' );
   var QuantumBoundStatesConstants = require( 'QUANTUM_BOUND_STATES/quantum-bound-states/model/QuantumBoundStatesConstants' );
   var SquareWellPotential = require( 'QUANTUM_BOUND_STATES/quantum-bound-states/model/SquareWellPotential' );
   var SuperpositionCoefficients = require( 'QUANTUM_BOUND_STATES/quantum-bound-states/model/SuperpositionCoefficients' );
-  var Vector2 = require( 'DOT/Vector2' );
   
   var constants = new QuantumBoundStatesConstants();
-  var FastArray = dot.FastArray;
 
   /**
    * Main constructor for QuantumBoundStatesModel, which contains all of the model logic for the entire sim screen.
@@ -128,7 +124,7 @@ define( function( require ) {
       var nonzero = [];
       var subscripts = [];
       for (var i = 0; i < coeff.coefficients.length; i++ ) {
-        if ( coeff.coefficients[i] != 0 ) {
+        if ( coeff.coefficients[i] !== 0 ) {
           nonzero.push(coeff.coefficients[i]);
           subscripts.push(i + this.currentPotentialProperty.value.groundState);
         }

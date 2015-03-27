@@ -22,7 +22,6 @@ define( function( require ) {
   var Rectangle = require( 'SCENERY/nodes/Rectangle' );
   var RectangularPushButton = require( 'SUN/buttons/RectangularPushButton' );
   var VBox = require( 'SCENERY/nodes/VBox' );
-  var VerticalCheckBoxGroup = require( 'SUN/VerticalCheckBoxGroup' );
   var VStrut = require( 'SUN/VStrut' );
   
   // constants
@@ -88,8 +87,6 @@ define( function( require ) {
     hSlider.addMinorTick( 0.5 * constants.electronMass, new Text( "0.50", labelFont ) );
     hSlider.addMinorTick( 1.1 * constants.electronMass, new Text( "1.10", labelFont ) );
     
-    var midpush  = (boxWidth - 20 - 50 - width) / 2;
-
     var viewBottomChartVBox = new VBox( {
       children: [ 
         new HBox( { children: [ new HStrut( boxWidth - 20 ) ] } ),

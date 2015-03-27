@@ -52,8 +52,8 @@ define( function( require ) {
     var xSpacing = (width  / divisors);
     var xLoc = xSpacing / 2;
     for (var i = model.minX + 0.5; i < divisors + model.minX; i += 1) {
-      var tick = new Line(background.left + xLoc, background.top, background.left+xLoc, background.bottom, {stroke: 'gray'});
-      this.addChild( tick );
+      var line = new Line(background.left + xLoc, background.top, background.left+xLoc, background.bottom, {stroke: 'gray'});
+      this.addChild( line );
       xLoc += xSpacing;
     }
     

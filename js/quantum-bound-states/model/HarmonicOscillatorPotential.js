@@ -12,7 +12,6 @@ define( function( require ) {
   var PotentialWell = require( 'QUANTUM_BOUND_STATES/quantum-bound-states/model/PotentialWell' );
   var Property = require( 'AXON/Property' );
   var QuantumBoundStatesConstants = require( 'QUANTUM_BOUND_STATES/quantum-bound-states/model/QuantumBoundStatesConstants' );
-  var EigenstateSolver = require( 'QUANTUM_BOUND_STATES/quantum-bound-states/model/EigenstateSolver' );
   
   var constants = new QuantumBoundStatesConstants();
   
