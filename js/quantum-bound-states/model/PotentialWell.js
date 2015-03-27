@@ -120,12 +120,5 @@ define( function( require ) {
     cacheEigenstate: function( n, eigenstate ) {
       this.eigenstateCache[n] = eigenstate;
     },
-    
-    redrawEigenstates: function() {
-      if (this.groundState) {
-        this.getEigenvalues();
-        this.eigenstateCache = [];
-      }
-    },
   } );
 } );
