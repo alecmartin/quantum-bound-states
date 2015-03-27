@@ -18,12 +18,15 @@ define( function( require ) {
   var NUM_POINTS = 1350;
   
   /**
-  * @param {float} minX
-  * @param {float} maxX
+  * @param {number} minX
+  * @param {number} maxX
   * @param {Particle} particle
+  * @param {number} wellOffset
   * @constructor
   */
   function PotentialWell( minX, maxX, particle, wellOffset ) {
+    var thisNode = this;
+    
     this.maxX = maxX;
     this.minX = minX;
     this.particle = particle;
@@ -39,8 +42,6 @@ define( function( require ) {
       this.pointsX[i] = x;
       x += (this.maxX - this.minX) / (NUM_POINTS - 1);
     }
-    
-    var thisNode = this;
     
     /**
      * Recalculate eigenstates when variables change
@@ -120,6 +121,13 @@ define( function( require ) {
      */
     cacheEigenstate: function( n, eigenstate ) {
       this.eigenstateCache[n] = eigenstate;
+    },
+    
+    redrawEigenstates: function() {
+      if (this.groundState) {
+        this.getEigenvalues();
+        this.eigenstateCache = [];
+      }
     },
   } );
 } );

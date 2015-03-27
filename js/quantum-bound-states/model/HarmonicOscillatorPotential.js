@@ -14,11 +14,11 @@ define( function( require ) {
   var QuantumBoundStatesConstants = require( 'QUANTUM_BOUND_STATES/quantum-bound-states/model/QuantumBoundStatesConstants' );
   
   /**
-  * @param {float} minX
-  * @param {float} maxX
+  * @param {number} minX
+  * @param {number} maxX
   * @param {Particle} particle
-  * @param {double} wellOffset
-  * @param {double} frequency
+  * @param {number} wellOffset
+  * @param {number} frequency
   * @constructor
   */
   function HarmonicOscillatorPotential( minX, maxX, particle, wellOffset, frequency ) {
@@ -30,12 +30,11 @@ define( function( require ) {
     this.frequencyProperty = new Property( frequency );
     this.name = harmonicString;
     this.image = harmonicImage;
-    
-    PotentialWell.call( this, minX, maxX, particle, wellOffset );
-    
     this.minEnergy = -5; // eV
     this.maxEnergy = 15; // eV
     this.groundState = 0;
+    
+    PotentialWell.call( this, minX, maxX, particle, wellOffset );
     
     var thisNode = this;    
     this.frequencyProperty.link( thisNode.redrawEigenstates );

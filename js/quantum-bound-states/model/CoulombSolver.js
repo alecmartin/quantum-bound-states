@@ -17,11 +17,10 @@ define( function( require ) {
   var SQRT_4_PI = Math.sqrt(4 * Math.PI);
   
   /**
-  * @param {float} minX
-  * @param {float} maxX
+  * @param {number} minX
+  * @param {number} maxX
   * @param {Particle} particle
-  * @param {int} n: the number of points to return in a calculated wavefunction
-  * @param {PotentialWell} potential
+  * @param {number} n: the number of points to return in a calculated wavefunction
   * @constructor
   */
   function CoulombSolver( minX, maxX, particle, n ) {

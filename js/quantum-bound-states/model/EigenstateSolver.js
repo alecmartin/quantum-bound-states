@@ -36,10 +36,10 @@ define( function( require ) {
   
   /**
   * @constructor for the eigenstate solver
-  * @param {float} minX
-  * @param {float} maxX
+  * @param {number} minX
+  * @param {number} maxX
   * @param {Particle} particle
-  * @param {int} n: the number of points to produce in a wavefunction
+  * @param {number} n: the number of points to produce in a wavefunction
   * @param {PotentialWell} potential
   */
   function EigenstateSolver( minX, maxX, particle, n, potential ) {

@@ -13,12 +13,12 @@ define( function( require ) {
   var Property = require( 'AXON/Property' );
   
   /**
-  * @param {float} minX
-  * @param {float} maxX
+  * @param {number} minX
+  * @param {number} maxX
   * @param {Particle} particle
-  * @param {double} wellOffset
-  * @param {double} wellWidth
-  * @param {double} wellHeight
+  * @param {number} wellOffset
+  * @param {number} wellWidth
+  * @param {number} wellHeight
   * @constructor
   */
   function AsymmetricPotential( minX, maxX, particle, wellOffset, wellWidth, wellHeight ) {
@@ -31,12 +31,11 @@ define( function( require ) {
     this.wellHeightProperty = new Property( wellHeight );
     this.name = asymString;
     this.image = asymImage;
-    
-    PotentialWell.call( this, minX, maxX, particle, wellOffset );
-    
     this.minEnergy = -5; // eV
     this.maxEnergy = 15; // eV
     this.groundState = 1;
+    
+    PotentialWell.call( this, minX, maxX, particle, wellOffset );
     
     var thisNode = this;
     

@@ -18,10 +18,10 @@ define( function( require ) {
   var MAX_EIGENSTATES = 10;
   
   /**
-  * @param {float} minX
-  * @param {float} maxX
+  * @param {number} minX
+  * @param {number} maxX
   * @param {Particle} particle
-  * @param {double} wellOffset
+  * @param {number} wellOffset
   * @constructor
   */
   function Coulomb3DPotential( minX, maxX, particle, wellOffset ) {
@@ -32,12 +32,11 @@ define( function( require ) {
     
     this.name = coulomb3DString;
     this.image = coulombImage;
-    
-    PotentialWell.call( this, minX, maxX, particle, wellOffset );
-    
     this.minEnergy = -15; // eV
     this.maxEnergy = 5; // eV
     this.groundState = 1;
+    
+    PotentialWell.call( this, minX, maxX, particle, wellOffset );
   }
   
   return inherit( Object, Coulomb3DPotential, {
