@@ -1,4 +1,4 @@
-//  Copyright 2002-2014, University of Colorado Boulder
+// Copyright 2015, University of Colorado Boulder
 
 /**
  * Constructor for the plot of the probability density function and the wavefunctions
