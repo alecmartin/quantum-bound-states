@@ -22,8 +22,15 @@ define( function( require ) {
   * @constructor
   */
   function SquareWellPotential( minX, maxX, particle, wellOffset, wellWidth, wellHeight ) {
+    // strings
+    var squareString = require( 'string!QUANTUM_BOUND_STATES/square' );
+    // images
+    var squareImage = require( 'image!QUANTUM_BOUND_STATES/SquareIcon.png' );
+    
     this.wellWidthProperty = new Property( wellWidth );
     this.wellHeightProperty = new Property( wellHeight );
+    this.name = squareString;
+    this.image = squareImage;
     
     PotentialWell.call( this, minX, maxX, particle, wellOffset );
     

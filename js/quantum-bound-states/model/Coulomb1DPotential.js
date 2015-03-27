@@ -22,6 +22,14 @@ define( function( require ) {
   * @constructor
   */
   function Coulomb1DPotential( minX, maxX, particle, wellOffset ) {
+    // strings
+    var coulomb1DString = require( 'string!QUANTUM_BOUND_STATES/coulomb_1d' );
+    // images
+    var coulombImage = require( 'image!QUANTUM_BOUND_STATES/CoulombIcon.png' );
+    
+    this.name = coulomb1DString;
+    this.image = coulombImage;
+    
     PotentialWell.call( this, minX, maxX, particle, wellOffset );
     
     this.minEnergy = -15; // eV

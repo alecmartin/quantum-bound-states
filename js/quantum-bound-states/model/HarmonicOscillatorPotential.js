@@ -22,7 +22,14 @@ define( function( require ) {
   * @constructor
   */
   function HarmonicOscillatorPotential( minX, maxX, particle, wellOffset, frequency ) {
+    // strings
+    var harmonicString = require( 'string!QUANTUM_BOUND_STATES/harmonic-oscillator' );
+    // images
+    var harmonicImage = require( 'image!QUANTUM_BOUND_STATES/HarmonicIcon.png' );
+    
     this.frequencyProperty = new Property( frequency );
+    this.name = harmonicString;
+    this.image = harmonicImage;
     
     PotentialWell.call( this, minX, maxX, particle, wellOffset );
     

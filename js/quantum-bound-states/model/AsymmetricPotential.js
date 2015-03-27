@@ -22,8 +22,15 @@ define( function( require ) {
   * @constructor
   */
   function AsymmetricPotential( minX, maxX, particle, wellOffset, wellWidth, wellHeight ) {
+    // strings
+    var asymString = require( 'string!QUANTUM_BOUND_STATES/asymmetric' );
+    // images
+    var asymImage = require( 'image!QUANTUM_BOUND_STATES/AsymIcon.png' );
+    
     this.wellWidthProperty = new Property( wellWidth );
     this.wellHeightProperty = new Property( wellHeight );
+    this.name = asymString;
+    this.image = asymImage;
     
     PotentialWell.call( this, minX, maxX, particle, wellOffset );
     

@@ -24,7 +24,15 @@ define( function( require ) {
   * @param {double} wellOffset
   * @constructor
   */
-  function Coulomb3DPotential( minX, maxX, particle, wellOffset ) {    
+  function Coulomb3DPotential( minX, maxX, particle, wellOffset ) {
+    // strings
+    var coulomb3DString = require( 'string!QUANTUM_BOUND_STATES/coulomb_3d' );
+    // images
+    var coulombImage = require( 'image!QUANTUM_BOUND_STATES/CoulombIcon.png' );
+    
+    this.name = coulomb3DString;
+    this.image = coulombImage;
+    
     PotentialWell.call( this, minX, maxX, particle, wellOffset );
     
     this.minEnergy = -15; // eV
