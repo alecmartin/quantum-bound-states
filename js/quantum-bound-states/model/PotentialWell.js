@@ -24,13 +24,14 @@ define( function( require ) {
   * @constructor
   */
   function PotentialWell( minX, maxX, particle, wellOffset ) {
+
     this.maxX = maxX;
     this.minX = minX;
     this.particle = particle;
     this.numPoints = NUM_POINTS;
     this.eigenstateCache = [];
     this.eigenvals = [];
-    
+
     this.wellOffsetProperty = new Property( wellOffset );
     
     this.pointsX = new FastArray( NUM_POINTS );
@@ -39,29 +40,27 @@ define( function( require ) {
       this.pointsX[i] = x;
       x += (this.maxX - this.minX) / (NUM_POINTS - 1);
     }
-    
-    var thisNode = this;
-    
-    /**
-     * Recalculate eigenstates when variables change
-     */
-    this.redrawEigenstates = function() {
-      if (thisNode.groundState) {
-        thisNode.getEigenvalues();
-        thisNode.eigenstateCache = [];
-      }
-    };
-    
-    this.particle.particleMassProperty.link( thisNode.redrawEigenstates );
-    
-    this.wellOffsetProperty.link( thisNode.redrawEigenstates );
+
+    this.particle.particleMassProperty.link( this.redrawEigenstates.bind( this ) );
+    this.wellOffsetProperty.link( this.redrawEigenstates.bind( this ) );
   }
   
   return inherit( Object, PotentialWell, {
+
     reset: function( ) {
       this.wellOffsetProperty.reset();
     },
-    
+
+    /**
+     * Recalculate eigenstates when variables change
+     */
+    redrawEigenstates: function() {
+      if ( this.groundState ) {
+        this.getEigenvalues();
+        this.eigenstateCache = [];
+      }
+    },
+
     /**
      * Get a set of n points (x, y) to draw the potential well
      */

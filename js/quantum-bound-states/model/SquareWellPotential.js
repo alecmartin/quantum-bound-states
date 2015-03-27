@@ -38,11 +38,8 @@ define( function( require ) {
     this.maxEnergy = 15; // eV
     this.groundState = 1;
     
-    var thisNode = this;
-    
-    this.wellWidthProperty.link( thisNode.redrawEigenstates );
-    
-    this.wellHeightProperty.link( thisNode.redrawEigenstates );
+    this.wellWidthProperty.link( this.redrawEigenstates.bind( this ) );
+    this.wellHeightProperty.link( this.redrawEigenstates.bind( this ) );
   }
   
   return inherit( PotentialWell, SquareWellPotential, {

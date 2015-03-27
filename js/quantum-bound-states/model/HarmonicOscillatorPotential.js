@@ -37,8 +37,7 @@ define( function( require ) {
     this.maxEnergy = 15; // eV
     this.groundState = 0;
     
-    var thisNode = this;    
-    this.frequencyProperty.link( thisNode.redrawEigenstates );
+    this.frequencyProperty.link( this.redrawEigenstates.bind( this ) );
   }
   
   return inherit( PotentialWell, HarmonicOscillatorPotential, {
