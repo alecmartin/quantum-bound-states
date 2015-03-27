@@ -2,7 +2,7 @@
   "name": "quantum-bound-states",
   "version": "1.0.0-dev.1",
   "phetLibs": [
-    "quantum-bound-states ",
+    "quantum-bound-states",
     "assert",
     "axon",
     "brand",
