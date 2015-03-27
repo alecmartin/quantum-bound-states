@@ -1,4 +1,4 @@
-// Copyright 2015, University of Colorado Boulder
+// Copyright 2002-2015, University of Colorado Boulder
 /**
 * Coulomb 3D solver, inherits from Coulomb Solver
 * Provides an analytic solution for eigenstates of a 3D Coulomb Well

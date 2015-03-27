@@ -1,4 +1,4 @@
-// Copyright 2015, University of Colorado Boulder
+// Copyright 2002-2015, University of Colorado Boulder
 /**
 * 1-dimensional Coulomb well potential
 *
