@@ -11,7 +11,13 @@ define( function( require ) {
   var inherit = require( 'PHET_CORE/inherit' );
   var Property = require( 'AXON/Property' );
   var PotentialWell = require( 'QUANTUM_BOUND_STATES/quantum-bound-states/model/PotentialWell' );
-  
+
+  // strings
+  var squareString = require( 'string!QUANTUM_BOUND_STATES/square' );
+
+  // images
+  var squareImage = require( 'image!QUANTUM_BOUND_STATES/SquareIcon.png' );
+
   /**
   * @param {number} minX
   * @param {number} maxX
@@ -22,10 +28,6 @@ define( function( require ) {
   * @constructor
   */
   function SquareWellPotential( minX, maxX, particle, wellOffset, wellWidth, wellHeight ) {
-    // strings
-    var squareString = require( 'string!QUANTUM_BOUND_STATES/square' );
-    // images
-    var squareImage = require( 'image!QUANTUM_BOUND_STATES/SquareIcon.png' );
     
     this.wellWidthProperty = new Property( wellWidth );
     this.wellHeightProperty = new Property( wellHeight );
@@ -37,11 +39,8 @@ define( function( require ) {
     
     PotentialWell.call( this, minX, maxX, particle, wellOffset );
     
-    var thisNode = this;
-    
-    this.wellWidthProperty.link( thisNode.redrawEigenstates );
-    
-    this.wellHeightProperty.link( thisNode.redrawEigenstates );
+    this.wellWidthProperty.link( this.redrawEigenstates.bind( this ) );
+    this.wellHeightProperty.link( this.redrawEigenstates.bind( this ) );
   }
   
   return inherit( PotentialWell, SquareWellPotential, {

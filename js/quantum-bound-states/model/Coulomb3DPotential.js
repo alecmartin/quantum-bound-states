@@ -39,7 +39,7 @@ define( function( require ) {
     PotentialWell.call( this, minX, maxX, particle, wellOffset );
   }
   
-  return inherit( Object, Coulomb3DPotential, {
+  return inherit( PotentialWell, Coulomb3DPotential, {
     
     /**
     * Get the value of the potential well at a point r

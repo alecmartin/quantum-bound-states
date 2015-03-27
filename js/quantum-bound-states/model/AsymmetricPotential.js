@@ -37,11 +37,8 @@ define( function( require ) {
     
     PotentialWell.call( this, minX, maxX, particle, wellOffset );
     
-    var thisNode = this;
-    
-    this.wellWidthProperty.link( thisNode.redrawEigenstates );
-    
-    this.wellHeightProperty.link( thisNode.redrawEigenstates );
+    this.wellWidthProperty.link( this.redrawEigenstates.bind( this ) );
+    this.wellHeightProperty.link( this.redrawEigenstates.bind( this ) );
   }
   
   return inherit( PotentialWell, AsymmetricPotential, {

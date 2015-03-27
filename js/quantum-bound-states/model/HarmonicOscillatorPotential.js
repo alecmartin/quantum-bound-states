@@ -36,8 +36,7 @@ define( function( require ) {
     
     PotentialWell.call( this, minX, maxX, particle, wellOffset );
     
-    var thisNode = this;    
-    this.frequencyProperty.link( thisNode.redrawEigenstates );
+    this.frequencyProperty.link( this.redrawEigenstates.bind( this ) );
   }
   
   return inherit( PotentialWell, HarmonicOscillatorPotential, {
