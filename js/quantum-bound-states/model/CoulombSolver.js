@@ -15,7 +15,7 @@ define( function( require ) {
   // constants
   var constants = new QuantumBoundStatesConstants();
   var FastArray = dot.FastArray;
-  var sqrt4Pi = Math.sqrt(4 * Math.PI);
+  var SQRT_4_PI = Math.sqrt(4 * Math.PI);
   
   /**
   * @param {QuantumBoundStatesModel} model
@@ -62,7 +62,7 @@ define( function( require ) {
      */
     calculatePsi: function( nodes, x ) {
       x = Math.abs(x);
-      return 1.0 / sqrt4Pi * Math.exp(-x / (nodes * this.ab)) * this.bxSum( nodes, x );
+      return 1.0 / SQRT_4_PI * Math.exp(-x / (nodes * this.ab)) * this.bxSum( nodes, x );
     },
     
     /*

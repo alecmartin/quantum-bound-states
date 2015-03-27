@@ -14,6 +14,7 @@ define( function( require ) {
   
   // constants
   var FastArray = dot.FastArray;
+  var NUM_POINTS = 1350;
   
   /**
   * @param {QuantumBoundStatesModel} model
@@ -21,15 +22,14 @@ define( function( require ) {
   */
   function PotentialWell( model ) {
     this.model = model;
-    this.numPoints = 1350;
     this.eigenstateCache = [];
     this.eigenvals = [];
     
-    this.pointsX = new FastArray( this.numPoints );
+    this.pointsX = new FastArray( NUM_POINTS );
     var x = this.model.minX;
-    for (var i = 0; i < this.numPoints; i++) {
+    for (var i = 0; i < NUM_POINTS; i++) {
       this.pointsX[i] = x;
-      x += (this.model.maxX - this.model.minX) / (this.numPoints - 1);
+      x += (this.model.maxX - this.model.minX) / (NUM_POINTS - 1);
     }
     
     var thisNode = this;
@@ -86,7 +86,7 @@ define( function( require ) {
       }
       else {
         var energy = this.getNthEigenvalue( n );
-        var solver = new EigenstateSolver( this.model, this.numPoints, this );
+        var solver = new EigenstateSolver( this.model, NUM_POINTS, this );
         pointsY = solver.calculateWavefunction( energy );
         this.cacheEigenstate( n, pointsY );
       }
@@ -98,7 +98,7 @@ define( function( require ) {
      * Solution will have n-this.groundState nodes
      */
     getNthEigenvalue: function( n ) {
-      var solver = new EigenstateSolver( this.model, this.numPoints, this );
+      var solver = new EigenstateSolver( this.model, NUM_POINTS, this );
       return solver.calculateEnergy( n - this.groundState );
     },
     

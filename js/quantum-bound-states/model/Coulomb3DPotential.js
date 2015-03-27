@@ -16,7 +16,7 @@ define( function( require ) {
   
   // constants
   var constants = new QuantumBoundStatesConstants();
-  var maxEigenstates = 10;
+  var MAX_EIGENSTATES = 10;
   
   /**
   * @param {QuantumBoundStatesModel} model
@@ -66,7 +66,7 @@ define( function( require ) {
     getEigenvalues: function() {
       var n = this.groundState;
       var energy = this.getNthEigenvalue( n );
-      while ( n <= maxEigenstates ) {
+      while ( n <= MAX_EIGENSTATES ) {
         this.eigenvals[n - this.groundState] = energy;
         n++;
         energy = this.getNthEigenvalue(n);

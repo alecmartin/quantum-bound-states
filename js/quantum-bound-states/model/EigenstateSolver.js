@@ -15,6 +15,8 @@ define( function( require ) {
   // constants
   var constants = new QuantumBoundStatesConstants();
   var FastArray = dot.FastArray;
+  var SMALL = 1.0E-10;
+  var MAX_TRIES = 100;
   
   /**
    * @constructor for helper class
@@ -42,8 +44,6 @@ define( function( require ) {
   function EigenstateSolver( model, n, potential ) {
     this.model = model;
     this.n = n;
-    this.small = 1.0E-10;
-    this.maxTries = 100;
     this.hb = constants.hbar * constants.hbar / (2 * model.particleMassProperty.value);
     this.potential = potential;
     this.potentialPoints = potential.getPotentialPoints( n )[1];
@@ -122,34 +122,34 @@ define( function( require ) {
       var lowerTester;
       // find upper bound
       var upperEnergy = this.hb * 10.0 * Math.pow((nodes + 1) / (this.model.maxX - this.model.minX), 2);
-      for (i = 0; i < this.maxTries; i++) {
+      for (i = 0; i < MAX_TRIES; i++) {
         upperEnergy *= 2.0;
         upperTester = this.testEnergy( upperEnergy );
         if (upperTester.isUpper( nodes )) {
           break;
         }
       }
-      if (i === this.maxTries) {
+      if (i === MAX_TRIES) {
         console.log("Couldn't find upper bound, nodes = "+nodes);
       }
       
       // find lower bound
       var lowerEnergy = -this.hb * 10.0 * Math.pow((nodes + 1) / (this.model.maxX - this.model.minX), 2);
-      for (i = 0; i < this.maxTries; i++) {
+      for (i = 0; i < MAX_TRIES; i++) {
         lowerEnergy *= 2.0;
         lowerTester = this.testEnergy( lowerEnergy );
         if (!lowerTester.isUpper( nodes )) {
           break;
         }
       }
-      if (i === this.maxTries) {
+      if (i === MAX_TRIES) {
         console.log("Couldn't find lower bound, nodes = "+nodes);
       }
       
       // binary chop to get close to exact energy
       var midEnergy = 0;
       var midTester;
-      for (i = 0; i < this.maxTries && (upperTester.nodes !== lowerTester.nodes); i++) {
+      for (i = 0; i < MAX_TRIES && (upperTester.nodes !== lowerTester.nodes); i++) {
         midEnergy = 0.5 * (lowerEnergy + upperEnergy);
         midTester = this.testEnergy( midEnergy );
         if (midTester.isUpper( nodes )) {
@@ -161,13 +161,13 @@ define( function( require ) {
           lowerTester = midTester;
         }
       }
-      if (i === this.maxTries) {
+      if (i === MAX_TRIES) {
         console.log("No convergence in binary chop, nodes = "+nodes);
         return midEnergy;
       }
       
       // linearly interpolate for better convergence to exact energy
-      for (i = 0; i < this.maxTries && (Math.abs(upperTester.derivative - lowerTester.derivative)) > this.small; i++) {
+      for (i = 0; i < MAX_TRIES && (Math.abs(upperTester.derivative - lowerTester.derivative)) > SMALL; i++) {
         midEnergy = upperEnergy - (upperEnergy - lowerEnergy) * upperTester.derivative / (lowerTester.derivative - upperTester.derivative);
         if (midEnergy > upperEnergy || midEnergy < lowerEnergy) {
           midEnergy = 0.5 * (lowerEnergy + upperEnergy);
@@ -182,7 +182,7 @@ define( function( require ) {
           lowerTester = midTester;
         }
       }
-      if (i === this.maxTries) {
+      if (i === MAX_TRIES) {
         console.log("No convergence in interpolation, nodes = "+nodes);
         return midEnergy;
       }

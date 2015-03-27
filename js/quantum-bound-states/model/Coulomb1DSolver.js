@@ -15,7 +15,7 @@ define( function( require ) {
   
   // constants
   var constants = new QuantumBoundStatesConstants();
-  var scalingCoefficients = [1.10851, -1.86636,  2.55958, -3.21387,  3.84064, -4.44633,  5.03504, -5.60960,  6.17208, -6.72406];
+  var SCALING_COEFFICIENTS = [1.10851, -1.86636,  2.55958, -3.21387,  3.84064, -4.44633,  5.03504, -5.60960,  6.17208, -6.72406];
   
   /**
   * @param {QuantumBoundStatesModel} model
@@ -29,7 +29,7 @@ define( function( require ) {
   
   return inherit( CoulombSolver, Coulomb1DSolver, {
     getMaxEigenstates: function() {
-      return scalingCoefficients.length;
+      return SCALING_COEFFICIENTS.length;
     },
     
     /**
@@ -37,7 +37,7 @@ define( function( require ) {
      * @param nodes eigenstate subscript, n=1,2,3,...
      */
     getScalingCoefficient: function( nodes ) {
-      return scalingCoefficients[nodes - 1];
+      return SCALING_COEFFICIENTS[nodes - 1];
     },
     
     /*
