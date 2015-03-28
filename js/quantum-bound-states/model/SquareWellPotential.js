@@ -28,16 +28,15 @@ define( function( require ) {
   * @constructor
   */
   function SquareWellPotential( minX, maxX, particle, wellOffset, wellWidth, wellHeight ) {
-    
     this.wellWidthProperty = new Property( wellWidth );
     this.wellHeightProperty = new Property( wellHeight );
-    this.name = squareString;
-    this.image = squareImage;
-    this.minEnergy = -5; // eV
-    this.maxEnergy = 15; // eV
-    this.groundState = 1;
+    var name = squareString;
+    var image = squareImage;
+    var minEnergy = -5; // eV
+    var maxEnergy = 15; // eV
+    var groundState = 1;
     
-    PotentialWell.call( this, minX, maxX, particle, wellOffset );
+    PotentialWell.call( this, minX, maxX, particle, wellOffset, minEnergy, maxEnergy, groundState, name, image );
     
     this.wellWidthProperty.link( this.redrawEigenstates.bind( this ) );
     this.wellHeightProperty.link( this.redrawEigenstates.bind( this ) );

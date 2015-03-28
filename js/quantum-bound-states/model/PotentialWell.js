@@ -22,17 +22,27 @@ define( function( require ) {
   * @param {number} maxX
   * @param {Particle} particle
   * @param {number} wellOffset
+  * @param {number} minEnergy
+  * @param {number} maxEnergy
+  * @param {number} groundState
+  * @param {string} name
+  * @param {Image} image
   * @constructor
   */
-  function PotentialWell( minX, maxX, particle, wellOffset ) {
-    this.maxX = maxX;
+  function PotentialWell( minX, maxX, particle, wellOffset, minEnergy, maxEnergy, groundState, name, image ) {
     this.minX = minX;
+    this.maxX = maxX;
     this.particle = particle;
+    this.wellOffsetProperty = new Property( wellOffset );
+    this.minEnergy = minEnergy; // eV
+    this.maxEnergy = maxEnergy; // eV
+    this.groundState = groundState;
+    this.name = name;
+    this.image = image;
+    
     this.numPoints = NUM_POINTS;
     this.eigenstateCache = [];
     this.eigenvals = [];
-
-    this.wellOffsetProperty = new Property( wellOffset );
     
     this.pointsX = new FastArray( NUM_POINTS );
     var x = this.minX;
@@ -43,6 +53,7 @@ define( function( require ) {
     
     this.particle.particleMassProperty.link( this.redrawEigenstates.bind( this ) );
     this.wellOffsetProperty.link( this.redrawEigenstates.bind( this ) );
+
   }
   
   return inherit( Object, PotentialWell, {

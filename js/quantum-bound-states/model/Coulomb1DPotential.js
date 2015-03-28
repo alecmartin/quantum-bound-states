@@ -14,6 +14,12 @@ define( function( require ) {
   var Property = require( 'AXON/Property' );
   var QuantumBoundStatesConstants = require( 'QUANTUM_BOUND_STATES/quantum-bound-states/model/QuantumBoundStatesConstants' );
   
+  // strings
+  var coulomb1DString = require( 'string!QUANTUM_BOUND_STATES/coulomb_1d' );
+  
+  // images
+  var coulombImage = require( 'image!QUANTUM_BOUND_STATES/CoulombIcon.png' );
+  
   /**
   * @param {number} minX
   * @param {number} maxX
@@ -22,18 +28,13 @@ define( function( require ) {
   * @constructor
   */
   function Coulomb1DPotential( minX, maxX, particle, wellOffset ) {
-    // strings
-    var coulomb1DString = require( 'string!QUANTUM_BOUND_STATES/coulomb_1d' );
-    // images
-    var coulombImage = require( 'image!QUANTUM_BOUND_STATES/CoulombIcon.png' );
+    var name = coulomb1DString;
+    var image = coulombImage;
+    var minEnergy = -15; // eV
+    var maxEnergy = 5; // eV
+    var groundState = 1;
     
-    this.name = coulomb1DString;
-    this.image = coulombImage;
-    this.minEnergy = -15; // eV
-    this.maxEnergy = 5; // eV
-    this.groundState = 1;
-    
-    PotentialWell.call( this, minX, maxX, particle, wellOffset );
+    PotentialWell.call( this, minX, maxX, particle, wellOffset, minEnergy, maxEnergy, groundState, name, image );
   }
   
   return inherit( PotentialWell, Coulomb1DPotential, {

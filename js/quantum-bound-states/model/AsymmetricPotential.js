@@ -12,6 +12,12 @@ define( function( require ) {
   var PotentialWell = require( 'QUANTUM_BOUND_STATES/quantum-bound-states/model/PotentialWell' );
   var Property = require( 'AXON/Property' );
   
+  // strings
+  var asymString = require( 'string!QUANTUM_BOUND_STATES/asymmetric' );
+  
+  // images
+  var asymImage = require( 'image!QUANTUM_BOUND_STATES/AsymIcon.png' );
+  
   /**
   * @param {number} minX
   * @param {number} maxX
@@ -22,20 +28,15 @@ define( function( require ) {
   * @constructor
   */
   function AsymmetricPotential( minX, maxX, particle, wellOffset, wellWidth, wellHeight ) {
-    // strings
-    var asymString = require( 'string!QUANTUM_BOUND_STATES/asymmetric' );
-    // images
-    var asymImage = require( 'image!QUANTUM_BOUND_STATES/AsymIcon.png' );
-    
     this.wellWidthProperty = new Property( wellWidth );
     this.wellHeightProperty = new Property( wellHeight );
-    this.name = asymString;
-    this.image = asymImage;
-    this.minEnergy = -5; // eV
-    this.maxEnergy = 15; // eV
-    this.groundState = 1;
+    var name = asymString;
+    var image = asymImage;
+    var minEnergy = -5; // eV
+    var maxEnergy = 15; // eV
+    var groundState = 1;
     
-    PotentialWell.call( this, minX, maxX, particle, wellOffset );
+    PotentialWell.call( this, minX, maxX, particle, wellOffset, minEnergy, maxEnergy, groundState, name, image );
     
     this.wellWidthProperty.link( this.redrawEigenstates.bind( this ) );
     this.wellHeightProperty.link( this.redrawEigenstates.bind( this ) );

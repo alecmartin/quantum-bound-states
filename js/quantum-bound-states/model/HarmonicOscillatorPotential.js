@@ -13,6 +13,12 @@ define( function( require ) {
   var Property = require( 'AXON/Property' );
   var QuantumBoundStatesConstants = require( 'QUANTUM_BOUND_STATES/quantum-bound-states/model/QuantumBoundStatesConstants' );
   
+  // strings
+  var harmonicString = require( 'string!QUANTUM_BOUND_STATES/harmonic-oscillator' );
+  
+  // images
+  var harmonicImage = require( 'image!QUANTUM_BOUND_STATES/HarmonicIcon.png' );
+  
   /**
   * @param {number} minX
   * @param {number} maxX
@@ -22,19 +28,14 @@ define( function( require ) {
   * @constructor
   */
   function HarmonicOscillatorPotential( minX, maxX, particle, wellOffset, frequency ) {
-    // strings
-    var harmonicString = require( 'string!QUANTUM_BOUND_STATES/harmonic-oscillator' );
-    // images
-    var harmonicImage = require( 'image!QUANTUM_BOUND_STATES/HarmonicIcon.png' );
-    
     this.frequencyProperty = new Property( frequency );
-    this.name = harmonicString;
-    this.image = harmonicImage;
-    this.minEnergy = -5; // eV
-    this.maxEnergy = 15; // eV
-    this.groundState = 0;
+    var name = harmonicString;
+    var image = harmonicImage;
+    var minEnergy = -5; // eV
+    var maxEnergy = 15; // eV
+    var groundState = 0;
     
-    PotentialWell.call( this, minX, maxX, particle, wellOffset );
+    PotentialWell.call( this, minX, maxX, particle, wellOffset, minEnergy, maxEnergy, groundState, name, image );
     
     this.frequencyProperty.link( this.redrawEigenstates.bind( this ) );
   }
