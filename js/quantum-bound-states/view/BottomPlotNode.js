@@ -15,6 +15,12 @@ define( function( require ) {
   var Text = require( 'SCENERY/nodes/Text' );
   var SubSupText = require( 'SCENERY_PHET/SubSupText' );
 
+  /**
+  * @param {QuantumBoundStatesModel} model
+  * @param {number} width
+  * @param {number} height
+  * @constructor
+  */
   function BottomPlotNode( model, width, height, options ) {
 
     // strings

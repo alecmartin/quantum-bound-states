@@ -15,8 +15,8 @@ define( function( require ) {
 
   /**
   * @param {QuantumBoundStatesModel} model
-  * @param {int} width
-  * @param {int} height
+  * @param {number} width
+  * @param {number} height
   * @constructor
   */
   function PotentialWellNode( model, width, height, options ) {

@@ -9,6 +9,12 @@ define( function( require ){
   
   var mouse = require( 'SCENERY/input/Mouse' );
 
+  /**
+  * @param {QuantumBoundStatesModel} model
+  * @param {number} width
+  * @param {number} height
+  * @constructor
+  */
   function EnergyLine( model, width, height, options ){
 	  
     // Line.call(this, options);
