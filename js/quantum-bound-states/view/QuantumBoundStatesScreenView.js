@@ -13,9 +13,9 @@ define( function( require ) {
   var ResetAllButton = require( 'SCENERY_PHET/buttons/ResetAllButton' );
   var EnergyLine = require( 'QUANTUM_BOUND_STATES/quantum-bound-states/view/EnergyLine' );
   var EnergyPlotNode = require( 'QUANTUM_BOUND_STATES/quantum-bound-states/view/EnergyPlotNode' );
-  var BottomPlotNode = require( 'QUANTUM_BOUND_STATES/quantum-bound-states/view/BottomPlotNode' );
-  var TopChartNode = require( 'QUANTUM_BOUND_STATES/quantum-bound-states/view/TopChartNode' );
-  var BottomChartNode = require( 'QUANTUM_BOUND_STATES/quantum-bound-states/view/BottomChartNode' );
+  var WaveFunctionPlotNode = require( 'QUANTUM_BOUND_STATES/quantum-bound-states/view/WaveFunctionPlotNode' );
+  var PotentialWellPanel = require( 'QUANTUM_BOUND_STATES/quantum-bound-states/view/PotentialWellPanel' );
+  var ParticleMassPanel = require( 'QUANTUM_BOUND_STATES/quantum-bound-states/view/ParticleMassPanel' );
 
   /**
    * @param {QuantumBoundStatesModel} quantumBoundStatesModel
@@ -40,25 +40,25 @@ define( function( require ) {
     // });
     // this.addChild( energyLine );
 
-    var bottomPlotNode = new BottomPlotNode( quantumBoundStatesModel, 600, 200, {
+    var waveFunctionPlotNode = new WaveFunctionPlotNode( quantumBoundStatesModel, 600, 200, {
       x: 0,
       y: 325,
     });
-    this.addChild( bottomPlotNode );
+    this.addChild( waveFunctionPlotNode );
 
-    var topChartNode = new TopChartNode( quantumBoundStatesModel, {
+    var potentialWellPanel = new PotentialWellPanel( quantumBoundStatesModel, {
       x: this.layoutBounds.maxX - 240,
       y: 20,
 
     });
-    this.addChild( topChartNode );
+    this.addChild( potentialWellPanel );
 
-    var bottomChartNode = new BottomChartNode( particleMassProperty, {
+    var particleMassPanel = new ParticleMassPanel( particleMassProperty, {
       x: this.layoutBounds.maxX - 240,
       y: 450,
 
     });
-    this.addChild( bottomChartNode );
+    this.addChild( particleMassPanel );
 
     // Create and add the Reset All Button in the bottom right, which resets the model
     var resetAllButton = new ResetAllButton( {

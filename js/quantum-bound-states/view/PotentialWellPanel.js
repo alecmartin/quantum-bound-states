@@ -25,7 +25,7 @@ define( function( require ) {
   * @param {QuantumBoundStatesModel} model
   * @constructor
   */
-  function TopChartNode( model, options ) {
+  function PotentialWellPanel( model, options ) {
     Node.call( this, options );
 
     // Strings and other variables
@@ -95,7 +95,7 @@ define( function( require ) {
     
     this.addChild( parent );
   }
-  return inherit( Node, TopChartNode );
+  return inherit( Node, PotentialWellPanel );
 
 
 } );

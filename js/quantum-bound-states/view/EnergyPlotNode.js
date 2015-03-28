@@ -1,7 +1,7 @@
 // Copyright 2002-2015, University of Colorado Boulder
 
 /**
- * Constructor for the top plot
+ * Constructor for the energy plot
  * Contains the drawing of the potential well and the energy lines
  */
 define( function( require ) {

@@ -21,7 +21,7 @@ define( function( require ) {
   * @param {number} height
   * @constructor
   */
-  function BottomPlotNode( model, width, height, options ) {
+  function WaveFunctionPlotNode( model, width, height, options ) {
 
     // strings
     var psiString = "Ψ";
@@ -112,5 +112,5 @@ define( function( require ) {
     this.addChild( eigenText );
   }
 
-  return inherit( Node, BottomPlotNode);
+  return inherit( Node, WaveFunctionPlotNode);
 } );

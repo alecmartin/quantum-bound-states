@@ -1,7 +1,7 @@
 // Copyright 2002-2015, University of Colorado Boulder
 
 /**
-* Constructor for the chart that holds the mass slider
+* Constructor for the panel that holds the mass slider
 */
 define( function( require ) {
   'use strict';
@@ -28,7 +28,7 @@ define( function( require ) {
   * @param {Property} particleMassProperty
   * @constructor
   */
-  function BottomChartNode( particleMassProperty, options ) {
+  function ParticleMassPanel( particleMassProperty, options ) {
     Node.call( this, options );
 
     // Strings and other variables
@@ -107,6 +107,6 @@ define( function( require ) {
     
     this.addChild( viewBottomChartPanel );
   }
-  return inherit( Node, BottomChartNode );
+  return inherit( Node, ParticleMassPanel );
 
 } );
