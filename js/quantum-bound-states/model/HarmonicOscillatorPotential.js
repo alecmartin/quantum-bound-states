@@ -1,4 +1,4 @@
-// Copyright 2002-2013, University of Colorado Boulder
+// Copyright 2002-2015, University of Colorado Boulder
 /**
 * Harmonic Oscillator potential
 *
@@ -12,36 +12,37 @@ define( function( require ) {
   var PotentialWell = require( 'QUANTUM_BOUND_STATES/quantum-bound-states/model/PotentialWell' );
   var Property = require( 'AXON/Property' );
   var QuantumBoundStatesConstants = require( 'QUANTUM_BOUND_STATES/quantum-bound-states/model/QuantumBoundStatesConstants' );
-  var EigenstateSolver = require( 'QUANTUM_BOUND_STATES/quantum-bound-states/model/EigenstateSolver' );
   
-  var constants = new QuantumBoundStatesConstants();
+  // strings
+  var harmonicString = require( 'string!QUANTUM_BOUND_STATES/harmonic-oscillator' );
+  
+  // images
+  var harmonicImage = require( 'image!QUANTUM_BOUND_STATES/HarmonicIcon.png' );
   
   /**
-  * @param {QuantumBoundStatesModel} model
-  * @param {double} wellOffset
-  * @param {double} frequency
+  * @param {number} minX
+  * @param {number} maxX
+  * @param {Particle} particle
+  * @param {number} wellOffset
+  * @param {number} frequency
   * @constructor
   */
-  function HarmonicOscillatorPotential( model, wellOffset, frequency ) {
-    this.wellOffsetProperty = new Property( wellOffset );
+  function HarmonicOscillatorPotential( minX, maxX, particle, wellOffset, frequency ) {
     this.frequencyProperty = new Property( frequency );
+    var name = harmonicString;
+    var image = harmonicImage;
+    var minEnergy = -5; // eV
+    var maxEnergy = 15; // eV
+    var groundState = 0;
     
-    PotentialWell.call( this, model );
+    PotentialWell.call( this, minX, maxX, particle, wellOffset, minEnergy, maxEnergy, groundState, name, image );
     
-    this.minEnergy = -5; // eV
-    this.maxEnergy = 15; // eV
-    this.groundState = 0;
-    
-    var thisNode = this;
-    this.wellOffsetProperty.link( thisNode.redrawEigenstates );
-    
-    this.frequencyProperty.link( thisNode.redrawEigenstates );
+    this.frequencyProperty.link( this.redrawEigenstates.bind( this ) );
   }
   
   return inherit( PotentialWell, HarmonicOscillatorPotential, {
     
     reset: function( ) {
-      this.wellOffsetProperty.reset();
       this.frequencyProperty.reset();
     },
     
@@ -51,7 +52,7 @@ define( function( require ) {
     */
     potentialValue: function( x ) {
       var w = this.frequencyProperty.value;
-      return 1 / 2 * this.model.particleMassProperty.value * Math.pow(w * x, 2) + this.wellOffsetProperty.value;
+      return 1 / 2 * this.particle.particleMassProperty.value * Math.pow(w * x, 2) + this.wellOffsetProperty.value;
     },
     
     /**
@@ -59,7 +60,7 @@ define( function( require ) {
      */
     getNthEigenvalue: function( n ) {
       var w = this.frequencyProperty.value;
-      return constants.hbar * w * (n + 1 / 2) + this.wellOffsetProperty.value;
+      return QuantumBoundStatesConstants.HBAR * w * (n + 1 / 2) + this.wellOffsetProperty.value;
     },
     
     /**

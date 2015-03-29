@@ -1,4 +1,4 @@
-// Copyright 2002-2013, University of Colorado Boulder
+// Copyright 2002-2015, University of Colorado Boulder
 /**
 * Parent class for all potential wells
 *
@@ -11,52 +11,75 @@ define( function( require ) {
   var dot = require( 'DOT/dot' );
   var inherit = require( 'PHET_CORE/inherit' );
   var EigenstateSolver = require( 'QUANTUM_BOUND_STATES/quantum-bound-states/model/EigenstateSolver' );
+  var Property = require( 'AXON/Property' );
   
   // constants
   var FastArray = dot.FastArray;
+  var NUM_POINTS = 1350;
   
   /**
-  * @param {QuantumBoundStatesModel} model
+  * @param {number} minX
+  * @param {number} maxX
+  * @param {Particle} particle
+  * @param {number} wellOffset
+  * @param {number} minEnergy
+  * @param {number} maxEnergy
+  * @param {number} groundState
+  * @param {string} name
+  * @param {Image} image
   * @constructor
   */
-  function PotentialWell( model ) {
-    this.model = model;
-    this.numPoints = 1350;
+  function PotentialWell( minX, maxX, particle, wellOffset, minEnergy, maxEnergy, groundState, name, image ) {
+    this.minX = minX;
+    this.maxX = maxX;
+    this.particle = particle;
+    this.wellOffsetProperty = new Property( wellOffset );
+    this.minEnergy = minEnergy; // eV
+    this.maxEnergy = maxEnergy; // eV
+    this.groundState = groundState;
+    this.name = name;
+    this.image = image;
+    
+    this.numPoints = NUM_POINTS;
     this.eigenstateCache = [];
     this.eigenvals = [];
     
-    this.pointsX = new FastArray( this.numPoints );
-    var x = this.model.minX;
-    for (var i = 0; i < this.numPoints; i++) {
+    this.pointsX = new FastArray( NUM_POINTS );
+    var x = this.minX;
+    for (var i = 0; i < NUM_POINTS; i++) {
       this.pointsX[i] = x;
-      x += (this.model.maxX - this.model.minX) / (this.numPoints - 1);
+      x += (this.maxX - this.minX) / (NUM_POINTS - 1);
     }
     
-    var thisNode = this;
-    
-    /**
-     * Recalculate eigenstates when variables change
-     */
-    this.redrawEigenstates = function() {
-      if (thisNode.groundState) {
-        thisNode.getEigenvalues();
-        thisNode.eigenstateCache = [];
-      }
-    };
-    
-    this.model.particleMassProperty.link( thisNode.redrawEigenstates );
+    this.particle.particleMassProperty.link( this.redrawEigenstates.bind( this ) );
+    this.wellOffsetProperty.link( this.redrawEigenstates.bind( this ) );
+
   }
   
   return inherit( Object, PotentialWell, {
-    
+
+    reset: function( ) {
+      this.wellOffsetProperty.reset();
+    },
+
+    /**
+     * Recalculate eigenstates when variables change
+     */
+    redrawEigenstates: function() {
+      if ( this.groundState ) {
+        this.getEigenvalues();
+        this.eigenstateCache = [];
+      }
+    },
+
     /**
      * Get a set of n points (x, y) to draw the potential well
      */
     getPotentialPoints: function( numPoints ) {
       var pointsX = new FastArray( numPoints );
       var pointsY = new FastArray( numPoints );
-      var delta = (this.model.maxX - this.model.minX) / numPoints;
-      var x = this.model.minX;
+      var delta = (this.maxX - this.minX) / numPoints;
+      var x = this.minX;
       for (var i = 0; i < numPoints; i++ ) {
         pointsX[i] = x;
         pointsY[i] = this.potentialValue(x);
@@ -86,7 +109,7 @@ define( function( require ) {
       }
       else {
         var energy = this.getNthEigenvalue( n );
-        var solver = new EigenstateSolver( this.model, this.numPoints, this );
+        var solver = new EigenstateSolver( this.minX, this.maxX, this.particle, NUM_POINTS, this );
         pointsY = solver.calculateWavefunction( energy );
         this.cacheEigenstate( n, pointsY );
       }
@@ -98,7 +121,7 @@ define( function( require ) {
      * Solution will have n-this.groundState nodes
      */
     getNthEigenvalue: function( n ) {
-      var solver = new EigenstateSolver( this.model, this.numPoints, this );
+      var solver = new EigenstateSolver( this.minX, this.maxX, this.particle, NUM_POINTS, this );
       return solver.calculateEnergy( n - this.groundState );
     },
     

@@ -1,0 +1,4 @@
+AsymIcon.png author=Emily Randall
+CoulombIcon.png author=Emily Randall
+HarmonicIcon.png author=Emily Randall
+SquareIcon.png author=Emily Randall

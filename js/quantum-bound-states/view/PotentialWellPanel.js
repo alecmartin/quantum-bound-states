@@ -1,4 +1,4 @@
-//  Copyright 2002-2014, University of Colorado Boulder
+// Copyright 2002-2015, University of Colorado Boulder
 
 /**
 * Draws the top panel containing the configure potential button and the superposition state button
@@ -21,7 +21,11 @@ define( function( require ) {
   var VBox = require( 'SCENERY/nodes/VBox' );
   var TextPushButton = require( 'SUN/buttons/TextPushButton' );
   
-  function TopChartNode( model, options ) {
+  /**
+  * @param {QuantumBoundStatesModel} model
+  * @constructor
+  */
+  function PotentialWellPanel( model, options ) {
     Node.call( this, options );
 
     // Strings and other variables
@@ -32,7 +36,7 @@ define( function( require ) {
     var superpositionStateString = require( 'string!QUANTUM_BOUND_STATES/top-chart-superposition-state' );
 
     var parent = new Node();
-    var potentialWellComboBox = new PotentialComboBox( model, parent );
+    var potentialWellComboBox = new PotentialComboBox( model.potentials, model.potentialTypeProperty, parent );
     
     //boxwidth
     var boxwidth = 240;
@@ -91,7 +95,7 @@ define( function( require ) {
     
     this.addChild( parent );
   }
-  return inherit( Node, TopChartNode );
+  return inherit( Node, PotentialWellPanel );
 
 
 } );

@@ -1,4 +1,4 @@
-//  Copyright 2002-2014, University of Colorado Boulder
+// Copyright 2002-2015, University of Colorado Boulder
 
 /**
  * Constructor for the plot of the probability density function and the wavefunctions
@@ -15,7 +15,13 @@ define( function( require ) {
   var Text = require( 'SCENERY/nodes/Text' );
   var SubSupText = require( 'SCENERY_PHET/SubSupText' );
 
-  function BottomPlotNode( model, width, height, options ) {
+  /**
+  * @param {QuantumBoundStatesModel} model
+  * @param {number} width
+  * @param {number} height
+  * @constructor
+  */
+  function WaveFunctionPlotNode( model, width, height, options ) {
 
     // strings
     var psiString = "Ψ";
@@ -106,5 +112,5 @@ define( function( require ) {
     this.addChild( eigenText );
   }
 
-  return inherit( Node, BottomPlotNode);
+  return inherit( Node, WaveFunctionPlotNode);
 } );

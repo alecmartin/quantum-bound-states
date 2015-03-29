@@ -1,4 +1,4 @@
-// Copyright 2002-2013, University of Colorado Boulder
+// Copyright 2002-2015, University of Colorado Boulder
 /**
 * Numerical solver for eigenstates and eigenvalues
 *
@@ -11,11 +11,11 @@ define( function( require ) {
   var dot = require( 'DOT/dot' );
   var inherit = require( 'PHET_CORE/inherit' );
   var QuantumBoundStatesConstants = require( 'QUANTUM_BOUND_STATES/quantum-bound-states/model/QuantumBoundStatesConstants' );
-  var Vector2 = require( 'DOT/Vector2' );
   
   // constants
-  var constants = new QuantumBoundStatesConstants();
   var FastArray = dot.FastArray;
+  var SMALL = 1.0E-10;
+  var MAX_TRIES = 100;
   
   /**
    * @constructor for helper class
@@ -36,24 +36,25 @@ define( function( require ) {
   
   /**
   * @constructor for the eigenstate solver
-  * @param {QuantumBoundStatesModel} model
-  * @param {int} n: the number of points to produce in a wavefunction
+  * @param {number} minX
+  * @param {number} maxX
+  * @param {Particle} particle
+  * @param {number} n: the number of points to produce in a wavefunction
   * @param {PotentialWell} potential
   */
-  function EigenstateSolver( model, n, potential ) {
-    this.model = model;
+  function EigenstateSolver( minX, maxX, particle, n, potential ) {
+    this.maxX = maxX;
+    this.minX = minX;
     this.n = n;
-    this.small = 1.0E-10;
-    this.maxTries = 100;
-    this.hb = constants.hbar * constants.hbar / (2 * model.particleMassProperty.value);
+    this.hb = QuantumBoundStatesConstants.HBAR * QuantumBoundStatesConstants.HBAR / (2 * particle.particleMassProperty.value);
     this.potential = potential;
     this.potentialPoints = potential.getPotentialPoints( n )[1];
     
     var thisNode = this;
     
-    model.particleMassProperty.link( function () {
-      thisNode.hb = constants.hbar * constants.hbar / (2 * model.particleMassProperty.value);
-    })
+    particle.particleMassProperty.link( function () {
+      thisNode.hb = QuantumBoundStatesConstants.HBAR * QuantumBoundStatesConstants.HBAR / (2 * particle.particleMassProperty.value);
+    });
   }
   
   return inherit( Object, EigenstateSolver, {
@@ -65,7 +66,7 @@ define( function( require ) {
       var n = this.n;
       var hbInverse = 1 / this.hb;
       var matchPoint = n * 0.53;
-      var dx = (this.model.maxX - this.model.minX) / (n - 1);
+      var dx = (this.maxX - this.minX) / (n - 1);
       var h12 = dx * dx / 12;
       
       // initial and final boundary conditions
@@ -122,36 +123,35 @@ define( function( require ) {
       var upperTester;
       var lowerTester;
       // find upper bound
-      var upperEnergy = this.hb * 10.0 * Math.pow((nodes + 1) / (this.model.maxX - this.model.minX), 2);
-      for (i = 0; i < this.maxTries; i++) {
+      var upperEnergy = this.hb * 10.0 * Math.pow((nodes + 1) / (this.maxX - this.minX), 2);
+      for (i = 0; i < MAX_TRIES; i++) {
         upperEnergy *= 2.0;
         upperTester = this.testEnergy( upperEnergy );
         if (upperTester.isUpper( nodes )) {
           break;
         }
       }
-      if (i === this.maxTries) {
+      if (i === MAX_TRIES) {
         console.log("Couldn't find upper bound, nodes = "+nodes);
       }
       
       // find lower bound
-      var lowerEnergy = -this.hb * 10.0 * Math.pow((nodes + 1) / (this.model.maxX - this.model.minX), 2);
-      var lowerNodes = 0;
-      for (i = 0; i < this.maxTries; i++) {
+      var lowerEnergy = -this.hb * 10.0 * Math.pow((nodes + 1) / (this.maxX - this.minX), 2);
+      for (i = 0; i < MAX_TRIES; i++) {
         lowerEnergy *= 2.0;
         lowerTester = this.testEnergy( lowerEnergy );
         if (!lowerTester.isUpper( nodes )) {
           break;
         }
       }
-      if (i === this.maxTries) {
+      if (i === MAX_TRIES) {
         console.log("Couldn't find lower bound, nodes = "+nodes);
       }
       
       // binary chop to get close to exact energy
       var midEnergy = 0;
       var midTester;
-      for (i = 0; i < this.maxTries && (upperTester.nodes !== lowerTester.nodes); i++) {
+      for (i = 0; i < MAX_TRIES && (upperTester.nodes !== lowerTester.nodes); i++) {
         midEnergy = 0.5 * (lowerEnergy + upperEnergy);
         midTester = this.testEnergy( midEnergy );
         if (midTester.isUpper( nodes )) {
@@ -163,13 +163,13 @@ define( function( require ) {
           lowerTester = midTester;
         }
       }
-      if (i === this.maxTries) {
+      if (i === MAX_TRIES) {
         console.log("No convergence in binary chop, nodes = "+nodes);
         return midEnergy;
       }
       
       // linearly interpolate for better convergence to exact energy
-      for (i = 0; i < this.maxTries && (Math.abs(upperTester.derivative - lowerTester.derivative)) > this.small; i++) {
+      for (i = 0; i < MAX_TRIES && (Math.abs(upperTester.derivative - lowerTester.derivative)) > SMALL; i++) {
         midEnergy = upperEnergy - (upperEnergy - lowerEnergy) * upperTester.derivative / (lowerTester.derivative - upperTester.derivative);
         if (midEnergy > upperEnergy || midEnergy < lowerEnergy) {
           midEnergy = 0.5 * (lowerEnergy + upperEnergy);
@@ -184,7 +184,7 @@ define( function( require ) {
           lowerTester = midTester;
         }
       }
-      if (i === this.maxTries) {
+      if (i === MAX_TRIES) {
         console.log("No convergence in interpolation, nodes = "+nodes);
         return midEnergy;
       }
@@ -200,7 +200,7 @@ define( function( require ) {
       var wave = new FastArray(n);
       var hbInverse = 1 / this.hb;
       var matchPoint = n * 0.53;
-      var dx = (this.model.maxX - this.model.minX) / (n - 1);
+      var dx = (this.maxX - this.minX) / (n - 1);
       var h12 = dx * dx / 12;
       
       // initial and final boundary conditions

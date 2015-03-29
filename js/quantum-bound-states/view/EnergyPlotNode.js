@@ -1,7 +1,7 @@
-//  Copyright 2002-2014, University of Colorado Boulder
+// Copyright 2002-2015, University of Colorado Boulder
 
 /**
- * Constructor for the top plot
+ * Constructor for the energy plot
  * Contains the drawing of the potential well and the energy lines
  */
 define( function( require ) {
@@ -18,6 +18,12 @@ define( function( require ) {
   var Rectangle = require( 'SCENERY/nodes/Rectangle' );
   var Text = require( 'SCENERY/nodes/Text' );
 
+  /**
+  * @param {QuantumBoundStatesModel} model
+  * @param {number} width
+  * @param {number} height
+  * @constructor
+  */
   function EnergyPlotNode( model, width, height, options ) {
 
     Node.call( this, options );
@@ -52,8 +58,8 @@ define( function( require ) {
     var xSpacing = (width  / divisors);
     var xLoc = xSpacing / 2;
     for (var i = model.minX + 0.5; i < divisors + model.minX; i += 1) {
-      var tick = new Line(background.left + xLoc, background.top, background.left+xLoc, background.bottom, {stroke: 'gray'});
-      this.addChild( tick );
+      var line = new Line(background.left + xLoc, background.top, background.left+xLoc, background.bottom, {stroke: 'gray'});
+      this.addChild( line );
       xLoc += xSpacing;
     }
     

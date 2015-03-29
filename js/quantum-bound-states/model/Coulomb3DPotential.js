@@ -1,4 +1,4 @@
-// Copyright 2002-2013, University of Colorado Boulder
+// Copyright 2002-2015, University of Colorado Boulder
 /**
 * 3D Coulomb well potential
 *
@@ -14,40 +14,40 @@ define( function( require ) {
   var Property = require( 'AXON/Property' );
   var QuantumBoundStatesConstants = require( 'QUANTUM_BOUND_STATES/quantum-bound-states/model/QuantumBoundStatesConstants' );
   
+  // strings
+  var coulomb3DString = require( 'string!QUANTUM_BOUND_STATES/coulomb_3d' );
+  
+  // images
+  var coulombImage = require( 'image!QUANTUM_BOUND_STATES/CoulombIcon.png' );
+  
   // constants
-  var constants = new QuantumBoundStatesConstants();
-  var maxEigenstates = 10;
+  var MAX_EIGENSTATES = 10;
   
   /**
-  * @param {QuantumBoundStatesModel} model
-  * @param {double} wellOffset
+  * @param {number} minX
+  * @param {number} maxX
+  * @param {Particle} particle
+  * @param {number} wellOffset
   * @constructor
   */
-  function Coulomb3DPotential( model, wellOffset ) {
-    this.wellOffsetProperty = new Property( wellOffset );
+  function Coulomb3DPotential( minX, maxX, particle, wellOffset ) {
+    var name = coulomb3DString;
+    var image = coulombImage;
+    var minEnergy = -15; // eV
+    var maxEnergy = 5; // eV
+    var groundState = 1;
     
-    PotentialWell.call( this, model );
-    
-    this.minEnergy = -15; // eV
-    this.maxEnergy = 5; // eV
-    this.groundState = 1;
-    
-    var thisNode = this;
-    this.wellOffsetProperty.link( thisNode.redrawEigenstates );
+    PotentialWell.call( this, minX, maxX, particle, wellOffset, minEnergy, maxEnergy, groundState, name, image );
   }
   
-  return inherit( Object, Coulomb3DPotential, {
-    
-    reset: function( ) {
-      this.wellOffsetProperty.reset();
-    },
+  return inherit( PotentialWell, Coulomb3DPotential, {
     
     /**
     * Get the value of the potential well at a point r
     * @param {double} r: distance from center of well (origin) in nanometers
     */
     potentialValue: function( r ) {
-      return -1 * constants.ke2 / Math.abs(r) + this.wellOffsetProperty.value;
+      return -1 * QuantumBoundStatesConstants.KE2 / Math.abs(r) + this.wellOffsetProperty.value;
     },
     
     /**
@@ -55,8 +55,9 @@ define( function( require ) {
      * n starts at 1
      */
     getNthEigenvalue: function( n ) {
-      var m = this.model.particleMassProperty.value;
-      return -m * constants.ke2 * constants.ke2 / (2 * constants.hbar * constants.hbar * n * n) + this.wellOffsetProperty.value;
+      var m = this.particle.particleMassProperty.value;
+      return -m * QuantumBoundStatesConstants.KE2 * QuantumBoundStatesConstants.KE2 /
+      (2 * QuantumBoundStatesConstants.HBAR * QuantumBoundStatesConstants.HBAR * n * n) + this.wellOffsetProperty.value;
     },
     
     /**
@@ -66,7 +67,7 @@ define( function( require ) {
     getEigenvalues: function() {
       var n = this.groundState;
       var energy = this.getNthEigenvalue( n );
-      while ( n <= maxEigenstates ) {
+      while ( n <= MAX_EIGENSTATES ) {
         this.eigenvals[n - this.groundState] = energy;
         n++;
         energy = this.getNthEigenvalue(n);
@@ -86,7 +87,7 @@ define( function( require ) {
       }
       else {
         var energy = this.getNthEigenvalue( n );
-        var solver = new Coulomb3DSolver( this.model, this.numPoints, this );
+        var solver = new Coulomb3DSolver( this.minX, this.maxX, this.particle, this.numPoints );
         pointsY = solver.calculateWavefunction( energy );
         this.cacheEigenstate( n-1, pointsY );
       }

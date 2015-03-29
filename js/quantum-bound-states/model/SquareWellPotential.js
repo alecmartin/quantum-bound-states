@@ -1,4 +1,4 @@
-// Copyright 2002-2013, University of Colorado Boulder
+// Copyright 2002-2015, University of Colorado Boulder
 /**
 * Square well potential
 *
@@ -11,41 +11,40 @@ define( function( require ) {
   var inherit = require( 'PHET_CORE/inherit' );
   var Property = require( 'AXON/Property' );
   var PotentialWell = require( 'QUANTUM_BOUND_STATES/quantum-bound-states/model/PotentialWell' );
-  var QuantumBoundStatesConstants = require( 'QUANTUM_BOUND_STATES/quantum-bound-states/model/QuantumBoundStatesConstants' );
-  
-  // constants
-  var constants = new QuantumBoundStatesConstants();
-  
+
+  // strings
+  var squareString = require( 'string!QUANTUM_BOUND_STATES/square' );
+
+  // images
+  var squareImage = require( 'image!QUANTUM_BOUND_STATES/SquareIcon.png' );
+
   /**
-  * @param {QuantumBoundStatesModel} model
-  * @param {double} wellOffset
-  * @param {double} wellWidth
-  * @param {double} wellHeight
+  * @param {number} minX
+  * @param {number} maxX
+  * @param {Particle} particle
+  * @param {number} wellOffset
+  * @param {number} wellWidth
+  * @param {number} wellHeight
   * @constructor
   */
-  function SquareWellPotential( model, wellOffset, wellWidth, wellHeight ) {
-    this.wellOffsetProperty = new Property( wellOffset );
+  function SquareWellPotential( minX, maxX, particle, wellOffset, wellWidth, wellHeight ) {
     this.wellWidthProperty = new Property( wellWidth );
     this.wellHeightProperty = new Property( wellHeight );
+    var name = squareString;
+    var image = squareImage;
+    var minEnergy = -5; // eV
+    var maxEnergy = 15; // eV
+    var groundState = 1;
     
-    PotentialWell.call( this, model );
+    PotentialWell.call( this, minX, maxX, particle, wellOffset, minEnergy, maxEnergy, groundState, name, image );
     
-    this.minEnergy = -5; // eV
-    this.maxEnergy = 15; // eV
-    this.groundState = 1;
-    
-    var thisNode = this;
-    this.wellOffsetProperty.link( thisNode.redrawEigenstates );
-    
-    this.wellWidthProperty.link( thisNode.redrawEigenstates );
-    
-    this.wellHeightProperty.link( thisNode.redrawEigenstates );
+    this.wellWidthProperty.link( this.redrawEigenstates.bind( this ) );
+    this.wellHeightProperty.link( this.redrawEigenstates.bind( this ) );
   }
   
   return inherit( PotentialWell, SquareWellPotential, {
     
     reset: function( ) {
-      this.wellOffsetProperty.reset();
       this.wellWidthProperty.reset();
       this.wellHeightProperty.reset();
     },

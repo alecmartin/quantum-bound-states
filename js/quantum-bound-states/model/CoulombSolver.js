@@ -1,4 +1,4 @@
-// Copyright 2002-2013, University of Colorado Boulder
+// Copyright 2002-2015, University of Colorado Boulder
 /**
 * Parent class for Coulomb solvers
 *
@@ -13,39 +13,41 @@ define( function( require ) {
   var QuantumBoundStatesConstants = require( 'QUANTUM_BOUND_STATES/quantum-bound-states/model/QuantumBoundStatesConstants' );
   
   // constants
-  var constants = new QuantumBoundStatesConstants();
   var FastArray = dot.FastArray;
-  var sqrt4Pi = Math.sqrt(4 * Math.PI);
+  var SQRT_4_PI = Math.sqrt(4 * Math.PI);
   
   /**
-  * @param {QuantumBoundStatesModel} model
-  * @param {int} n: the number of points to return in a calculated wavefunction
-  * @param {Coulomb1DPotential} potential
+  * @param {number} minX
+  * @param {number} maxX
+  * @param {Particle} particle
+  * @param {number} n: the number of points to return in a calculated wavefunction
   * @constructor
   */
-  function CoulombSolver( model, n, potential ) {
-    this.model = model;
-    this.potential = potential;
+  function CoulombSolver( minX, maxX, particle, n ) {
+    this.minX = minX;
+    this.maxX = maxX;
+    this.particle = particle;
     this.ab = this.getBohrRadius();
     this.n = n;
     
     var thisNode = this;
-    model.particleMassProperty.link( function () {
+    particle.particleMassProperty.link( function () {
       thisNode.ab = thisNode.getBohrRadius();
     });
   }
   
   return inherit( Object, CoulombSolver, {
     getBohrRadius: function() {
-      return constants.hbar * constants.hbar / (this.model.particleMassProperty.value * constants.ke2);
+      return QuantumBoundStatesConstants.HBAR * QuantumBoundStatesConstants.HBAR /
+      (this.particle.particleMassProperty.value * QuantumBoundStatesConstants.KE2);
     },
     
     /**
      * Return the scaled wavefunction
      */
     calculateWavefunction: function( nodes ) {
-      var dx = (this.model.maxX - this.model.minX) / (this.n - 1);
-      var x = this.model.minX;
+      var dx = (this.maxX - this.minX) / (this.n - 1);
+      var x = this.minX;
       var wave = new FastArray( this.n );
       for (var i = 0; i < this.n; i++) {
         wave[i] = this.psiScaled( nodes, x );
@@ -62,7 +64,7 @@ define( function( require ) {
      */
     calculatePsi: function( nodes, x ) {
       x = Math.abs(x);
-      return 1.0 / sqrt4Pi * Math.exp(-x / (nodes * this.ab)) * this.bxSum( nodes, x );
+      return 1.0 / SQRT_4_PI * Math.exp(-x / (nodes * this.ab)) * this.bxSum( nodes, x );
     },
     
     /*

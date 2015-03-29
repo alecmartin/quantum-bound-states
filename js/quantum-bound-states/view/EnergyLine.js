@@ -1,3 +1,4 @@
+// Copyright 2002-2015, University of Colorado Boulder
 define( function( require ){
 	
   var inherit = require( 'PHET_CORE/inherit' );
@@ -8,6 +9,12 @@ define( function( require ){
   
   var mouse = require( 'SCENERY/input/Mouse' );
 
+  /**
+  * @param {QuantumBoundStatesModel} model
+  * @param {number} width
+  * @param {number} height
+  * @constructor
+  */
   function EnergyLine( model, width, height, options ){
 	  
     var x1 = 0;

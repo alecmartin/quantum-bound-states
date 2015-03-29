@@ -1,4 +1,4 @@
-// Copyright 2002-2013, University of Colorado Boulder
+// Copyright 2002-2015, University of Colorado Boulder
 /**
 * Coulomb 3D solver, inherits from Coulomb Solver
 * Provides an analytic solution for eigenstates of a 3D Coulomb Well
@@ -10,24 +10,20 @@ define( function( require ) {
   
   // modules
   var CoulombSolver = require( 'QUANTUM_BOUND_STATES/quantum-bound-states/model/CoulombSolver' );
-  var dot = require( 'DOT/dot' );
   var inherit = require( 'PHET_CORE/inherit' );
-  var QuantumBoundStatesConstants = require( 'QUANTUM_BOUND_STATES/quantum-bound-states/model/QuantumBoundStatesConstants' );
   
   // constants
-  var constants = new QuantumBoundStatesConstants();
-  var FastArray = dot.FastArray;
-  var sqrtPi = Math.sqrt(Math.PI);
-  var scalingCoefficients = [1.10851, -1.86636,  2.55958, -3.21387,  3.84064, -4.44633,  5.03504, -5.60960,  6.17208, -6.72406];
+  var SQRT_PI = Math.sqrt(Math.PI);
   
   /**
-  * @param {QuantumBoundStatesModel} model
-  * @param {int} n: the number of points to return in a calculated wavefunction
-  * @param {Coulomb3DPotential} potential
+  * @param {number} minX
+  * @param {number} maxX
+  * @param {Particle} particle
+  * @param {number} n: the number of points to return in a calculated wavefunction
   * @constructor
   */
-  function Coulomb3DSolver( model, n, potential ) {
-    CoulombSolver.call( this, model, n, potential );
+  function Coulomb3DSolver( minX, maxX, particle, n ) {
+    CoulombSolver.call( this, minX, maxX, particle, n );
   }
   
   return inherit( CoulombSolver, Coulomb3DSolver, {
@@ -37,7 +33,7 @@ define( function( require ) {
      */
     getScalingCoefficient: function( nodes ) {
       var ab = this.getBohrRadius();
-      return sqrtPi * Math.pow((nodes * ab), 1.5);
+      return SQRT_PI * Math.pow((nodes * ab), 1.5);
     },
     
     /*

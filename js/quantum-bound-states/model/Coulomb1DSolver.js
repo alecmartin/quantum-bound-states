@@ -1,4 +1,4 @@
-// Copyright 2002-2013, University of Colorado Boulder
+// Copyright 2002-2015, University of Colorado Boulder
 /**
 * Coulomb 1D solver, inherits from Coulomb Solver
 * Provides an analytic solution for eigenstates of a 1D Coulomb Well
@@ -14,22 +14,22 @@ define( function( require ) {
   var QuantumBoundStatesConstants = require( 'QUANTUM_BOUND_STATES/quantum-bound-states/model/QuantumBoundStatesConstants' );
   
   // constants
-  var constants = new QuantumBoundStatesConstants();
-  var scalingCoefficients = [1.10851, -1.86636,  2.55958, -3.21387,  3.84064, -4.44633,  5.03504, -5.60960,  6.17208, -6.72406];
+  var SCALING_COEFFICIENTS = [1.10851, -1.86636,  2.55958, -3.21387,  3.84064, -4.44633,  5.03504, -5.60960,  6.17208, -6.72406];
   
   /**
-  * @param {QuantumBoundStatesModel} model
-  * @param {int} n: the number of points to return in a calculated wavefunction
-  * @param {Coulomb1DPotential} potential
+  * @param {number} minX
+  * @param {number} maxX
+  * @param {Particle} particle
+  * @param {number} n: the number of points to return in a calculated wavefunction
   * @constructor
   */
-  function Coulomb1DSolver( model, n, potential ) {
-    CoulombSolver.call( this, model, n, potential );
+  function Coulomb1DSolver( minX, maxX, particle, n ) {
+    CoulombSolver.call( this, minX, maxX, particle, n );
   }
   
   return inherit( CoulombSolver, Coulomb1DSolver, {
     getMaxEigenstates: function() {
-      return scalingCoefficients.length;
+      return SCALING_COEFFICIENTS.length;
     },
     
     /**
@@ -37,7 +37,7 @@ define( function( require ) {
      * @param nodes eigenstate subscript, n=1,2,3,...
      */
     getScalingCoefficient: function( nodes ) {
-      return scalingCoefficients[nodes - 1];
+      return SCALING_COEFFICIENTS[nodes - 1];
     },
     
     /*
@@ -50,8 +50,8 @@ define( function( require ) {
      */
     psiScaled: function( nodes, x ) {
       var coeff = this.getScalingCoefficient( nodes );
-      var mass = this.model.particleMassProperty.value;
-      return Math.sqrt(constants.electronMass / mass) * coeff * x * this.calculatePsi( nodes, x );
+      var mass = this.particle.particleMassProperty.value;
+      return Math.sqrt(QuantumBoundStatesConstants.ELECTRON_MASS / mass) * coeff * x * this.calculatePsi( nodes, x );
     }
   } );
 } );

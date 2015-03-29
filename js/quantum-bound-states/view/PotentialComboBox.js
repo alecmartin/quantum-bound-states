@@ -1,4 +1,4 @@
-//  Copyright 2002-2014, University of Colorado Boulder
+// Copyright 2002-2015, University of Colorado Boulder
 
 /**
 * Combo box to choose between 5 types of potentials
@@ -16,23 +16,19 @@ define( function( require ) {
   var PhetFont = require( 'SCENERY_PHET/PhetFont' );
   var Text = require( 'SCENERY/nodes/Text' );
 
-  function PotentialComboBox( model, parent, options ) {
-    
-    // strings
-    var squareString = require( 'string!QUANTUM_BOUND_STATES/square' );
-    var asymString = require( 'string!QUANTUM_BOUND_STATES/asymmetric' );
-    var coulomb1DString = require( 'string!QUANTUM_BOUND_STATES/coulomb_1d' );
-    var coulomb3DString = require( 'string!QUANTUM_BOUND_STATES/coulomb_3d' );
-    var harmonicString = require( 'string!QUANTUM_BOUND_STATES/harmonic-oscillator' );
-    
-    // images
-    var squareImage = require( 'image!QUANTUM_BOUND_STATES/SquareIcon.png' );
-    var asymImage = require( 'image!QUANTUM_BOUND_STATES/AsymIcon.png' );
-    var coulombImage = require( 'image!QUANTUM_BOUND_STATES/CoulombIcon.png' );
-    var harmonicImage = require( 'image!QUANTUM_BOUND_STATES/HarmonicIcon.png' );
-    
-    var potentialNames = [squareString, asymString, coulomb1DString, coulomb3DString, harmonicString];
-    var images = [squareImage, asymImage, coulombImage, coulombImage, harmonicImage];
+  /**
+  * @param {PotentialWell[]} potentials
+  * @param {Property} potentialTypeProperty
+  * @param {Node} parent
+  * @constructor
+  */
+  function PotentialComboBox( potentials, potentialTypeProperty, parent, options ) {
+    var potentialNames = [];
+    var images = [];
+    for (var i = 0; i < potentials.length; i++) {
+      potentialNames[i] = potentials[i].name;
+      images[i] = potentials[i].image;
+    }
     
     function createItem( i ) {
       var name = potentialNames[i];
@@ -46,13 +42,14 @@ define( function( require ) {
     
     // items
     var items = [];
-    for ( var i = 0; i < model.potentials.length; i++ ) {
+    for ( var i = 0; i < potentials.length; i++ ) {
       items[ i ] = createItem( i );
     }
     
-    ComboBox.call( this, items, model.potentialTypeProperty, parent, {
+    ComboBox.call( this, items, potentialTypeProperty, parent, {
       listPosition: 'below',
       itemYMargin: 3,
+      itemXMargin: 0,
       itemHighlightFill: 'rgb(218,255,255)'
     } );
   }
