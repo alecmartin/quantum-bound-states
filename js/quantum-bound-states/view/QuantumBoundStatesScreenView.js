@@ -31,12 +31,11 @@ define( function( require ) {
     });
     this.addChild( energyPlotNode );
 
-    // not working because cris is a chump
-    // var energyLine = new EnergyLine( quantumBoundStatesModel, 600, 250, {
-    //   x: 0,
-    //   y: 50,
-    // });
-    // this.addChild( energyLine );
+    var energyLine = new EnergyLine( quantumBoundStatesModel, 600, 250, {
+      x: 50,
+      y: 100,
+    });
+    this.addChild( energyLine );
 
     var bottomPlotNode = new BottomPlotNode( quantumBoundStatesModel, 600, 200, {
       x: 0,

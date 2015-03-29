@@ -10,13 +10,20 @@ define( function( require ){
 
   function EnergyLine( model, width, height, options ){
 	  
-    // Line.call(this, options);
-    // var x1 = 0;
-    // var y1 = 0;
-    // var y2 = 0;
-  
-    // var line = new Line(x1, y1, width, y2, {fill:'green'});
-    // this.addChild(line);
+    var x1 = 0;
+    var y1 = 20;
+    var y2 = 20;
+    Line.call(this, options);
+    var topline = new Line(x1, y1, width, y2, {stroke:'green', lineWidth: 3});
+    this.addChild(topline);
+    var midline1 = new Line(x1, y1+30, width, y2+30, {stroke:'green', lineWidth: 3});
+    this.addChild(midline1);
+    var midline2 = new Line(x1, y1+60, width, y2+60, {stroke:'green', lineWidth: 3});
+    this.addChild(midline2);
+    var midline3 = new Line(x1, y1+90, width, y2+90, {stroke:'green', lineWidth: 3});
+    this.addChild(midline3);
+    var bottomline = new Line(x1, y1+100, width, y2+100, {stroke:'red', lineWidth: 3});
+    this.addChild(bottomline);
   
    //  while(mouse.over(width, this)){
 	  // var line = new Line(x1, y1, width, y2, {fill:'red'});
@@ -31,4 +38,6 @@ define( function( require ){
   
   
   }
+  return inherit( Line, EnergyLine );
+
   });
