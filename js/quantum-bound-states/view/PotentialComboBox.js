@@ -20,6 +20,7 @@ define( function( require ) {
    * @param {PotentialWell[]} potentials
    * @param {Property} potentialTypeProperty
    * @param {Node} parent
+   * @param {Object} [object]
    * @constructor
    */
   function PotentialComboBox( potentials, potentialTypeProperty, parent, options ) {
