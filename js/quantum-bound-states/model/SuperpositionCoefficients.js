@@ -9,12 +9,9 @@ define( function( require ) {
   'use strict';
   
   // modules
-  var dot = require( 'DOT/dot' );
+  var FastArray = require( 'DOT/dot' ).FastArray;
   var inherit = require( 'PHET_CORE/inherit' );
   var Property = require( 'AXON/Property' );
-  
-  // constants
-  var FastArray = dot.FastArray;
   
   /**
   * @param {PotentialWell} potential
