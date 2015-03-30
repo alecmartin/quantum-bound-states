@@ -16,37 +16,27 @@ define( function( require ) {
   var PhetFont = require( 'SCENERY_PHET/PhetFont' );
   var Text = require( 'SCENERY/nodes/Text' );
 
+  // Creates a combo box item
+  function createItem( potential, i ) {
+       var node = new Node();
+       var text = new Text( potential.name, { font: new PhetFont( 12 ) } );
+       var icon = new Image( potential.image, { left: text.right + 7, top: text.top, scale: 0.2 } );
+       node.addChild( text );
+       node.addChild( icon );
+       return ComboBox.createItem( node, i );
+     }
+
   /**
    * @param {PotentialWell[]} potentials
    * @param {Property} potentialTypeProperty
    * @param {Node} parent
-   * @param {Object} [object]
    * @constructor
    */
-  function PotentialComboBox( potentials, potentialTypeProperty, parent, options ) {
-    var potentialNames = [];
-    var images = [];
-    var i; // reused loop variable
+  function PotentialComboBox( potentials, potentialTypeProperty, parent ) {
 
-    for ( i = 0; i < potentials.length; i++ ) {
-      potentialNames[ i ] = potentials[ i ].name;
-      images[ i ] = potentials[ i ].image;
-    }
-
-    function createItem( i ) {
-      var name = potentialNames[ i ];
-      var node = new Node();
-      var text = new Text( name, { font: new PhetFont( 12 ) } );
-      var icon = new Image( images[ i ], { left: text.right + 7, top: text.top, scale: 0.2 } );
-      node.addChild( text );
-      node.addChild( icon );
-      return ComboBox.createItem( node, i );
-    }
-
-    // items
     var items = [];
-    for ( i = 0; i < potentials.length; i++ ) {
-      items[ i ] = createItem( i );
+    for ( var i = 0; i < potentials.length; i++ ) {
+      items[ i ] = createItem( potentials[i], i );
     }
 
     ComboBox.call( this, items, potentialTypeProperty, parent, {
