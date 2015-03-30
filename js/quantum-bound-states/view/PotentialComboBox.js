@@ -24,7 +24,7 @@ define( function( require ) {
     node.addChild( text );
     node.addChild( icon );
     return ComboBox.createItem( node, i );
-  };
+  }
 
   /**
    * @param {PotentialWell[]} potentials
