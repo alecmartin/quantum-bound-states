@@ -56,6 +56,11 @@ define( function( require ) {
       showMagnitude: false,
       showPhase: false
       } );
+    
+    var thisNode = this;
+    this.currentPotentialProperty.link( function() {
+      thisNode.eigenvalsProperty.value = thisNode.currentPotentialProperty.value.getEigenvalues();
+    });
   }
 
   return inherit( PropertySet, QuantumBoundStatesModel, {
