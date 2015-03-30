@@ -25,7 +25,9 @@ define( function( require ) {
   function PotentialComboBox( potentials, potentialTypeProperty, parent, options ) {
     var potentialNames = [];
     var images = [];
-    for ( var i = 0; i < potentials.length; i++ ) {
+    var i; // reused loop variable
+
+    for ( i = 0; i < potentials.length; i++ ) {
       potentialNames[ i ] = potentials[ i ].name;
       images[ i ] = potentials[ i ].image;
     }
@@ -42,7 +44,7 @@ define( function( require ) {
 
     // items
     var items = [];
-    for ( var i = 0; i < potentials.length; i++ ) {
+    for ( i = 0; i < potentials.length; i++ ) {
       items[ i ] = createItem( i );
     }
 
