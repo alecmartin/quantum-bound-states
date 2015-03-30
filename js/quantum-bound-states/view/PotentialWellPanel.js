@@ -36,7 +36,7 @@ define( function( require ) {
     var superpositionStateString = require( 'string!QUANTUM_BOUND_STATES/top-chart-superposition-state' );
 
     var parent = new Node();
-    var potentialWellComboBox = new PotentialComboBox( model.potentials, model.potentialTypeProperty, parent );
+    var potentialWellComboBox = new PotentialComboBox( model.potentials, model.currentPotentialProperty, parent );
     
     //boxwidth
     var boxwidth = 240;

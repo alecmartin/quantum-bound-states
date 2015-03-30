@@ -17,29 +17,29 @@ define( function( require ) {
   var Text = require( 'SCENERY/nodes/Text' );
 
   // Creates a combo box item
-  function createItem( potential, i ) {
+  function createItem( potential ) {
     var node = new Node();
     var text = new Text( potential.name, { font: new PhetFont( 12 ) } );
     var icon = new Image( potential.image, { left: text.right + 7, top: text.top, scale: 0.2 } );
     node.addChild( text );
     node.addChild( icon );
-    return ComboBox.createItem( node, i );
+    return ComboBox.createItem( node, potential );
   }
 
   /**
    * @param {PotentialWell[]} potentials
-   * @param {Property} potentialTypeProperty
+   * @param {Property.<PotentialWell>} currentPotentialProperty
    * @param {Node} parent
    * @constructor
    */
-  function PotentialComboBox( potentials, potentialTypeProperty, parent ) {
+  function PotentialComboBox( potentials, currentPotentialProperty, parent ) {
 
     var items = [];
     for ( var i = 0; i < potentials.length; i++ ) {
       items[ i ] = createItem( potentials[ i ], i );
     }
 
-    ComboBox.call( this, items, potentialTypeProperty, parent, {
+    ComboBox.call( this, items, currentPotentialProperty, parent, {
       listPosition: 'below',
       itemYMargin: 3,
       itemXMargin: 0,
