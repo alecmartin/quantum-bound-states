@@ -18,13 +18,13 @@ define( function( require ) {
 
   // Creates a combo box item
   function createItem( potential, i ) {
-       var node = new Node();
-       var text = new Text( potential.name, { font: new PhetFont( 12 ) } );
-       var icon = new Image( potential.image, { left: text.right + 7, top: text.top, scale: 0.2 } );
-       node.addChild( text );
-       node.addChild( icon );
-       return ComboBox.createItem( node, i );
-     }
+    var node = new Node();
+    var text = new Text( potential.name, { font: new PhetFont( 12 ) } );
+    var icon = new Image( potential.image, { left: text.right + 7, top: text.top, scale: 0.2 } );
+    node.addChild( text );
+    node.addChild( icon );
+    return ComboBox.createItem( node, i );
+  };
 
   /**
    * @param {PotentialWell[]} potentials
@@ -36,7 +36,7 @@ define( function( require ) {
 
     var items = [];
     for ( var i = 0; i < potentials.length; i++ ) {
-      items[ i ] = createItem( potentials[i], i );
+      items[ i ] = createItem( potentials[ i ], i );
     }
 
     ComboBox.call( this, items, potentialTypeProperty, parent, {
