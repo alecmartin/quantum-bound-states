@@ -1,10 +1,10 @@
 // Copyright 2002-2015, University of Colorado Boulder
 
 /**
-* Combo box to choose between 5 types of potentials
-*
-* @author Emily Randall
-*/
+ * Combo box to choose between 5 types of potentials
+ *
+ * @author Emily Randall
+ */
 define( function( require ) {
   'use strict';
 
@@ -16,37 +16,30 @@ define( function( require ) {
   var PhetFont = require( 'SCENERY_PHET/PhetFont' );
   var Text = require( 'SCENERY/nodes/Text' );
 
+  // Creates a combo box item
+  function createItem( potential ) {
+    var node = new Node();
+    var text = new Text( potential.name, { font: new PhetFont( 12 ) } );
+    var icon = new Image( potential.image, { left: text.right + 7, top: text.top, scale: 0.2 } );
+    node.addChild( text );
+    node.addChild( icon );
+    return ComboBox.createItem( node, potential );
+  }
+
   /**
-  * @param {PotentialWell[]} potentials
-  * @param {Property} potentialTypeProperty
-  * @param {Node} parent
-  * @constructor
-  */
-  function PotentialComboBox( potentials, potentialTypeProperty, parent, options ) {
-    var potentialNames = [];
-    var images = [];
-    for (var i = 0; i < potentials.length; i++) {
-      potentialNames[i] = potentials[i].name;
-      images[i] = potentials[i].image;
-    }
-    
-    function createItem( i ) {
-      var name = potentialNames[i];
-      var node = new Node();
-      var text = new Text( name, {font: new PhetFont(12) });
-      var icon = new Image( images[i], {left: text.right + 7, top: text.top, scale: 0.2});
-      node.addChild( text );
-      node.addChild( icon );
-      return ComboBox.createItem( node, i );
-    }
-    
-    // items
+   * @param {PotentialWell[]} potentials
+   * @param {Property.<PotentialWell>} currentPotentialProperty
+   * @param {Node} parent
+   * @constructor
+   */
+  function PotentialComboBox( potentials, currentPotentialProperty, parent ) {
+
     var items = [];
     for ( var i = 0; i < potentials.length; i++ ) {
-      items[ i ] = createItem( i );
+      items[ i ] = createItem( potentials[ i ], i );
     }
-    
-    ComboBox.call( this, items, potentialTypeProperty, parent, {
+
+    ComboBox.call( this, items, currentPotentialProperty, parent, {
       listPosition: 'below',
       itemYMargin: 3,
       itemXMargin: 0,
@@ -54,5 +47,5 @@ define( function( require ) {
     } );
   }
 
-  return inherit( ComboBox, PotentialComboBox);
+  return inherit( ComboBox, PotentialComboBox );
 } );

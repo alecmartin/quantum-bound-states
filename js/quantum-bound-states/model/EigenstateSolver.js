@@ -8,12 +8,11 @@ define( function( require ) {
   'use strict';
   
   // modules
-  var dot = require( 'DOT/dot' );
+  var FastArray = require( 'DOT/dot' ).FastArray;
   var inherit = require( 'PHET_CORE/inherit' );
   var QuantumBoundStatesConstants = require( 'QUANTUM_BOUND_STATES/quantum-bound-states/model/QuantumBoundStatesConstants' );
   
   // constants
-  var FastArray = dot.FastArray;
   var SMALL = 1.0E-10;
   var MAX_TRIES = 100;
   

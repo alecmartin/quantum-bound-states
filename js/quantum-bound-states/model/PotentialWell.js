@@ -8,13 +8,12 @@ define( function( require ) {
   'use strict';
   
   // modules
-  var dot = require( 'DOT/dot' );
+  var FastArray = require( 'DOT/dot' ).FastArray;
   var inherit = require( 'PHET_CORE/inherit' );
   var EigenstateSolver = require( 'QUANTUM_BOUND_STATES/quantum-bound-states/model/EigenstateSolver' );
   var Property = require( 'AXON/Property' );
   
   // constants
-  var FastArray = dot.FastArray;
   var NUM_POINTS = 1350;
   
   /**

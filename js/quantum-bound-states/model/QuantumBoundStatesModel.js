@@ -28,6 +28,7 @@ define( function( require ) {
    * @constructor
    */
   function QuantumBoundStatesModel() {
+
     var particle = new Particle();
     var squareWell = new SquareWellPotential( MIN_X, MAX_X, particle, 0.0, 1.0, 10.0 );
     var asymWell = new AsymmetricPotential( MIN_X, MAX_X, particle, 0.0, 1.0, 10.0 );
@@ -44,7 +45,6 @@ define( function( require ) {
       particle: particle,
       particleMass: QuantumBoundStatesConstants.ELECTRON_MASS,
       hoveredEigenstate: -1,
-      potentialType: 0,
       currentPotential: squareWell,
       eigenvals: squareWell.getEigenvalues(),
       superpositionCoefficients: coefficients,
@@ -54,12 +54,12 @@ define( function( require ) {
       showReal: true,
       showImaginary: false,
       showMagnitude: false,
-      showPhase: false,
+      showPhase: false
       } );
     
     var thisNode = this;
-    this.potentialTypeProperty.link( function() {
-      thisNode.setPotential(thisNode.potentialTypeProperty.value);
+    this.currentPotentialProperty.link( function() {
+      thisNode.eigenvalsProperty.value = thisNode.currentPotentialProperty.value.getEigenvalues();
     });
   }
 
@@ -68,16 +68,6 @@ define( function( require ) {
     // Called by the animation loop. Optional, so if your model has no animation, you can omit this.
     step: function( dt ) {
       // Handle model animation here.
-    },
-    
-    /**
-     * Change the current potential being displayed
-     */
-    setPotential: function( type ) {
-      var potential = this.potentials[type];
-      this.currentPotentialProperty.value = potential;
-      this.eigenvalsProperty.value = potential.getEigenvalues();
-      this.potentialTypeProperty.value = type;
     },
     
     /**
