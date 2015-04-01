@@ -8,7 +8,7 @@
 *     b) Imaginary Part
 *     c) Magnitude
 *     d) Phase
-* The controls all change what appears in the output animation/graphic.
+* The controls all change what appears in the wave function plot panel.
 *
 * @author Alec Martin
 */
@@ -43,7 +43,7 @@ define( function( require ) {
   * @param {QuantumBoundStatesModel} model
   * @constructor
   */
-  function AnimationControlPanel( model, options ) {
+  function WaveFunctionPlotControls( model, options ) {
     Node.call( this, options );
 
     // Layout values
@@ -100,9 +100,9 @@ define( function( require ) {
                                                    { boxWidth: 20, 
                                                      spacing: 8, 
                                                      checkBoxColor: 'black'
-                                                   });
+                                                   } );
 
-    var viewAnimationControlVBox = new VBox( {
+    var controlPanelLayout = new VBox( {
       children: [
         new HBox( { children: [ new HStrut( boxwidth - 20 ) ] } ),
         new VStrut( 10 ),
@@ -114,7 +114,7 @@ define( function( require ) {
       align: 'left'
     } );
 
-    var viewAnimationControlPanel = new Panel( viewAnimationControlVBox,
+    var controlPanel = new Panel( controlPanelLayout,
     {
       fill: 'black',
       stroke: 'white',
@@ -122,7 +122,7 @@ define( function( require ) {
       top: 5
     } );
     
-    this.addChild( viewAnimationControlPanel );
+    this.addChild( controlPanel );
   }
-  return inherit( Node, AnimationControlPanel );
+  return inherit( Node, WaveFunctionPlotControls );
 } );
