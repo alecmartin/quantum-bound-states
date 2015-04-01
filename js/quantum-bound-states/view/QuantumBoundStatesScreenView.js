@@ -15,7 +15,7 @@ define( function( require ) {
   var EnergyPlotNode = require( 'QUANTUM_BOUND_STATES/quantum-bound-states/view/EnergyPlotNode' );
   var WaveFunctionPlotNode = require( 'QUANTUM_BOUND_STATES/quantum-bound-states/view/WaveFunctionPlotNode' );
   var PotentialWellPanel = require( 'QUANTUM_BOUND_STATES/quantum-bound-states/view/PotentialWellPanel' );
-  var AnimationControlPanel = require( 'QUANTUM_BOUND_STATES/quantum-bound-states/view/WaveFunctionPlotControls' );
+  var WaveFunctionPlotControls = require( 'QUANTUM_BOUND_STATES/quantum-bound-states/view/WaveFunctionPlotControls' );
   var ParticleMassPanel = require( 'QUANTUM_BOUND_STATES/quantum-bound-states/view/ParticleMassPanel' );
 
   /**
@@ -42,26 +42,26 @@ define( function( require ) {
 
     var waveFunctionPlotNode = new WaveFunctionPlotNode( quantumBoundStatesModel, 600, 200, {
       x: 0,
-      y: 325,
+      y: energyPlotNode.bottom + 20,
     });
     this.addChild( waveFunctionPlotNode );
 
     var potentialWellPanel = new PotentialWellPanel( quantumBoundStatesModel, {
       x: this.layoutBounds.maxX - 240,
-      y: 20,
+      y: 10,
 
     });
     this.addChild( potentialWellPanel );
     
-    var animationControlPanel = new AnimationControlPanel( quantumBoundStatesModel, {
+    var waveFunctionPlotControls = new WaveFunctionPlotControls( quantumBoundStatesModel, {
       x: this.layoutBounds.maxX - 240,
-      y: 240,
+      y: potentialWellPanel.bottom + 10,
     });
-    this.addChild( animationControlPanel );
+    this.addChild( waveFunctionPlotControls );
 
     var particleMassPanel = new ParticleMassPanel( particleMassProperty, {
       x: this.layoutBounds.maxX - 240,
-      y: 480,
+      y: waveFunctionPlotControls.bottom + 10,
 
     });
     this.addChild( particleMassPanel );
@@ -72,7 +72,7 @@ define( function( require ) {
         quantumBoundStatesModel.reset();
       },
       right:  this.layoutBounds.maxX - 10,
-      bottom: this.layoutBounds.maxY - 10
+      top: particleMassPanel.bottom + 10
     } );
     this.addChild( resetAllButton );
   }
