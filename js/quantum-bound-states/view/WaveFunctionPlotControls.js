@@ -44,13 +44,11 @@ define( function( require ) {
   * @constructor
   */
   function WaveFunctionPlotControls( model, options ) {
-    Node.call( this, options );
 
     // Layout values
     var radioButtonFont = {font: new PhetFont( 14 ), fill: "palegoldenrod"};
     var checkBoxFontActive = {font: new PhetFont( 12 ), fill: "white"};
     var boxwidth = 240;
-
  
     var radioButtonContent = [
       { property: model.showProbDensityProperty, 
@@ -114,15 +112,12 @@ define( function( require ) {
       align: 'left'
     } );
 
-    var controlPanel = new Panel( controlPanelLayout,
-    {
+    Panel.call( this, controlPanelLayout, {
       fill: 'black',
       stroke: 'white',
       lineWidth: 2,
       top: 5
     } );
-    
-    this.addChild( controlPanel );
   }
-  return inherit( Node, WaveFunctionPlotControls );
+  return inherit( Panel, WaveFunctionPlotControls );
 } );

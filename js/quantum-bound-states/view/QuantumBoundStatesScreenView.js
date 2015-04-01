@@ -46,23 +46,21 @@ define( function( require ) {
     });
     this.addChild( waveFunctionPlotNode );
 
-    var potentialWellPanel = new PotentialWellPanel( quantumBoundStatesModel, {
-      x: this.layoutBounds.maxX - 240,
-      y: 10,
-
+    var potentialWellPanel = new PotentialWellPanel( quantumBoundStatesModel ).mutate( {
+      right: this.layoutBounds.maxX - 10,
+      top: 10,
     });
     this.addChild( potentialWellPanel );
     
-    var waveFunctionPlotControls = new WaveFunctionPlotControls( quantumBoundStatesModel, {
-      x: this.layoutBounds.maxX - 240,
-      y: potentialWellPanel.bottom + 10,
-    });
+    var waveFunctionPlotControls = new WaveFunctionPlotControls( quantumBoundStatesModel ).mutate( {
+      right: this.layoutBounds.maxX - 10,
+      top: potentialWellPanel.bottom + 10
+    } );
     this.addChild( waveFunctionPlotControls );
 
-    var particleMassPanel = new ParticleMassPanel( particleMassProperty, {
-      x: this.layoutBounds.maxX - 240,
-      y: waveFunctionPlotControls.bottom + 10,
-
+    var particleMassPanel = new ParticleMassPanel( particleMassProperty ).mutate( {
+      right: this.layoutBounds.maxX - 10,
+      top: waveFunctionPlotControls.bottom + 10,
     });
     this.addChild( particleMassPanel );
 
@@ -72,7 +70,7 @@ define( function( require ) {
         quantumBoundStatesModel.reset();
       },
       right:  this.layoutBounds.maxX - 10,
-      top: particleMassPanel.bottom + 10
+      bottom: this.layoutBounds.maxY - 10
     } );
     this.addChild( resetAllButton );
   }
