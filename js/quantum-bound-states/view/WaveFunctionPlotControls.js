@@ -18,6 +18,7 @@ define( function( require ) {
 
   // PhET modules
   var inherit = require( 'PHET_CORE/inherit' );
+  var Property = require( 'AXON/Property' );
   var HBox = require( 'SCENERY/nodes/HBox' );
   var Image = require( 'SCENERY/nodes/Image' );
   var Line = require( 'SCENERY/nodes/Line' );
@@ -46,15 +47,19 @@ define( function( require ) {
 
     // Layout values
     var radioButtonFont = {font: new PhetFont( 14 ), fill: "palegoldenrod"};
-    var checkBoxFontActive = {font: new PhetFont( 12 ), fill: "white"};
+    var checkBoxFontEnabled = {font: new PhetFont( 12 ), fill: "white"};
+    var checkBoxFontDisabled = {font: new PhetFont( 12 ), fill: "gray"};
     var boxwidth = 240;
  
+    // Radio buttons, check boxes, and associated logic
+    var checkBoxesEnabledProperty = new Property( false );
+    
     var radioButtonContent = [
-      { property: model.showProbDensityProperty, 
+      { property: model.showProbDensityProperty && checkBoxesEnabledProperty, 
         value: true, 
         node: new Text( probabilityDensityString, radioButtonFont )
       },
-      { property: model.showProbDensityProperty,
+      { property: model.showProbDensityProperty && checkBoxesEnabledProperty, 
         value: false, 
         node: new Text( waveFunctionString, radioButtonFont )
       },
@@ -62,28 +67,28 @@ define( function( require ) {
 
     
     var checkBoxContent = [
-      { content: new HBox( { children: [ new Text( realPartString, checkBoxFontActive ),
+      { content: new HBox( { children: [ new Text( realPartString, checkBoxFontEnabled ),
                                          new HStrut( 15 ),
                                          new Line( 0, 0, 20, 0, { stroke: 'orange', lineWidth: 3 } )
                                        ] } ),
         property: model.showRealProperty, 
         label: realPartString, 
       },
-      { content: new HBox( { children: [ new Text( imaginaryPartString, checkBoxFontActive ),
+      { content: new HBox( { children: [ new Text( imaginaryPartString, checkBoxFontEnabled ),
                                          new HStrut( 15 ),
                                          new Line( 0, 0, 20, 0, { stroke: 'blue', lineWidth: 3 } )
                                        ] } ),
         property: model.showImaginaryProperty, 
         label: imaginaryPartString 
       },
-      { content: new HBox( { children: [ new Text( magnitudeString, checkBoxFontActive ), 
+      { content: new HBox( { children: [ new Text( magnitudeString, checkBoxFontEnabled ), 
                                          new HStrut( 15 ),
                                          new Line( 0, 0, 20, 0, { stroke: 'white', lineWidth: 3 } )
                                        ] } ),
         property: model.showMagnitudeProperty, 
         label: magnitudeString 
       },
-      { content: new HBox( { children: [ new Text( phaseString, checkBoxFontActive ),
+      { content: new HBox( { children: [ new Text( phaseString, checkBoxFontEnabled ),
                                          new HStrut( 15 ),
                                          new Image( 'images/PhaseIcon.png', { left: 0, top: 0, scale: 0.25 } )
                                        ] } ),
@@ -98,6 +103,24 @@ define( function( require ) {
                                                      spacing: 8, 
                                                      checkBoxColor: 'black'
                                                    } );
+
+    // Make checkboxes disabled when Probability Density button is selected
+    checkBoxesEnabledProperty.link( function( isEnabled ) {
+      for(var i = 0; i < 4; i++) {
+        // Disable checkbox: the children of checkBoxGroup are HBoxes. Each HBox has a children array
+        // containing the checkbox we need to manipulate as its only element.
+        checkBoxGroup.children[i].children[0].enabled = isEnabled;
+
+        // Grey out type: each checkbox has a content value, which has a children array, the 0th element of
+        // which is text.
+        if( isEnabled) {
+          // Make text white
+        }
+        else {
+          //Make text grey
+        }
+      }
+    } );
 
     var controlPanelLayout = new VBox( {
       children: [
