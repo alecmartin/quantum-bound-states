@@ -79,7 +79,7 @@ define( function( require ) {
       var pointsY = new FastArray( numPoints );
       var delta = (this.maxX - this.minX) / numPoints;
       var x = this.minX;
-      for (var i = 0; i < numPoints; i++ ) {
+      for (var i = 0; i <= numPoints; i++ ) {
         pointsX[i] = x;
         pointsY[i] = this.potentialValue(x);
         x += delta;
