@@ -36,7 +36,6 @@ define( function( require ) {
 
     // Strings and other variables
     var radioButtonFont = {font: new PhetFont( 14 ), fill: "palegoldenrod"};
-    var checkBoxFontInactive = {font: new PhetFont( 12 ), fill: "grey"};
     var checkBoxFontActive = {font: new PhetFont( 12 ), fill: "white"};
     var probabilityDensityString = require( 'string!QUANTUM_BOUND_STATES/probability-density' );
     var waveFunctionString = require( 'string!QUANTUM_BOUND_STATES/wave-function' );
@@ -50,37 +49,45 @@ define( function( require ) {
     //boxwidth
     var boxwidth = 240;
 
-    var radioButtonGroup = new VerticalCheckBoxGroup( [
-        { content: new Text( probabilityDensityString, radioButtonFont ),
-          property: model.showProbDensityProperty, 
-          label: probabilityDensityString 
-        },
-        { content: new Text( waveFunctionString, radioButtonFont ),
-          property: model.showProbDensityProperty, 
-          label: waveFunctionString 
-        },
-        
-      ], { boxWidth: 20, spacing: 5, checkBoxColor: 'black'} );
+ 
+    var radioButtonContent = [
+      { property: model.showProbDensityProperty, 
+        value: true, 
+        node: new Text( probabilityDensityString, radioButtonFont )
+      },
+      { property: model.showProbDensityProperty,
+        value: false, 
+        node: new Text( waveFunctionString, radioButtonFont )
+      },
+    ];
 
-    var checkBoxGroup = new VerticalCheckBoxGroup( [
-        { content: new Text( realPartString, checkBoxFontInactive ),
-          property: model.showRealProperty, 
-          label: realPartString 
-        },
-        { content: new Text( imaginaryPartString, checkBoxFontInactive ),
-          property: model.showImaginaryProperty, 
-          label: imaginaryPartString 
-        },
-        { content: new Text( magnitudeString, checkBoxFontInactive ),
-          property: model.showMagnitudeProperty, 
-          label: magnitudeString 
-        },
-        { content: new Text( phaseString, checkBoxFontInactive ),
-          property: model.showPhaseProperty, 
-          label: phaseString 
-        },
-        
-      ], { boxWidth: 20, spacing: 5, checkBoxColor: 'black'} );
+    
+    var checkBoxContent = [
+      { content: new Text( realPartString, checkBoxFontActive ),
+        property: model.showRealProperty, 
+        label: realPartString, 
+      },
+      { content: new Text( imaginaryPartString, checkBoxFontActive ),
+        property: model.showImaginaryProperty, 
+        label: imaginaryPartString 
+      },
+      { content: new Text( magnitudeString, checkBoxFontActive ),
+        property: model.showMagnitudeProperty, 
+        label: magnitudeString 
+      },
+      { content: new Text( phaseString, checkBoxFontActive ),
+        property: model.showPhaseProperty, 
+        label: phaseString 
+      },
+    ];
+    
+    
+    var radioButtonGroup = new VerticalAquaRadioButtonGroup( radioButtonContent, {} );
+    var checkBoxGroup = new VerticalCheckBoxGroup( checkBoxContent, 
+                                                   { boxWidth: 20, 
+                                                     spacing: 5, 
+                                                     checkBoxColor: 'black'
+                                                   });
 
     var viewAnimationControlVBox = new VBox( {
       children: [
