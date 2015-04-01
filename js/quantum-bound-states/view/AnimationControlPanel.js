@@ -9,6 +9,8 @@
 *     c) Magnitude
 *     d) Phase
 * The controls all change what appears in the output animation/graphic.
+*
+* @author Alec Martin
 */
 
 define( function( require ) {
@@ -23,6 +25,8 @@ define( function( require ) {
   var HStrut = require( 'SUN/HStrut' );
   var VStrut = require( 'SUN/VStrut' );
   var Panel = require( 'SUN/Panel' );
+  var Line = require( 'SCENERY/nodes/Line' );
+  var Image = require( 'SCENERY/nodes/Image' );
   var VerticalCheckBoxGroup = require( 'SUN/VerticalCheckBoxGroup' );
   var VerticalAquaRadioButtonGroup = require( 'SUN/VerticalAquaRadioButtonGroup' );
   var VBox = require( 'SCENERY/nodes/VBox' );
@@ -63,29 +67,40 @@ define( function( require ) {
 
     
     var checkBoxContent = [
-      { content: new Text( realPartString, checkBoxFontActive ),
+      { content: new HBox( { children: [ new Text( realPartString, checkBoxFontActive ),
+                                         new HStrut( 15 ),
+                                         new Line( 0, 0, 20, 0, { stroke: 'orange', lineWidth: 3 } )
+                                       ] } ),
         property: model.showRealProperty, 
         label: realPartString, 
       },
-      { content: new Text( imaginaryPartString, checkBoxFontActive ),
+      { content: new HBox( { children: [ new Text( imaginaryPartString, checkBoxFontActive ),
+                                         new HStrut( 15 ),
+                                         new Line( 0, 0, 20, 0, { stroke: 'blue', lineWidth: 3 } )
+                                       ] } ),
         property: model.showImaginaryProperty, 
         label: imaginaryPartString 
       },
-      { content: new Text( magnitudeString, checkBoxFontActive ),
+      { content: new HBox( { children: [ new Text( magnitudeString, checkBoxFontActive ), 
+                                         new HStrut( 15 ),
+                                         new Line( 0, 0, 20, 0, { stroke: 'white', lineWidth: 3 } )
+                                       ] } ),
         property: model.showMagnitudeProperty, 
         label: magnitudeString 
       },
-      { content: new Text( phaseString, checkBoxFontActive ),
+      { content: new HBox( { children: [ new Text( phaseString, checkBoxFontActive ),
+                                         new HStrut( 15 ),
+                                         new Image( 'images/PhaseIcon.png', { left: 0, top: 0, scale: 0.25 } )
+                                       ] } ),
         property: model.showPhaseProperty, 
         label: phaseString 
       },
     ];
     
-    
     var radioButtonGroup = new VerticalAquaRadioButtonGroup( radioButtonContent, {} );
     var checkBoxGroup = new VerticalCheckBoxGroup( checkBoxContent, 
                                                    { boxWidth: 20, 
-                                                     spacing: 5, 
+                                                     spacing: 8, 
                                                      checkBoxColor: 'black'
                                                    });
 
@@ -100,6 +115,7 @@ define( function( require ) {
       ],
       align: 'left'
     } );
+
     var viewAnimationControlPanel = new Panel( viewAnimationControlVBox,
     {
       fill: 'black',

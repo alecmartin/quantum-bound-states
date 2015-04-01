@@ -61,7 +61,7 @@ define( function( require ) {
 
     var particleMassPanel = new ParticleMassPanel( particleMassProperty, {
       x: this.layoutBounds.maxX - 240,
-      y: 450,
+      y: 480,
 
     });
     this.addChild( particleMassPanel );
