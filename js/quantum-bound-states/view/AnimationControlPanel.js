@@ -36,8 +36,8 @@ define( function( require ) {
 
     // Strings and other variables
     var radioButtonFont = {font: new PhetFont( 14 ), fill: "palegoldenrod"};
-    var checkboxFontInactive = {font: new PhetFont( 12 ), fill: "grey"};
-    var checkboxFontActive = {font: new PhetFont( 12 ), fill: "white"};
+    var checkBoxFontInactive = {font: new PhetFont( 12 ), fill: "grey"};
+    var checkBoxFontActive = {font: new PhetFont( 12 ), fill: "white"};
     var probabilityDensityString = require( 'string!QUANTUM_BOUND_STATES/probability-density' );
     var waveFunctionString = require( 'string!QUANTUM_BOUND_STATES/wave-function' );
     var realPartString = require( 'string!QUANTUM_BOUND_STATES/real-part' );
@@ -49,19 +49,6 @@ define( function( require ) {
     
     //boxwidth
     var boxwidth = 240;
-
-
-    /*var radioButtonGroup = new VerticalCheckBoxGroup( [
-        { content: new Text( probabilityDensityString, radioButtonFont ), 
-          property: model.graphProbabilityDensity,
-          label: probabilityDensityString 
-        },
-        { content: new Text( waveFunctionString, radioButtonFont ),
-          property: model.graphWaveFunction,
-          label: waveFunctionString
-        }
-      ], { boxWidth: 20, spacing: 5 } );
-*/
 
     var radioButtonGroup = new VerticalCheckBoxGroup( [
         { content: new Text( probabilityDensityString, radioButtonFont ),
@@ -76,13 +63,21 @@ define( function( require ) {
       ], { boxWidth: 20, spacing: 5, checkBoxColor: 'black'} );
 
     var checkBoxGroup = new VerticalCheckBoxGroup( [
-        { content: new Text( realPartString, radioButtonFont ),
+        { content: new Text( realPartString, checkBoxFontInactive ),
           property: model.showMagnifyingGlassProperty, 
           label: realPartString 
         },
-        { content: new Text( imaginaryPartString, radioButtonFont ),
+        { content: new Text( imaginaryPartString, checkBoxFontInactive ),
           property: model.showMagnifyingGlassProperty, 
           label: imaginaryPartString 
+        },
+        { content: new Text( magnitudeString, checkBoxFontInactive ),
+          property: model.showMagnifyingGlassProperty, 
+          label: magnitudeString 
+        },
+        { content: new Text( phaseString, checkBoxFontInactive ),
+          property: model.showMagnifyingGlassProperty, 
+          label: phaseString 
         },
         
       ], { boxWidth: 20, spacing: 5, checkBoxColor: 'black'} );
@@ -90,7 +85,6 @@ define( function( require ) {
     var viewAnimationControlVBox = new VBox( {
       children: [
         new HBox( { children: [ new HStrut( boxwidth - 20 ) ] } ),
-        // new HBox( { children: [ new HStrut( 10 ), new VStrut( 10 ), new Text( potentialWellString, optionFont ), new HStrut( 15 ) ] } ), 
         new VStrut( 10 ),
         new HBox( { children: [ new HStrut( 10 ), new VStrut( 10 ), radioButtonGroup, new HStrut( 15 ) ] } ),
         new VStrut( 10 ),

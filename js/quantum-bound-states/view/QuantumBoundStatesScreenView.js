@@ -55,7 +55,7 @@ define( function( require ) {
     
     var animationControlPanel = new AnimationControlPanel( quantumBoundStatesModel, {
       x: this.layoutBounds.maxX - 240,
-      y: 250,
+      y: 240,
     });
     this.addChild( animationControlPanel );
 
