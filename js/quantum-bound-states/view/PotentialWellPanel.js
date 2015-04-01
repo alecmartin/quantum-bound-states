@@ -91,6 +91,7 @@ define( function( require ) {
       lineWidth: 2,
       top: 5
     } );
+    this.addChild( parent );
   }
 
   return inherit( Panel, PotentialWellPanel );
