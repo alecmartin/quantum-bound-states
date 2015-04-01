@@ -8,6 +8,8 @@ define( function( require ) {
   'use strict';
 
   // modules
+  var EnergyLine = require( 'QUANTUM_BOUND_STATES/quantum-bound-states/view/EnergyLine' );
+
   var HBox = require( 'SCENERY/nodes/HBox' );
   var HStrut = require( 'SUN/HStrut' );
   var inherit = require( 'PHET_CORE/inherit' );
@@ -106,6 +108,8 @@ define( function( require ) {
     this.addChild( units );
 
     //Energy lines
+    var energyLine = new EnergyLine(model.hoveredEigensProperty, width, {left: background.left});
+    this.addChild(energyLine);
 
   }
   
