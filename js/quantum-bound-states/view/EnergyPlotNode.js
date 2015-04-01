@@ -34,6 +34,8 @@ define( function( require ) {
     Node.call( this, options );
     var i;
     var background = new Rectangle(50, 0, width, height, 0, 0, {fill:'black', stroke: 'white'});
+    var backgroundClipArea = background.createRectangleShape();
+    background.setClipArea( backgroundClipArea );
     this.addChild( background );
     
     var padding = 10;
@@ -59,12 +61,12 @@ define( function( require ) {
     var xLoc = xSpacing / 2;
     for (i = model.minX + 0.5; i < divisors + model.minX; i += 1) {
       var line = new Line(background.left + xLoc, background.top, background.left+xLoc, background.bottom, {stroke: 'gray'});
-      this.addChild( line );
+      background.addChild( line );
       xLoc += xSpacing;
     }
     
     var well = new PotentialWellNode( model, width, height + padding, {x: 50} );
-    this.addChild( well );
+    background.addChild( well );
     
     var title = new Text( titleString, {
       font: new PhetFont( 18 ),
