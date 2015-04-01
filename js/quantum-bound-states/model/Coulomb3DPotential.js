@@ -11,7 +11,6 @@ define( function( require ) {
   var Coulomb3DSolver = require( 'QUANTUM_BOUND_STATES/quantum-bound-states/model/Coulomb3DSolver' );
   var inherit = require( 'PHET_CORE/inherit' );
   var PotentialWell = require( 'QUANTUM_BOUND_STATES/quantum-bound-states/model/PotentialWell' );
-  var Property = require( 'AXON/Property' );
   var QuantumBoundStatesConstants = require( 'QUANTUM_BOUND_STATES/quantum-bound-states/model/QuantumBoundStatesConstants' );
   
   // strings

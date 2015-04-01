@@ -1,4 +1,10 @@
 // Copyright 2002-2015, University of Colorado Boulder
+
+/**
+ * Constructor for a line that represents the energy of an eigenstate
+ * Line is initially green, but turns yellow when hovered over
+ * Lines are red when they are selected
+ */
 define( function( require ){
 	
   var inherit = require( 'PHET_CORE/inherit' );
@@ -10,11 +16,11 @@ define( function( require ){
   var mouse = require( 'SCENERY/input/Mouse' );
 
   /**
-  * @param {QuantumBoundStatesModel} model
+  * @param {Property} hoveredEigenstateProperty
   * @param {number} width
-  * @param {number} height
   * @constructor
   */
+<<<<<<< HEAD
   function EnergyLine( model, width, height, options ){
 
     var energyline = new Line();
@@ -25,7 +31,24 @@ define( function( require ){
     // var midline3 = new Line(x1, y1+90, width, y2+90, {stroke:'green', lineWidth: 3});    
     // var bottomline = new Line(x1, y1+100, width, y2+100, {stroke:'red', lineWidth: 3});
 
+=======
+  function EnergyLine( hoveredEigenstateProperty, width, options ){
+    options = _.extend( {
+      stroke: 'green',
+      lineWidth: 3
+    }, options );
+    
+    Line.call( this );
+    
+    
+    this.mutate( options );
+>>>>>>> a1075eb5f792556222615b3de8150745e627b07d
   }
+  
   return inherit( Line, EnergyLine );
+<<<<<<< HEAD
 
   });
+=======
+} );
+>>>>>>> a1075eb5f792556222615b3de8150745e627b07d
