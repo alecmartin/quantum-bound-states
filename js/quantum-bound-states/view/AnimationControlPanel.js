@@ -16,20 +16,28 @@
 define( function( require ) {
   'use strict';
 
-  // modules
+  // PhET modules
   var inherit = require( 'PHET_CORE/inherit' );
+  var HBox = require( 'SCENERY/nodes/HBox' );
+  var Image = require( 'SCENERY/nodes/Image' );
+  var Line = require( 'SCENERY/nodes/Line' );
   var Node = require( 'SCENERY/nodes/Node' );
   var PhetFont = require( 'SCENERY_PHET/PhetFont' );
   var Text = require( 'SCENERY/nodes/Text' );
-  var HBox = require( 'SCENERY/nodes/HBox' );
-  var HStrut = require( 'SUN/HStrut' );
-  var VStrut = require( 'SUN/VStrut' );
-  var Panel = require( 'SUN/Panel' );
-  var Line = require( 'SCENERY/nodes/Line' );
-  var Image = require( 'SCENERY/nodes/Image' );
-  var VerticalCheckBoxGroup = require( 'SUN/VerticalCheckBoxGroup' );
-  var VerticalAquaRadioButtonGroup = require( 'SUN/VerticalAquaRadioButtonGroup' );
   var VBox = require( 'SCENERY/nodes/VBox' );
+  var HStrut = require( 'SUN/HStrut' );
+  var Panel = require( 'SUN/Panel' );
+  var VStrut = require( 'SUN/VStrut' );
+  var VerticalAquaRadioButtonGroup = require( 'SUN/VerticalAquaRadioButtonGroup' );
+  var VerticalCheckBoxGroup = require( 'SUN/VerticalCheckBoxGroup' );
+  
+  // Strings
+  var probabilityDensityString = require( 'string!QUANTUM_BOUND_STATES/probability-density' );
+  var waveFunctionString = require( 'string!QUANTUM_BOUND_STATES/wave-function' );
+  var realPartString = require( 'string!QUANTUM_BOUND_STATES/real-part' );
+  var imaginaryPartString = require( 'string!QUANTUM_BOUND_STATES/imaginary-part' );
+  var magnitudeString = require( 'string!QUANTUM_BOUND_STATES/magnitude' );
+  var phaseString = require( 'string!QUANTUM_BOUND_STATES/phase' );
   
   /**
   * @param {QuantumBoundStatesModel} model
@@ -38,19 +46,9 @@ define( function( require ) {
   function AnimationControlPanel( model, options ) {
     Node.call( this, options );
 
-    // Strings and other variables
+    // Layout values
     var radioButtonFont = {font: new PhetFont( 14 ), fill: "palegoldenrod"};
     var checkBoxFontActive = {font: new PhetFont( 12 ), fill: "white"};
-    var probabilityDensityString = require( 'string!QUANTUM_BOUND_STATES/probability-density' );
-    var waveFunctionString = require( 'string!QUANTUM_BOUND_STATES/wave-function' );
-    var realPartString = require( 'string!QUANTUM_BOUND_STATES/real-part' );
-    var imaginaryPartString = require( 'string!QUANTUM_BOUND_STATES/imaginary-part' );
-    var magnitudeString = require( 'string!QUANTUM_BOUND_STATES/magnitude' );
-    var phaseString = require( 'string!QUANTUM_BOUND_STATES/phase' );
-
-    var parent = new Node();
-    
-    //boxwidth
     var boxwidth = 240;
 
  
