@@ -15,7 +15,7 @@ define( function( require ) {
   var EnergyPlotNode = require( 'QUANTUM_BOUND_STATES/quantum-bound-states/view/EnergyPlotNode' );
   var WaveFunctionPlotNode = require( 'QUANTUM_BOUND_STATES/quantum-bound-states/view/WaveFunctionPlotNode' );
   var PotentialWellPanel = require( 'QUANTUM_BOUND_STATES/quantum-bound-states/view/PotentialWellPanel' );
-  var AnimationControlPanel = require( 'QUANTUM_BOUND_STATES/quantum-bound-states/view/WaveFunctionPlotControls' );
+  var WaveFunctionPlotControls = require( 'QUANTUM_BOUND_STATES/quantum-bound-states/view/WaveFunctionPlotControls' );
   var ParticleMassPanel = require( 'QUANTUM_BOUND_STATES/quantum-bound-states/view/ParticleMassPanel' );
 
   /**
@@ -42,27 +42,25 @@ define( function( require ) {
 
     var waveFunctionPlotNode = new WaveFunctionPlotNode( quantumBoundStatesModel, 600, 200, {
       x: 0,
-      y: 325,
+      y: energyPlotNode.bottom + 20,
     });
     this.addChild( waveFunctionPlotNode );
 
-    var potentialWellPanel = new PotentialWellPanel( quantumBoundStatesModel, {
-      x: this.layoutBounds.maxX - 240,
-      y: 20,
-
+    var potentialWellPanel = new PotentialWellPanel( quantumBoundStatesModel ).mutate( {
+      right: this.layoutBounds.maxX - 10,
+      top: 10,
     });
     this.addChild( potentialWellPanel );
     
-    var animationControlPanel = new AnimationControlPanel( quantumBoundStatesModel, {
-      x: this.layoutBounds.maxX - 240,
-      y: 240,
-    });
-    this.addChild( animationControlPanel );
+    var waveFunctionPlotControls = new WaveFunctionPlotControls( quantumBoundStatesModel ).mutate( {
+      right: this.layoutBounds.maxX - 10,
+      top: potentialWellPanel.bottom + 10
+    } );
+    this.addChild( waveFunctionPlotControls );
 
-    var particleMassPanel = new ParticleMassPanel( particleMassProperty, {
-      x: this.layoutBounds.maxX - 240,
-      y: 480,
-
+    var particleMassPanel = new ParticleMassPanel( particleMassProperty ).mutate( {
+      right: this.layoutBounds.maxX - 10,
+      top: waveFunctionPlotControls.bottom + 10,
     });
     this.addChild( particleMassPanel );
 
