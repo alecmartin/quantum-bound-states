@@ -15,6 +15,7 @@ define( function( require ) {
   var EnergyPlotNode = require( 'QUANTUM_BOUND_STATES/quantum-bound-states/view/EnergyPlotNode' );
   var WaveFunctionPlotNode = require( 'QUANTUM_BOUND_STATES/quantum-bound-states/view/WaveFunctionPlotNode' );
   var PotentialWellPanel = require( 'QUANTUM_BOUND_STATES/quantum-bound-states/view/PotentialWellPanel' );
+  var AnimationControlPanel = require( 'QUANTUM_BOUND_STATES/quantum-bound-states/view/AnimationControlPanel' );
   var ParticleMassPanel = require( 'QUANTUM_BOUND_STATES/quantum-bound-states/view/ParticleMassPanel' );
 
   /**
@@ -51,6 +52,12 @@ define( function( require ) {
 
     });
     this.addChild( potentialWellPanel );
+    
+    var animationControlPanel = new AnimationControlPanel( quantumBoundStatesModel, {
+      x: this.layoutBounds.maxX - 240,
+      y: 250,
+    });
+    this.addChild( animationControlPanel );
 
     var particleMassPanel = new ParticleMassPanel( particleMassProperty, {
       x: this.layoutBounds.maxX - 240,
