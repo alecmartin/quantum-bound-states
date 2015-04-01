@@ -108,8 +108,12 @@ define( function( require ) {
     this.addChild( units );
 
     //Energy lines
-    var energyLine = new EnergyLine(model.hoveredEigensProperty, width, {left: background.left});
-    this.addChild(energyLine);
+    model.eigenvalsProperty.link(function(){
+
+      var energyLine = new EnergyLine(model.hoveredEigensProperty, width, {left: background.left});
+      this.addChild(energyLine);
+
+    })
 
   }
   

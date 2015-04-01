@@ -8,7 +8,7 @@
 define( function( require ){
 	
   var inherit = require( 'PHET_CORE/inherit' );
-  var SimpleDragHandler = require( 'SCENERY/input/SimpleDragHandler' );
+  var FillHighlightListener = require( 'SCENERY_PHET/input/FillHighlightListener' );
   var Line = require( 'SCENERY/nodes/Line' );
   var PhetFont = require( 'SCENERY_PHET/PhetFont' );
   var Text = require( 'SCENERY/nodes/Text' );
@@ -25,22 +25,9 @@ define( function( require ){
       stroke: 'green',
       lineWidth: 3
     }, options );
-    
+
     Line.call( this, 0, 0, width, 0);
-
-    // this.addInputListener(new SimpleDragHandler({
-
-    //   allowTouchSnag: true,
-    //     // called when a drag starts
-    //   start: function() {
-    //     stroke: 'green';
-    //   },
-    //   // called when a drag ends
-    //   end: function() {
-    //     stroke: 'yellow'
-    //   }
-
-    // }));
+    this.addInputListener(new FillHighlightListener('green', 'purple'));
     
     this.mutate( options );
   }
