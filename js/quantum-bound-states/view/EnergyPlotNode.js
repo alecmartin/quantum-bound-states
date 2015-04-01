@@ -18,6 +18,11 @@ define( function( require ) {
   var Rectangle = require( 'SCENERY/nodes/Rectangle' );
   var Text = require( 'SCENERY/nodes/Text' );
 
+  // strings
+  var titleString = require( 'string!QUANTUM_BOUND_STATES/energy-plot-title' );
+  var totalEnergyString = require( 'string!QUANTUM_BOUND_STATES/energy-plot-total-energy' );
+  var potentialEnergyString = require( 'string!QUANTUM_BOUND_STATES/energy-plot-potential-energy' );
+
   /**
   * @param {QuantumBoundStatesModel} model
   * @param {number} width
@@ -27,12 +32,7 @@ define( function( require ) {
   function EnergyPlotNode( model, width, height, options ) {
 
     Node.call( this, options );
-    
-    // strings
-    var titleString = require( 'string!QUANTUM_BOUND_STATES/energy-plot-title' );
-    var totalEnergyString = require( 'string!QUANTUM_BOUND_STATES/energy-plot-total-energy' );
-    var potentialEnergyString = require( 'string!QUANTUM_BOUND_STATES/energy-plot-potential-energy' );
-    
+    var i;
     var background = new Rectangle(50, 0, width, height, 0, 0, {fill:'black', stroke: 'white'});
     this.addChild( background );
     
@@ -42,7 +42,7 @@ define( function( require ) {
     var ySpacing = (height - padding) / 4;
     var tickLength = 5;
     var yLoc = 5;
-    for (var i = model.getMaxEnergy(); i >= model.getMinEnergy(); i -= 5) {
+    for (i = model.getMaxEnergy(); i >= model.getMinEnergy(); i -= 5) {
       var tick = new Line(background.left, yLoc, background.left - tickLength, yLoc, {stroke: 'white'});
       this.addChild( tick );
       this.addChild( new Text( i.toString(), {
@@ -57,7 +57,7 @@ define( function( require ) {
     var divisors = (model.maxX - model.minX);
     var xSpacing = (width  / divisors);
     var xLoc = xSpacing / 2;
-    for (var i = model.minX + 0.5; i < divisors + model.minX; i += 1) {
+    for (i = model.minX + 0.5; i < divisors + model.minX; i += 1) {
       var line = new Line(background.left + xLoc, background.top, background.left+xLoc, background.bottom, {stroke: 'gray'});
       this.addChild( line );
       xLoc += xSpacing;

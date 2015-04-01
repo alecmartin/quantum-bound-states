@@ -12,7 +12,6 @@ define( function( require ) {
   var HSlider = require( 'SUN/HSlider' );
   var HStrut = require( 'SUN/HStrut' );
   var inherit = require( 'PHET_CORE/inherit' );
-  var Node = require( 'SCENERY/nodes/Node' );
   var Path = require( 'SCENERY/nodes/Path' );
   var Panel = require( 'SUN/Panel' );
   var PhetFont = require( 'SCENERY_PHET/PhetFont' );
@@ -24,17 +23,20 @@ define( function( require ) {
   var VBox = require( 'SCENERY/nodes/VBox' );
   var VStrut = require( 'SUN/VStrut' );
   
+  //strings
+  var particleMassString = require( 'string!QUANTUM_BOUND_STATES/bottom-chart-particle-mass' );
+
   /**
   * @param {Property} particleMassProperty
   * @constructor
   */
-  function ParticleMassPanel( particleMassProperty, options ) {
-    Node.call( this, options );
+  function ParticleMassPanel( particleMassProperty ) {
+    // Panel.call( this);
 
     // Strings and other variables
     var optionFont = {font: new PhetFont( 14 ), fill: "palegoldenrod"};
     var labelFont = {font: new PhetFont( 12 ), fill: "white"};
-    var particleMassString = require( 'string!QUANTUM_BOUND_STATES/bottom-chart-particle-mass' );
+    
 
     //boxWidth
     var boxWidth = 240;
@@ -87,7 +89,7 @@ define( function( require ) {
     hSlider.addMinorTick( 0.5 * QuantumBoundStatesConstants.ELECTRON_MASS, new Text( "0.50", labelFont ) );
     hSlider.addMinorTick( 1.1 * QuantumBoundStatesConstants.ELECTRON_MASS, new Text( "1.10", labelFont ) );
     
-    var viewBottomChartVBox = new VBox( {
+    var particleMassVBox = new VBox( {
       children: [ 
         new HBox( { children: [ new HStrut( boxWidth - 20 ) ] } ),
         new HBox( { children: [ new HStrut( 10 ), new VStrut( 10 ), new Text( particleMassString, optionFont ), new HStrut( 15 ) ] } ), 
@@ -97,16 +99,22 @@ define( function( require ) {
       ],
       align: 'left'
     } );
-    var viewBottomChartPanel = new Panel( viewBottomChartVBox,
-    {
+
+    // var particleMassPanel = new Panel( particleMassVBox,
+    // {
+    //   fill: 'black',
+    //   stroke: 'white',
+    //   lineWidth: 2,
+    //   top: 5
+    // } );
+    Panel.call( this, particleMassVBox, {
       fill: 'black',
       stroke: 'white',
       lineWidth: 2,
       top: 5
     } );
     
-    this.addChild( viewBottomChartPanel );
   }
-  return inherit( Node, ParticleMassPanel );
+  return inherit( Panel, ParticleMassPanel );
 
 } );
