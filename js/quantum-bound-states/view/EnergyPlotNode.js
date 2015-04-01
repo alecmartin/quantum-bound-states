@@ -104,6 +104,9 @@ define( function( require ) {
       ]
     });
     this.addChild( units );
+
+    //Energy lines
+
   }
   
   return inherit( Node, EnergyPlotNode );
