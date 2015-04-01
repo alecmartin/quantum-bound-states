@@ -57,7 +57,7 @@ define( function( require ) {
     var divisors = (model.maxX - model.minX);
     var xSpacing = (width  / divisors);
     var xLoc = xSpacing / 2;
-    for (var i = model.minX + 0.5; i < divisors + model.minX; i += 1) {
+    for (i = model.minX + 0.5; i < divisors + model.minX; i += 1) {
       var line = new Line(background.left + xLoc, background.top, background.left+xLoc, background.bottom, {stroke: 'gray'});
       this.addChild( line );
       xLoc += xSpacing;
