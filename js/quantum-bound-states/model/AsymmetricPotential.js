@@ -71,7 +71,7 @@ define( function( require ) {
       var n = this.groundState;
       var energy = this.getNthEigenvalue( n );
       while ( energy < this.wellHeightProperty.value + this.wellOffsetProperty.value ) {
-        this.eigenvals[n] = energy;
+        this.eigenvals[n-this.groundState] = energy;
         n++;
         energy = this.getNthEigenvalue( n );
       }
