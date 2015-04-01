@@ -12,8 +12,6 @@ define( function( require ){
   var PhetFont = require( 'SCENERY_PHET/PhetFont' );
   var Text = require( 'SCENERY/nodes/Text' );
   var SubSupText = require( 'SCENERY_PHET/SubSupText' );
-  
-  var mouse = require( 'SCENERY/input/Mouse' );
 
   /**
   * @param {Property} hoveredEigenstateProperty
@@ -27,7 +25,12 @@ define( function( require ){
       lineWidth: 3
     }, options );
     
+<<<<<<< HEAD
     Line.call( this, 0, 0, width, 0);
+=======
+    Line.call( this, 0, 0, width, 0 );
+    
+>>>>>>> e7b2a981b7044006662fae3c419004d8f92ac0b2
     
 
     this.mutate( options );
