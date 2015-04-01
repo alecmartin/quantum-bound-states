@@ -9,9 +9,9 @@ define( function( require ) {
 
   // modules
   var inherit = require( 'PHET_CORE/inherit' );
-  var Node = require( 'SCENERY/nodes/Node' );
   var PhetFont = require( 'SCENERY_PHET/PhetFont' );
   var Text = require( 'SCENERY/nodes/Text' );
+  var Node = require( 'SCENERY/nodes/Node' );
   var PotentialComboBox = require( 'QUANTUM_BOUND_STATES/quantum-bound-states/view/PotentialComboBox' );
   var HBox = require( 'SCENERY/nodes/HBox' );
   var HStrut = require( 'SUN/HStrut' );
@@ -21,21 +21,22 @@ define( function( require ) {
   var VBox = require( 'SCENERY/nodes/VBox' );
   var TextPushButton = require( 'SUN/buttons/TextPushButton' );
   
+  //strings 
+  var potentialWellString = require( 'string!QUANTUM_BOUND_STATES/potential-well' );
+  var magnifyingString = require( 'string!QUANTUM_BOUND_STATES/top-chart-show-magnifying-glass' );
+  var configpotentialWellString = require( 'string!QUANTUM_BOUND_STATES/top-chart-configure-potential-well' );
+  var superpositionStateString = require( 'string!QUANTUM_BOUND_STATES/top-chart-superposition-state' );
   /**
   * @param {QuantumBoundStatesModel} model
   * @constructor
   */
-  function PotentialWellPanel( model, options ) {
-    Node.call( this, options );
+  function PotentialWellPanel( model) {
+    // Panel.call( this, options );
 
-    // Strings and other variables
+    // optionfont
     var optionFont = {font: new PhetFont( 14 ), fill: "palegoldenrod"};
-    var potentialWellString = require( 'string!QUANTUM_BOUND_STATES/potential-well' );
-    var magnifyingString = require( 'string!QUANTUM_BOUND_STATES/top-chart-show-magnifying-glass' );
-    var configpotentialWellString = require( 'string!QUANTUM_BOUND_STATES/top-chart-configure-potential-well' );
-    var superpositionStateString = require( 'string!QUANTUM_BOUND_STATES/top-chart-superposition-state' );
-
     var parent = new Node();
+
     var potentialWellComboBox = new PotentialComboBox( model.potentials, model.currentPotentialProperty, parent );
     
     //boxwidth
@@ -67,7 +68,7 @@ define( function( require ) {
       { content: new Text( magnifyingString, optionFont ), property: model.showMagnifyingGlassProperty, label: magnifyingString },
     ], { boxWidth: 20, spacing: 5, checkBoxColor: 'black'} );
     
-    var viewTopChartVBox = new VBox( {
+    var PotentialWellVBox = new VBox( {
       children: [
         new HBox( { children: [ new HStrut( boxwidth - 20 ) ] } ),
         new HBox( { children: [ new HStrut( 10 ), new VStrut( 10 ), new Text( potentialWellString, optionFont ), new HStrut( 15 ) ] } ), 
@@ -83,19 +84,15 @@ define( function( require ) {
       ],
       align: 'left'
     } );
-    var viewTopChartPanel = new Panel( viewTopChartVBox,
-    {
+    
+    Panel.call( this, PotentialWellVBox, {
       fill: 'black',
       stroke: 'white',
       lineWidth: 2,
       top: 5
     } );
-    
-    this.addChild( viewTopChartPanel );
-    
-    this.addChild( parent );
   }
-  return inherit( Node, PotentialWellPanel );
 
+  return inherit( Panel, PotentialWellPanel );
 
 } );
