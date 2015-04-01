@@ -180,8 +180,8 @@ define( function( require ) {
       var superposition = this.getSubscriptsAndCoefficients();
       var nodeArray = superposition[0];
       var coefficients = superposition[1];
-      var psi = potential.getNthEigenstate( nodeArray[0] - this.currentPotentialProperty.value.groundState );
-      var energy = potential.getNthEigenvalue( nodeArray[0] - this.currentPotentialProperty.value.groundState );
+      var psi = potential.getNthEigenstate( nodeArray[0] );
+      var energy = potential.getNthEigenvalue( nodeArray[0] );
       
       // multiply by the propagator
       for (var l = 0; l < psi[1].length; l++) {
