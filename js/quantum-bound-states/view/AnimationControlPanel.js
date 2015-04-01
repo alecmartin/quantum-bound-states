@@ -52,11 +52,11 @@ define( function( require ) {
 
     var radioButtonGroup = new VerticalCheckBoxGroup( [
         { content: new Text( probabilityDensityString, radioButtonFont ),
-          property: model.showMagnifyingGlassProperty, 
+          property: model.showProbDensityProperty, 
           label: probabilityDensityString 
         },
         { content: new Text( waveFunctionString, radioButtonFont ),
-          property: model.showMagnifyingGlassProperty, 
+          property: model.showProbDensityProperty, 
           label: waveFunctionString 
         },
         
@@ -64,19 +64,19 @@ define( function( require ) {
 
     var checkBoxGroup = new VerticalCheckBoxGroup( [
         { content: new Text( realPartString, checkBoxFontInactive ),
-          property: model.showMagnifyingGlassProperty, 
+          property: model.showRealProperty, 
           label: realPartString 
         },
         { content: new Text( imaginaryPartString, checkBoxFontInactive ),
-          property: model.showMagnifyingGlassProperty, 
+          property: model.showImaginaryProperty, 
           label: imaginaryPartString 
         },
         { content: new Text( magnitudeString, checkBoxFontInactive ),
-          property: model.showMagnifyingGlassProperty, 
+          property: model.showMagnitudeProperty, 
           label: magnitudeString 
         },
         { content: new Text( phaseString, checkBoxFontInactive ),
-          property: model.showMagnifyingGlassProperty, 
+          property: model.showPhaseProperty, 
           label: phaseString 
         },
         
