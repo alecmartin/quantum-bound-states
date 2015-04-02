@@ -128,7 +128,9 @@ define( function( require ) {
         var shape = new Shape();
         shape.moveTo(xScale(points[0][0]), yScale(points[1][0]));
         // iterate over all points and generate our full shape
-        for (var j = 1; j < points[0].length; j++) {
+        // this part takes a while so we only grab every 10th point (good enough)
+        // reduction: 1344 points -> 134 points
+        for (var j = 1; j < points[0].length; j += 10) {
             shape.lineTo(xScale(points[0][j]), yScale(points[1][j]));
         }
         var shape_path = new Path(shape, {
@@ -143,8 +145,8 @@ define( function( require ) {
     }
     // Now we can iterate over generated paths
     var lower = 0;
-    var upper = 100;
-    var step = 20;
+    var upper = 10;
+    var step = 1;
     var time = lower;
     var paths = generateTimePaths(lower, upper, step);
     var currentLine = -1; // at the beginning we have no plotted path
@@ -153,8 +155,9 @@ define( function( require ) {
       if (currentLine != -1) {
           plot.removeChild(currentLine);
       }
-      plot.addChild(paths[time]);
-      currentLine = paths[time];
+      var newPath = paths[time];
+      plot.addChild(newPath);
+      currentLine = newPath;
       time++;
       time %= paths.length;
     }
