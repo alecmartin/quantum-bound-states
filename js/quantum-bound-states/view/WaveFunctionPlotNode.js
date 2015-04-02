@@ -131,7 +131,8 @@ define( function( require ) {
         var shape_path = new Path(shape, {
             stroke: 'blue',
             linewidth: 3,
-            lineJoin: 'round'
+            lineJoin: 'round',
+            x: 50
         });
         paths.push(shape_path);
       }
