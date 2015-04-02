@@ -110,7 +110,32 @@ define( function( require ) {
       top: background.top + 5
     });
     this.addChild( eigenText );
-  }
 
+    // Plotting lower graph lines
+    var lines = [];
+    var points;
+    var maxEnergy = model.getMaxEnergy();
+    var xScale = width / (model.maxX - model.minX);
+    var yScale = height / (maxEnergy - model.getMinEnergy());
+    var time = 0;
+    var plot = this;
+    var step = function() {
+      for (var i = 0; i < lines.length; i++) {
+          plot.removeChild(lines[i]);
+      }
+      lines = []
+      points = model.getRealWave(time);
+      var shape = new Shape().moveTo(points[0][0], points[1][0]);
+      for (var i = 1; i < points[0].length - 1; i++) {
+          shape.lineTo(points[0][i], points[1][i]);
+      }
+      lines.push(shape);
+      plot.addChild(shape);
+      time = (time + 1) % 100;
+    }
+    step();
+    //setInterval(step, 60);
+
+  }
   return inherit( Node, WaveFunctionPlotNode);
 } );
