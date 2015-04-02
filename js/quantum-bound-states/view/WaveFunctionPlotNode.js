@@ -115,16 +115,19 @@ define( function( require ) {
 
     // Plotting lower graph lines
     // Need to first generate paths for efficient animation
+    // Currently the largest timesink
     var generateTimePaths = function(lower, upper, step) {
       var points; // [xarr, yarr]
       var maxEnergy = model.getMaxEnergy();
       var xScale = function(x) { return (model.maxX + x) * (width / (model.maxX - model.minX)); }
       var yScale = function(y) { return (model.getMaxEnergy() - y) * (height / (maxEnergy - model.getMinEnergy())); }
       var paths = [];
+      // We iterate over every time value
       for (var i = 0; i < upper; i += step) {
         points = model.getRealWave(time);
         var shape = new Shape();
         shape.moveTo(xScale(points[0][0]), yScale(points[1][0]));
+        // iterate over all points and generate our full shape
         for (var j = 1; j < points[0].length; j++) {
             shape.lineTo(xScale(points[0][j]), yScale(points[1][j]));
         }
@@ -140,8 +143,8 @@ define( function( require ) {
     }
     // Now we can iterate over generated paths
     var lower = 0;
-    var upper = 5;
-    var step = 1;
+    var upper = 100;
+    var step = 20;
     var time = lower;
     var paths = generateTimePaths(lower, upper, step);
     var currentLine = -1; // at the beginning we have no plotted path
@@ -153,10 +156,9 @@ define( function( require ) {
       plot.addChild(paths[time]);
       currentLine = paths[time];
       time++;
-      time %= upper;
+      time %= paths.length;
     }
-    //step();
-    setInterval(step, 100);
+    setInterval(step, 15);
   }
   return inherit( Node, WaveFunctionPlotNode);
 } );
