@@ -184,7 +184,7 @@ define( function( require ) {
         }
       }
       if (i === MAX_TRIES) {
-        console.log("No convergence in interpolation, nodes = "+nodes);
+        //console.log("No convergence in interpolation, nodes = "+nodes);
         return midEnergy;
       }
       

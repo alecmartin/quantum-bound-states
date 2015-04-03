@@ -14,7 +14,7 @@ define( function( require ) {
   var Line = require( 'SCENERY/nodes/Line' );
   var Node = require( 'SCENERY/nodes/Node' );
   var PhetFont = require( 'SCENERY_PHET/PhetFont' );
-  var PotentialWellNode = require( 'QUANTUM_BOUND_STATES/quantum-bound-states/view/PotentialWellNode' );
+  var PotentialWellPlot = require( 'QUANTUM_BOUND_STATES/quantum-bound-states/view/PotentialWellPlot' );
   var Rectangle = require( 'SCENERY/nodes/Rectangle' );
   var Text = require( 'SCENERY/nodes/Text' );
 
@@ -65,7 +65,7 @@ define( function( require ) {
       xLoc += xSpacing;
     }
     
-    var well = new PotentialWellNode( model, width, height + padding, {x: 50} );
+    var well = new PotentialWellPlot( model, width, height + padding, {x: 50} );
     background.addChild( well );
     
     var title = new Text( titleString, {
