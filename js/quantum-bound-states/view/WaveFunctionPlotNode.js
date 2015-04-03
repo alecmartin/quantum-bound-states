@@ -10,6 +10,8 @@ define( function( require ) {
   var inherit = require( 'PHET_CORE/inherit' );
   var Line = require( 'SCENERY/nodes/Line' );
   var Node = require( 'SCENERY/nodes/Node' );
+  var Path = require( 'SCENERY/nodes/Path' );
+  var Shape = require( 'KITE/Shape' );
   var PhetFont = require( 'SCENERY_PHET/PhetFont' );
   var Rectangle = require( 'SCENERY/nodes/Rectangle' );
   var Text = require( 'SCENERY/nodes/Text' );
@@ -110,7 +112,56 @@ define( function( require ) {
       top: background.top + 5
     });
     this.addChild( eigenText );
-  }
 
+    // Plotting lower graph lines
+    // Need to first generate paths for efficient animation
+    // Currently the largest timesink
+    var generateTimePaths = function(lower, upper, step) {
+      var points; // [xarr, yarr]
+      var maxEnergy = model.getMaxEnergy();
+      var xScale = function(x) { return (model.maxX + x) * (width / (model.maxX - model.minX)); }
+      var yScale = function(y) { return (model.getMaxEnergy() - y) * (height / (maxEnergy - model.getMinEnergy())); }
+      var paths = [];
+      // We iterate over every time value
+      for (var i = 0; i < upper; i += step) {
+        points = model.getRealWave(time);
+        var shape = new Shape();
+        shape.moveTo(xScale(points[0][0]), yScale(points[1][0]));
+        // iterate over all points and generate our full shape
+        // this part takes a while so we only grab every 10th point (good enough)
+        // reduction: 1344 points -> 134 points
+        for (var j = 1; j < points[0].length; j += 10) {
+            shape.lineTo(xScale(points[0][j]), yScale(points[1][j]));
+        }
+        var shape_path = new Path(shape, {
+            stroke: 'blue',
+            linewidth: 3,
+            lineJoin: 'round',
+            x: 50
+        });
+        paths.push(shape_path);
+      }
+      return paths
+    }
+    // Now we can iterate over generated paths
+    var lower = 0;
+    var upper = 10;
+    var step = 1;
+    var time = lower;
+    var paths = generateTimePaths(lower, upper, step);
+    var currentLine = -1; // at the beginning we have no plotted path
+    var plot = this;
+    var step = function() {
+      if (currentLine != -1) {
+          plot.removeChild(currentLine);
+      }
+      var newPath = paths[time];
+      plot.addChild(newPath);
+      currentLine = newPath;
+      time++;
+      time %= paths.length;
+    }
+    setInterval(step, 15);
+  }
   return inherit( Node, WaveFunctionPlotNode);
 } );
