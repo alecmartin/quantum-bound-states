@@ -15,8 +15,13 @@ define( function( require ) {
   var Node = require( 'SCENERY/nodes/Node' );
   var PhetFont = require( 'SCENERY_PHET/PhetFont' );
   var PotentialWellPlot = require( 'QUANTUM_BOUND_STATES/quantum-bound-states/view/PotentialWellPlot' );
+  var QuantumBoundStatesConstants = require( 'QUANTUM_BOUND_STATES/quantum-bound-states/model/QuantumBoundStatesConstants' );
   var Rectangle = require( 'SCENERY/nodes/Rectangle' );
   var Text = require( 'SCENERY/nodes/Text' );
+  
+  // constants
+  var MIN_X = QuantumBoundStatesConstants.XRANGE.min;
+  var MAX_X = QuantumBoundStatesConstants.XRANGE.max;
 
   // strings
   var titleString = require( 'string!QUANTUM_BOUND_STATES/energy-plot-title' );
@@ -56,10 +61,10 @@ define( function( require ) {
     }
     
     // vertical lines
-    var divisors = (model.maxX - model.minX);
+    var divisors = (MAX_X - MIN_X);
     var xSpacing = (width  / divisors);
     var xLoc = xSpacing / 2;
-    for (i = model.minX + 0.5; i < divisors + model.minX; i += 1) {
+    for (i = MIN_X + 0.5; i < divisors + MIN_X; i += 1) {
       var line = new Line(background.left + xLoc, background.top, background.left+xLoc, background.bottom, {stroke: 'gray'});
       background.addChild( line );
       xLoc += xSpacing;

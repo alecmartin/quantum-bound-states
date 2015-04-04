@@ -24,8 +24,6 @@ define( function( require ) {
   var coulombImage = require( 'image!QUANTUM_BOUND_STATES/CoulombIcon.png' );
   
   /**
-  * @param {number} minX
-  * @param {number} maxX
   * @param {Particle} particle
   * @param {number} wellOffset
   * @constructor

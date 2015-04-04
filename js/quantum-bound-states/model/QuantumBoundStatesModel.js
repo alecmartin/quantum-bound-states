@@ -38,9 +38,6 @@ define( function( require ) {
     this.potentials = [squareWell, asymWell, coulomb1D, coulomb3D, oscillatorWell];
     var coefficients = new SuperpositionCoefficients( squareWell );
     
-    this.minX = MIN_X;
-    this.maxX = MAX_X;
-    
     PropertySet.call( this, {
       particle: particle,
       particleMass: QuantumBoundStatesConstants.ELECTRON_MASS,

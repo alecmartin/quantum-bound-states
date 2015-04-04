@@ -14,8 +14,13 @@ define( function( require ) {
   var Shape = require( 'KITE/Shape' );
   var PhetFont = require( 'SCENERY_PHET/PhetFont' );
   var Rectangle = require( 'SCENERY/nodes/Rectangle' );
+  var QuantumBoundStatesConstants = require( 'QUANTUM_BOUND_STATES/quantum-bound-states/model/QuantumBoundStatesConstants' );
   var Text = require( 'SCENERY/nodes/Text' );
   var SubSupText = require( 'SCENERY_PHET/SubSupText' );
+  
+  // constants
+  var MIN_X = QuantumBoundStatesConstants.XRANGE.min;
+  var MAX_X = QuantumBoundStatesConstants.XRANGE.max;
 
   /**
   * @param {QuantumBoundStatesModel} model
@@ -38,10 +43,10 @@ define( function( require ) {
     var background = new Rectangle(50,0,width,height,0,0, {fill:'black', stroke: 'white'});
     this.addChild( background );
     
-    var divisors = (model.maxX - model.minX);
+    var divisors = (MAX_X - MIN_X);
     var xSpacing = (width  / divisors);
     var xLoc = xSpacing /2;
-    for (var i = model.minX + 0.5; i < divisors + model.minX; i += 1) {
+    for (var i = MIN_X + 0.5; i < divisors + MIN_X; i += 1) {
       var tick = new Line(background.left + xLoc, background.top, background.left+xLoc, background.bottom, {stroke: 'gray'});
       this.addChild( tick );
       this.addChild( new Text( i.toString(), {
@@ -115,7 +120,7 @@ define( function( require ) {
 
     // Plotting lower graph lines
     var maxEnergy = model.getMaxEnergy();
-    var xScale    = function(x) { return (model.maxX + x) * (width / (model.maxX - model.minX)); }
+    var xScale    = function(x) { return (MAX_X + x) * (width / (MAX_X - MIN_X)); }
     var yScale    = function(y) { return (model.getMaxEnergy() - y) * (height / (maxEnergy - model.getMinEnergy())); }
 
     var time        = 0;
