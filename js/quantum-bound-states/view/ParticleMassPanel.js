@@ -16,7 +16,7 @@ define( function( require ) {
   var Panel = require( 'SUN/Panel' );
   var PhetFont = require( 'SCENERY_PHET/PhetFont' );
   // var Property = require( 'AXON/Property' );
-  var QuantumBoundStatesConstants = require( 'QUANTUM_BOUND_STATES/quantum-bound-states/model/QuantumBoundStatesConstants' );
+  //var QuantumBoundStatesConstants = require( 'QUANTUM_BOUND_STATES/quantum-bound-states/model/QuantumBoundStatesConstants' );
   var Range = require( 'DOT/Range' );
   // var Rectangle = require( 'SCENERY/nodes/Rectangle' );
   // var RectangularPushButton = require( 'SUN/buttons/RectangularPushButton' );

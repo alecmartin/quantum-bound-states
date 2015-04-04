@@ -34,7 +34,6 @@ define( function( require ) {
   function PotentialWellPlot( model, width, height, options ) {
 
     Node.call( this, options );
-    var thisNode = this;
 
     var maxEnergy = model.getMaxEnergy();
     var xScale = width / (MAX_X - MIN_X);

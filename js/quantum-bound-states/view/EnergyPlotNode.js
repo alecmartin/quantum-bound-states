@@ -8,6 +8,7 @@ define( function( require ) {
   'use strict';
 
   // modules
+  var EnergyLine = require( 'QUANTUM_BOUND_STATES/quantum-bound-states/view/EnergyLine' );
   var HBox = require( 'SCENERY/nodes/HBox' );
   var HStrut = require( 'SUN/HStrut' );
   var inherit = require( 'PHET_CORE/inherit' );
@@ -72,6 +73,8 @@ define( function( require ) {
     
     var well = new PotentialWellPlot( model, width, height + padding, {x: 50} );
     background.addChild( well );
+    var energyLine = new EnergyLine( model.hoveredEigenstateProperty, width, 0, {x: 50, y: 50} );
+    this.addChild( energyLine );
     
     var title = new Text( titleString, {
       font: new PhetFont( 18 ),

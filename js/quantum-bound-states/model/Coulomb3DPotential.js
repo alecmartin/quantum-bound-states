@@ -21,8 +21,6 @@ define( function( require ) {
   
   // constants
   var MAX_EIGENSTATES = 10;
-  var MIN_X = QuantumBoundStatesConstants.XRANGE.min;
-  var MAX_X = QuantumBoundStatesConstants.XRANGE.max;
   
   /**
   * @param {Particle} particle
