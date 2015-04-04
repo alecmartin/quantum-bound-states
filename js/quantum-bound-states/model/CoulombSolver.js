@@ -14,17 +14,15 @@ define( function( require ) {
   
   // constants
   var SQRT_4_PI = Math.sqrt(4 * Math.PI);
+  var MIN_X = QuantumBoundStatesConstants.XRANGE.min;
+  var MAX_X = QuantumBoundStatesConstants.XRANGE.max;
   
   /**
-  * @param {number} minX
-  * @param {number} maxX
   * @param {Particle} particle
   * @param {number} n: the number of points to return in a calculated wavefunction
   * @constructor
   */
-  function CoulombSolver( minX, maxX, particle, n ) {
-    this.minX = minX;
-    this.maxX = maxX;
+  function CoulombSolver( particle, n ) {
     this.particle = particle;
     this.ab = this.getBohrRadius();
     this.n = n;
@@ -45,8 +43,8 @@ define( function( require ) {
      * Return the scaled wavefunction
      */
     calculateWavefunction: function( nodes ) {
-      var dx = (this.maxX - this.minX) / (this.n - 1);
-      var x = this.minX;
+      var dx = (MAX_X - MIN_X) / (this.n - 1);
+      var x = MIN_X;
       var wave = new FastArray( this.n );
       for (var i = 0; i < this.n; i++) {
         wave[i] = this.psiScaled( nodes, x );

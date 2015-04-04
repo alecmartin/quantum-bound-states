@@ -16,10 +16,10 @@ define( function( require ) {
   var Range = require( 'DOT/Range' );
   var Shape = require( 'KITE/Shape' );
   
-  var NUM_POINTS = 200;
+  var NUM_POINTS = 500;
 
   /**
-   * @param {QuantumBoundStatesModel} model
+   * @param {Property} particleMassProperty
    * @param {HarmonicOscillatorPotential} potential
    * @param {function} valueToX
    * @param {function} valueToY
@@ -27,35 +27,50 @@ define( function( require ) {
    * @param {function} yToValue
    * @constructor
    */
-  function HarmonicOscillatorWellPlot( model, potential, valueToX, valueToY, xToValue, yToValue, options ) {
+  function HarmonicOscillatorWellPlot( particleMassProperty, potential, valueToX, valueToY, xToValue, yToValue, options ) {
 
     Node.call( this, options );
     var thisNode = this;
     
-    var energyRange = new Range( model.getMinEnergy(), model.getMaxEnergy() );
+    var energyRange = new Range( potential.minEnergy, potential.maxEnergy );
     var frequencyRange = QuantumBoundStatesConstants.FREQUENCY_RANGE;
     
     var maxEnergy = potential.maxEnergy;
     
     var wellShape;
     
-    var wellOffsetControl = new PotentialPropertyIndicator( potential.wellOffsetProperty, false, xToValue, yToValue, energyRange );
-    var wellFrequencyControl =  new PotentialPropertyIndicator( potential.frequencyProperty, true, xToValue, yToValue, frequencyRange );
+    var getOffset = function( y ) {
+      return yToValue( y + QuantumBoundStatesConstants.PROPERTY_INDICATOR_LENGTH / 2 );
+    };
+    
+    var getFrequency = function( x ) {
+      var realX = xToValue( x + QuantumBoundStatesConstants.PROPERTY_INDICATOR_LENGTH / 2 );
+      var energy = yToValue( wellFrequencyControl.centerY ) - potential.wellOffsetProperty.value;
+      var freq = -Math.sqrt( 2 * energy / particleMassProperty.value ) / realX;
+      if ( freq < 0 || freq > frequencyRange.max) {
+        freq = frequencyRange.max;
+      }
+      return freq;
+    };
+    
+    var wellOffsetControl = new PotentialPropertyIndicator( potential.wellOffsetProperty, false, xToValue, getOffset, energyRange );
+    var wellFrequencyControl =  new PotentialPropertyIndicator( potential.frequencyProperty, true, getFrequency, yToValue, frequencyRange );
+    
     wellOffsetControl.centerX = valueToX( 0 );
-    wellFrequencyControl.centerY = valueToY( (maxEnergy - model.getMinEnergy()) / 5 );
+    wellFrequencyControl.centerY = valueToY( (maxEnergy - potential.minEnergy) / 5 );
     
     var drawWell = function() {
       var potentialPoints = potential.getPotentialPoints( NUM_POINTS );
       var potentialPointsX = potentialPoints[ 0 ];
       var potentialPointsY = potentialPoints[ 1 ];
       var index = 0;
-      while ( potentialPointsY[ index ] > maxEnergy + 1 ) {
+      while ( potentialPointsY[ index ] > maxEnergy * 2 ) {
         index++;
       }
       wellShape = new Shape().
         moveTo( valueToX( potentialPointsX[ index ] ), valueToY( potentialPointsY[ index ] ) );
-      for (var i = index + 1; i < potentialPointsX.length; i++) {
-        if ( potentialPointsY[ i ] <= model.getMaxEnergy() + 1 ) {
+      for (var i = index + 1; i < potentialPointsX.length - index; i++) {
+        if ( potentialPointsY[ i ] <= potential.maxEnergy + 1 ) {
           wellShape = wellShape.lineTo( valueToX( potentialPointsX[ i ] ), valueToY( potentialPointsY[ i ] ) );
         }
       }
@@ -76,11 +91,16 @@ define( function( require ) {
     potential.wellOffsetProperty.link( function() {
       drawWell();
       wellPath.shape = wellShape;
+      wellOffsetControl.centerY = valueToY( potential.wellOffsetProperty.value );
+      wellFrequencyControl.centerY = valueToY( (maxEnergy - potential.minEnergy) / 5 + potential.wellOffsetProperty.value );
     });
     
     potential.frequencyProperty.link( function() {
       drawWell();
       wellPath.shape = wellShape;
+      var energy = yToValue( wellFrequencyControl.centerY ) - potential.wellOffsetProperty.value;
+      var x = -Math.sqrt( 2 * energy / particleMassProperty.value ) / potential.frequencyProperty.value;
+      wellFrequencyControl.centerX = valueToX( x );
     });
   }
 

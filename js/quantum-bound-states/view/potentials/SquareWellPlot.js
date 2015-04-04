@@ -8,35 +8,30 @@ define( function( require ) {
   'use strict';
 
   // modules
-  var QuantumBoundStatesConstants = require( 'QUANTUM_BOUND_STATES/quantum-bound-states/model/QuantumBoundStatesConstants' );
   var inherit = require( 'PHET_CORE/inherit' );
   var Node = require( 'SCENERY/nodes/Node' );
   var Path = require( 'SCENERY/nodes/Path' );
   var PotentialPropertyIndicator = require( 'QUANTUM_BOUND_STATES/quantum-bound-states/view/PotentialPropertyIndicator' );
+  var QuantumBoundStatesConstants = require( 'QUANTUM_BOUND_STATES/quantum-bound-states/model/QuantumBoundStatesConstants' );
   var Range = require( 'DOT/Range' );
   var Shape = require( 'KITE/Shape' );
 
+  var MAX_X = QuantumBoundStatesConstants.XRANGE.max;
+  
   /**
-   * @param {QuantumBoundStatesModel} model
    * @param {SquareWellPotential} potential
-   * @param {number} width
-   * @param {number} height
    * @param {function} valueToX
    * @param {function} valueToY
    * @param {function} xToValue
    * @param {function} yToValue
    * @constructor
    */
-  function SquareWellPlot( model, potential, width, height, valueToX, valueToY, xToValue, yToValue, options ) {
+  function SquareWellPlot( potential, valueToX, valueToY, xToValue, yToValue, options ) {
 
     Node.call( this, options );
     var thisNode = this;
-
-    var maxEnergy = potential.maxEnergy;
-    var xScale = width / (model.maxX - model.minX);
-    var yScale = height / (maxEnergy - potential.minEnergy);
     
-    var energyRange = new Range( model.getMinEnergy(), model.getMaxEnergy() );
+    var energyRange = new Range( potential.minEnergy, potential.maxEnergy );
     var heightRange = QuantumBoundStatesConstants.WELL_HEIGHT_RANGE;
     var widthRange = QuantumBoundStatesConstants.WELL_WIDTH_RANGE;
     
@@ -64,12 +59,12 @@ define( function( require ) {
       wellWidth = potential.wellWidthProperty.value;
       wellHeight = potential.wellHeightProperty.value;
       wellShape = new Shape().
-        moveTo( 0, (maxEnergy - (wellHeight + offset)) * yScale ).
-        horizontalLineTo( (model.maxX - wellWidth / 2) * xScale ).
-        verticalLineTo( (maxEnergy - offset) * yScale ).
-        horizontalLineTo( (model.maxX + wellWidth / 2) * xScale ).
-        verticalLineTo( (maxEnergy - (wellHeight + offset)) * yScale ).
-        horizontalLineTo( (model.maxX - model.minX) * xScale );
+        moveTo( 0, valueToY( wellHeight + offset ) ).
+        horizontalLineTo( valueToX( -wellWidth / 2 ) ).
+        verticalLineTo( valueToY( offset ) ).
+        horizontalLineTo( valueToX( wellWidth / 2 ) ).
+        verticalLineTo( valueToY( wellHeight + offset ) ).
+        horizontalLineTo( valueToX( MAX_X ) );
     };
 
     drawWell();

@@ -20,8 +20,8 @@ define( function( require ) {
   var SuperpositionCoefficients = require( 'QUANTUM_BOUND_STATES/quantum-bound-states/model/SuperpositionCoefficients' );
   
   // constants
-  var MIN_X = -3.5; // nm
-  var MAX_X = 3.5; // nm
+  var MIN_X = QuantumBoundStatesConstants.XRANGE.min;
+  var MAX_X = QuantumBoundStatesConstants.XRANGE.max;
 
   /**
    * Main constructor for QuantumBoundStatesModel, which contains all of the model logic for the entire sim screen.
@@ -30,11 +30,11 @@ define( function( require ) {
   function QuantumBoundStatesModel() {
 
     var particle = new Particle();
-    var squareWell = new SquareWellPotential( MIN_X, MAX_X, particle, 0.0, 1.0, 10.0 );
-    var asymWell = new AsymmetricPotential( MIN_X, MAX_X, particle, 0.0, 1.0, 10.0 );
-    var coulomb1D = new Coulomb1DPotential( MIN_X, MAX_X, particle, 0.0 );
-    var coulomb3D = new Coulomb3DPotential( MIN_X, MAX_X, particle, 0.0 );
-    var oscillatorWell = new HarmonicOscillatorPotential( MIN_X, MAX_X, particle, 0.0, 1.0 );
+    var squareWell = new SquareWellPotential( particle, 0.0, 1.0, 10.0 );
+    var asymWell = new AsymmetricPotential( particle, 0.0, 1.0, 10.0 );
+    var coulomb1D = new Coulomb1DPotential( particle, 0.0 );
+    var coulomb3D = new Coulomb3DPotential( particle, 0.0 );
+    var oscillatorWell = new HarmonicOscillatorPotential( particle, 0.0, 1.0 );
     this.potentials = [squareWell, asymWell, coulomb1D, coulomb3D, oscillatorWell];
     var coefficients = new SuperpositionCoefficients( squareWell );
     

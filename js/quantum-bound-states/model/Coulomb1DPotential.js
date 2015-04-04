@@ -13,6 +13,10 @@ define( function( require ) {
   var PotentialWell = require( 'QUANTUM_BOUND_STATES/quantum-bound-states/model/PotentialWell' );
   var QuantumBoundStatesConstants = require( 'QUANTUM_BOUND_STATES/quantum-bound-states/model/QuantumBoundStatesConstants' );
   
+  // constants
+  var MIN_X = QuantumBoundStatesConstants.XRANGE.min;
+  var MAX_X = QuantumBoundStatesConstants.XRANGE.max;
+  
   // strings
   var coulomb1DString = require( 'string!QUANTUM_BOUND_STATES/coulomb_1d' );
   
@@ -26,14 +30,14 @@ define( function( require ) {
   * @param {number} wellOffset
   * @constructor
   */
-  function Coulomb1DPotential( minX, maxX, particle, wellOffset ) {
+  function Coulomb1DPotential( particle, wellOffset ) {
     var name = coulomb1DString;
     var image = coulombImage;
     var minEnergy = -15; // eV
     var maxEnergy = 5; // eV
     var groundState = 1;
     
-    PotentialWell.call( this, minX, maxX, particle, wellOffset, minEnergy, maxEnergy, groundState, name, image );
+    PotentialWell.call( this, particle, wellOffset, minEnergy, maxEnergy, groundState, name, image );
   }
   
   return inherit( PotentialWell, Coulomb1DPotential, {
@@ -43,7 +47,7 @@ define( function( require ) {
     * @param {double} x: distance from center of well in nanometers
     */
     potentialValue: function( x ) {
-      return -1 * QuantumBoundStatesConstants.KE2 / Math.abs(x) + this.wellOffsetProperty.value;
+      return -1 * QuantumBoundStatesConstants.KE2 / Math.abs( x ) + this.wellOffsetProperty.value;
     },
     
     /**
@@ -61,9 +65,9 @@ define( function( require ) {
      */
     getEigenvalues: function() {
       var n = this.groundState;
-      var solver = new Coulomb1DSolver( this.minX, this.maxX, this.particle, this.numPoints );
+      var solver = new Coulomb1DSolver( this.particle, this.numPoints );
       var maxStates = solver.getMaxEigenstates();
-      var cutoffEnergy = this.potentialValue( this.maxX );
+      var cutoffEnergy = this.potentialValue( MAX_X );
       var energy = this.getNthEigenvalue(n);
       while ( energy < cutoffEnergy && n <= maxStates ) {
         this.eigenvals[n-this.groundState] = energy;
@@ -85,7 +89,7 @@ define( function( require ) {
       }
       else {
         var energy = this.getNthEigenvalue( n );
-        var solver = new Coulomb1DSolver( this.minX, this.maxX, this.particle, this.numPoints );
+        var solver = new Coulomb1DSolver( this.particle, this.numPoints );
         pointsY = solver.calculateWavefunction( energy );
         this.cacheEigenstate( n-1, pointsY );
       }

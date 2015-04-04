@@ -15,28 +15,23 @@ define( function( require ) {
   var PotentialPropertyIndicator = require( 'QUANTUM_BOUND_STATES/quantum-bound-states/view/PotentialPropertyIndicator' );
   var Range = require( 'DOT/Range' );
   var Shape = require( 'KITE/Shape' );
+  
+  var MAX_X = QuantumBoundStatesConstants.XRANGE.max;
 
   /**
-   * @param {QuantumBoundStatesModel} model
    * @param {AsymmetricPotential} potential
-   * @param {number} width
-   * @param {number} height
    * @param {function} valueToX
    * @param {function} valueToY
    * @param {function} xToValue
    * @param {function} yToValue
    * @constructor
    */
-  function AsymmetricWellPlot( model, potential, width, height, valueToX, valueToY, xToValue, yToValue, options ) {
+  function AsymmetricWellPlot( potential, valueToX, valueToY, xToValue, yToValue, options ) {
 
     Node.call( this, options );
     var thisNode = this;
-
-    var maxEnergy = potential.maxEnergy;
-    var xScale = width / (model.maxX - model.minX);
-    var yScale = height / (maxEnergy - potential.minEnergy);
     
-    var energyRange = new Range( model.getMinEnergy(), model.getMaxEnergy() );
+    var energyRange = new Range( potential.minEnergy, potential.maxEnergy );
     var heightRange = QuantumBoundStatesConstants.WELL_HEIGHT_RANGE;
     var widthRange = QuantumBoundStatesConstants.WELL_WIDTH_RANGE;
     
@@ -45,7 +40,7 @@ define( function( require ) {
     var wellHeight;
     
     var getWidth = function( x ) {
-      var diff = valueToX( model.maxX ) - x;
+      var diff = valueToX( MAX_X ) - x;
       return xToValue( diff - QuantumBoundStatesConstants.PROPERTY_INDICATOR_LENGTH / 2 ) * 2;
     };
     
@@ -56,8 +51,6 @@ define( function( require ) {
     var wellOffsetControl = new PotentialPropertyIndicator( potential.wellOffsetProperty, false, xToValue, getHeight, energyRange );
     var wellHeightControl =  new PotentialPropertyIndicator( potential.wellHeightProperty, false, xToValue, getHeight, heightRange );
     var wellWidthControl =  new PotentialPropertyIndicator( potential.wellWidthProperty, true, getWidth, yToValue, widthRange );
-
-    wellOffsetControl.centerX = valueToX( -wellWidth / 2 );
     
     var drawWell = function() {
       var offset = potential.wellOffsetProperty.value;
@@ -65,14 +58,11 @@ define( function( require ) {
       wellWidth = potential.wellWidthProperty.value;
       wellHeight = potential.wellHeightProperty.value;
       wellShape = new Shape().
-        moveTo( 0, (maxEnergy - (wellHeight + offset)) * yScale ).
-        horizontalLineTo( (model.maxX - wellWidth / 2) * xScale ).
-        verticalLineTo( (maxEnergy - offset) * yScale ).
-        lineTo( (model.maxX + wellWidth / 2) * xScale, (maxEnergy - (wellHeight + offset)) * yScale ).
-        horizontalLineTo( (model.maxX - model.minX) * xScale );
-      
-      wellWidthControl.centerY = valueToY( (wellHeight + offset) / 2 );
-      wellHeightControl.centerX = valueToX( wellWidth / 2 );
+        moveTo( 0, valueToY( wellHeight + offset ) ).
+        horizontalLineTo( valueToX( -wellWidth / 2 ) ).
+        verticalLineTo( valueToY( offset ) ).
+        lineTo( valueToX( wellWidth / 2 ), valueToY( wellHeight + offset ) ).
+        horizontalLineTo( valueToX( MAX_X ) );
     };
 
     drawWell();

@@ -16,14 +16,12 @@ define( function( require ) {
   var SQRT_PI = Math.sqrt(Math.PI);
   
   /**
-  * @param {number} minX
-  * @param {number} maxX
   * @param {Particle} particle
   * @param {number} n: the number of points to return in a calculated wavefunction
   * @constructor
   */
-  function Coulomb3DSolver( minX, maxX, particle, n ) {
-    CoulombSolver.call( this, minX, maxX, particle, n );
+  function Coulomb3DSolver( particle, n ) {
+    CoulombSolver.call( this, particle, n );
   }
   
   return inherit( CoulombSolver, Coulomb3DSolver, {

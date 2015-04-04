@@ -17,9 +17,13 @@ define( function( require ) {
   var HarmonicOscillatorWellPlot = require( 'QUANTUM_BOUND_STATES/quantum-bound-states/view/potentials/HarmonicOscillatorWellPlot' );
   var inherit = require( 'PHET_CORE/inherit' );
   var Node = require( 'SCENERY/nodes/Node' );
+  var QuantumBoundStatesConstants = require( 'QUANTUM_BOUND_STATES/quantum-bound-states/model/QuantumBoundStatesConstants' );
   var SquareWellPotential = require( 'QUANTUM_BOUND_STATES/quantum-bound-states/model/SquareWellPotential' );
   var SquareWellPlot = require( 'QUANTUM_BOUND_STATES/quantum-bound-states/view/potentials/SquareWellPlot' );
 
+  var MIN_X = QuantumBoundStatesConstants.XRANGE.min;
+  var MAX_X = QuantumBoundStatesConstants.XRANGE.max;
+  
   /**
    * @param {QuantumBoundStatesModel} model
    * @param {number} width
@@ -33,13 +37,13 @@ define( function( require ) {
     var thisNode = this;
 
     var maxEnergy = model.getMaxEnergy();
-    var xScale = width / (model.maxX - model.minX);
+    var xScale = width / (MAX_X - MIN_X);
     var yScale = height / (maxEnergy - model.getMinEnergy());
     var potential = model.currentPotentialProperty.value;
     
     // convert a value in nm to a pixel value
     var valueToX = function( x ) {
-      return (model.maxX + x) * xScale;
+      return (MAX_X + x) * xScale;
     };
     
     // convert a value in eV to a pixel value
@@ -47,9 +51,13 @@ define( function( require ) {
       return (maxEnergy - y) * yScale;
     };
     
+    var valueToCoulombY = function( y ) {
+      return (model.potentials[2].maxEnergy - y) * yScale;
+    };
+    
     // convert a value in pixels to nm
     var xToValue = function( x ) {
-      return x / xScale - model.maxX;
+      return x / xScale - MAX_X;
     };
     
     // convert a value in pixels to eV
@@ -57,11 +65,15 @@ define( function( require ) {
       return maxEnergy - y / yScale;
     };
     
-    var squareWellPlot = new SquareWellPlot( model, model.potentials[0], width, height, valueToX, valueToY, xToValue, yToValue );
-    var asymmetricWellPlot = new AsymmetricWellPlot( model, model.potentials[1], width, height, valueToX, valueToY, xToValue, yToValue );
-    var coulomb1DWellPlot = new CoulombWellPlot( model, model.potentials[2], width, valueToX, valueToY, xToValue, yToValue );
-    var coulomb3DWellPlot = new CoulombWellPlot( model, model.potentials[3], width, valueToX, valueToY, xToValue, yToValue );
-    var harmonicOscillatorWellPlot = new HarmonicOscillatorWellPlot( model, model.potentials[4], valueToX, valueToY, xToValue, yToValue );
+    var yToCoulombValue = function( y ) {
+      return model.potentials[2].maxEnergy - y / yScale;
+    };
+    
+    var squareWellPlot = new SquareWellPlot( model.potentials[0], valueToX, valueToY, xToValue, yToValue );
+    var asymmetricWellPlot = new AsymmetricWellPlot( model.potentials[1], valueToX, valueToY, xToValue, yToValue );
+    var coulomb1DWellPlot = new CoulombWellPlot( model.potentials[2], valueToX, valueToCoulombY, xToValue, yToCoulombValue );
+    var coulomb3DWellPlot = new CoulombWellPlot( model.potentials[3], valueToX, valueToCoulombY, xToValue, yToCoulombValue );
+    var harmonicOscillatorWellPlot = new HarmonicOscillatorWellPlot( model.getParticleMassProperty(), model.potentials[4], valueToX, valueToY, xToValue, yToValue );
     this.addChild( squareWellPlot );
     this.addChild( asymmetricWellPlot );
     this.addChild( coulomb1DWellPlot );

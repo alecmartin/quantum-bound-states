@@ -17,14 +17,12 @@ define( function( require ) {
   var SCALING_COEFFICIENTS = [1.10851, -1.86636,  2.55958, -3.21387,  3.84064, -4.44633,  5.03504, -5.60960,  6.17208, -6.72406];
   
   /**
-  * @param {number} minX
-  * @param {number} maxX
   * @param {Particle} particle
   * @param {number} n: the number of points to return in a calculated wavefunction
   * @constructor
   */
-  function Coulomb1DSolver( minX, maxX, particle, n ) {
-    CoulombSolver.call( this, minX, maxX, particle, n );
+  function Coulomb1DSolver( particle, n ) {
+    CoulombSolver.call( this, particle, n );
   }
   
   return inherit( CoulombSolver, Coulomb1DSolver, {
