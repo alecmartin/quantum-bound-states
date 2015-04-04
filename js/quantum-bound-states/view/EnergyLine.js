@@ -6,9 +6,12 @@
  * Lines are red when they are selected
  */
 define( function( require ){
+  'use strict';
 	
   var inherit = require( 'PHET_CORE/inherit' );
-  var FillHighlightListener = require( 'SCENERY_PHET/input/FillHighlightListener' );
+  // var FillHighlightListener = require( 'SCENERY_PHET/input/FillHighlightListener' );
+  // var HighlightListener = require( 'SCENERY_PHET/input/HighlightListener' );
+  var ButtonListener = require('SCENERY/input/ButtonListener');
   var Line = require( 'SCENERY/nodes/Line' );
   var PhetFont = require( 'SCENERY_PHET/PhetFont' );
   var Text = require( 'SCENERY/nodes/Text' );
@@ -25,9 +28,17 @@ define( function( require ){
       stroke: 'green',
       lineWidth: 3
     }, options );
+   
 
     Line.call( this, 0, 0, width, 0);
-    this.addInputListener(new FillHighlightListener('green', 'purple'));
+    // this.addInputListener( new FillHighlightListener( 'green', 'yellow' ) );
+
+    var inputListener = new ButtonListener( {
+      over: function( event ) {  this.options.stroke = 'yellow'; this.mutate( options ); },
+      up: function( event ) { this.options.stroke = 'green'; this.mutate( options ); }
+    } );
+
+    this.addInputListener(inputListener);
     
     this.mutate( options );
   }
