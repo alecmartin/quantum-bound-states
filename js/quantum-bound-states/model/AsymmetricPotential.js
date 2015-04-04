@@ -19,15 +19,13 @@ define( function( require ) {
   var asymImage = require( 'image!QUANTUM_BOUND_STATES/AsymIcon.png' );
   
   /**
-  * @param {number} minX
-  * @param {number} maxX
   * @param {Particle} particle
   * @param {number} wellOffset
   * @param {number} wellWidth
   * @param {number} wellHeight
   * @constructor
   */
-  function AsymmetricPotential( minX, maxX, particle, wellOffset, wellWidth, wellHeight ) {
+  function AsymmetricPotential( particle, wellOffset, wellWidth, wellHeight ) {
     this.wellWidthProperty = new Property( wellWidth );
     this.wellHeightProperty = new Property( wellHeight );
     var name = asymString;
@@ -36,7 +34,7 @@ define( function( require ) {
     var maxEnergy = 15; // eV
     var groundState = 1;
     
-    PotentialWell.call( this, minX, maxX, particle, wellOffset, minEnergy, maxEnergy, groundState, name, image );
+    PotentialWell.call( this, particle, wellOffset, minEnergy, maxEnergy, groundState, name, image );
     
     this.wellWidthProperty.link( this.redrawEigenstates.bind( this ) );
     this.wellHeightProperty.link( this.redrawEigenstates.bind( this ) );

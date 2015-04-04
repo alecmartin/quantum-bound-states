@@ -15,6 +15,8 @@ define( function( require ) {
   // constants
   var SMALL = 1.0E-10;
   var MAX_TRIES = 100;
+  var MIN_X = QuantumBoundStatesConstants.XRANGE.min;
+  var MAX_X = QuantumBoundStatesConstants.XRANGE.max;
   
   /**
    * @constructor for helper class
@@ -35,15 +37,11 @@ define( function( require ) {
   
   /**
   * @constructor for the eigenstate solver
-  * @param {number} minX
-  * @param {number} maxX
   * @param {Particle} particle
   * @param {number} n: the number of points to produce in a wavefunction
   * @param {PotentialWell} potential
   */
-  function EigenstateSolver( minX, maxX, particle, n, potential ) {
-    this.maxX = maxX;
-    this.minX = minX;
+  function EigenstateSolver( particle, n, potential ) {
     this.n = n;
     this.hb = QuantumBoundStatesConstants.HBAR * QuantumBoundStatesConstants.HBAR / (2 * particle.particleMassProperty.value);
     this.potential = potential;
@@ -65,7 +63,7 @@ define( function( require ) {
       var n = this.n;
       var hbInverse = 1 / this.hb;
       var matchPoint = n * 0.53;
-      var dx = (this.maxX - this.minX) / (n - 1);
+      var dx = (MAX_X - MIN_X) / (n - 1);
       var h12 = dx * dx / 12;
       
       // initial and final boundary conditions
@@ -122,7 +120,7 @@ define( function( require ) {
       var upperTester;
       var lowerTester;
       // find upper bound
-      var upperEnergy = this.hb * 10.0 * Math.pow((nodes + 1) / (this.maxX - this.minX), 2);
+      var upperEnergy = this.hb * 10.0 * Math.pow((nodes + 1) / (MAX_X - MIN_X), 2);
       for (i = 0; i < MAX_TRIES; i++) {
         upperEnergy *= 2.0;
         upperTester = this.testEnergy( upperEnergy );
@@ -135,7 +133,7 @@ define( function( require ) {
       }
       
       // find lower bound
-      var lowerEnergy = -this.hb * 10.0 * Math.pow((nodes + 1) / (this.maxX - this.minX), 2);
+      var lowerEnergy = -this.hb * 10.0 * Math.pow((nodes + 1) / (MAX_X - MIN_X), 2);
       for (i = 0; i < MAX_TRIES; i++) {
         lowerEnergy *= 2.0;
         lowerTester = this.testEnergy( lowerEnergy );
@@ -184,7 +182,7 @@ define( function( require ) {
         }
       }
       if (i === MAX_TRIES) {
-        console.log("No convergence in interpolation, nodes = "+nodes);
+        //console.log("No convergence in interpolation, nodes = "+nodes);
         return midEnergy;
       }
       
@@ -199,7 +197,7 @@ define( function( require ) {
       var wave = new FastArray(n);
       var hbInverse = 1 / this.hb;
       var matchPoint = n * 0.53;
-      var dx = (this.maxX - this.minX) / (n - 1);
+      var dx = (MAX_X - MIN_X) / (n - 1);
       var h12 = dx * dx / 12;
       
       // initial and final boundary conditions

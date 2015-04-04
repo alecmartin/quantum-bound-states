@@ -9,16 +9,20 @@ define( function( require ) {
 
   // modules
   var EnergyLine = require( 'QUANTUM_BOUND_STATES/quantum-bound-states/view/EnergyLine' );
-
   var HBox = require( 'SCENERY/nodes/HBox' );
   var HStrut = require( 'SUN/HStrut' );
   var inherit = require( 'PHET_CORE/inherit' );
   var Line = require( 'SCENERY/nodes/Line' );
   var Node = require( 'SCENERY/nodes/Node' );
   var PhetFont = require( 'SCENERY_PHET/PhetFont' );
-  var PotentialWellNode = require( 'QUANTUM_BOUND_STATES/quantum-bound-states/view/PotentialWellNode' );
+  var PotentialWellPlot = require( 'QUANTUM_BOUND_STATES/quantum-bound-states/view/PotentialWellPlot' );
+  var QuantumBoundStatesConstants = require( 'QUANTUM_BOUND_STATES/quantum-bound-states/model/QuantumBoundStatesConstants' );
   var Rectangle = require( 'SCENERY/nodes/Rectangle' );
   var Text = require( 'SCENERY/nodes/Text' );
+  
+  // constants
+  var MIN_X = QuantumBoundStatesConstants.XRANGE.min;
+  var MAX_X = QuantumBoundStatesConstants.XRANGE.max;
 
   // strings
   var titleString = require( 'string!QUANTUM_BOUND_STATES/energy-plot-title' );
@@ -36,6 +40,8 @@ define( function( require ) {
     Node.call( this, options );
     var i;
     var background = new Rectangle(50, 0, width, height, 0, 0, {fill:'black', stroke: 'white'});
+    var backgroundClipArea = background.createRectangleShape();
+    background.setClipArea( backgroundClipArea );
     this.addChild( background );
     
     var padding = 10;
@@ -56,17 +62,19 @@ define( function( require ) {
     }
     
     // vertical lines
-    var divisors = (model.maxX - model.minX);
+    var divisors = (MAX_X - MIN_X);
     var xSpacing = (width  / divisors);
     var xLoc = xSpacing / 2;
-    for (i = model.minX + 0.5; i < divisors + model.minX; i += 1) {
+    for (i = MIN_X + 0.5; i < divisors + MIN_X; i += 1) {
       var line = new Line(background.left + xLoc, background.top, background.left+xLoc, background.bottom, {stroke: 'gray'});
-      this.addChild( line );
+      background.addChild( line );
       xLoc += xSpacing;
     }
     
-    var well = new PotentialWellNode( model, width, height + padding, {x: 50} );
-    this.addChild( well );
+    var well = new PotentialWellPlot( model, width, height + padding, {x: 50} );
+    background.addChild( well );
+    var energyLine = new EnergyLine( model.hoveredEigenstateProperty, width, 0, {x: 50, y: 50} );
+    this.addChild( energyLine );
     
     var title = new Text( titleString, {
       font: new PhetFont( 18 ),
@@ -106,14 +114,6 @@ define( function( require ) {
       ]
     });
     this.addChild( units );
-
-    //Energy lines
-    // model.eigenvalsProperty.link(function(){
-      
-      var energyLine = new EnergyLine(model.hoveredEigensProperty, width, {left: background.left});
-      this.addChild(energyLine);
-    // });
-
   }
   
   return inherit( Node, EnergyPlotNode );

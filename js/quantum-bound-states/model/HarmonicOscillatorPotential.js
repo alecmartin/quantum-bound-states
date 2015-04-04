@@ -20,14 +20,12 @@ define( function( require ) {
   var harmonicImage = require( 'image!QUANTUM_BOUND_STATES/HarmonicIcon.png' );
   
   /**
-  * @param {number} minX
-  * @param {number} maxX
   * @param {Particle} particle
   * @param {number} wellOffset
   * @param {number} frequency
   * @constructor
   */
-  function HarmonicOscillatorPotential( minX, maxX, particle, wellOffset, frequency ) {
+  function HarmonicOscillatorPotential( particle, wellOffset, frequency ) {
     this.frequencyProperty = new Property( frequency );
     var name = harmonicString;
     var image = harmonicImage;
@@ -35,7 +33,7 @@ define( function( require ) {
     var maxEnergy = 15; // eV
     var groundState = 0;
     
-    PotentialWell.call( this, minX, maxX, particle, wellOffset, minEnergy, maxEnergy, groundState, name, image );
+    PotentialWell.call( this, particle, wellOffset, minEnergy, maxEnergy, groundState, name, image );
     
     this.frequencyProperty.link( this.redrawEigenstates.bind( this ) );
   }

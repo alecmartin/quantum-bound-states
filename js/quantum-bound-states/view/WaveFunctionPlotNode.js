@@ -10,10 +10,17 @@ define( function( require ) {
   var inherit = require( 'PHET_CORE/inherit' );
   var Line = require( 'SCENERY/nodes/Line' );
   var Node = require( 'SCENERY/nodes/Node' );
+  var Path = require( 'SCENERY/nodes/Path' );
+  var Shape = require( 'KITE/Shape' );
   var PhetFont = require( 'SCENERY_PHET/PhetFont' );
   var Rectangle = require( 'SCENERY/nodes/Rectangle' );
+  var QuantumBoundStatesConstants = require( 'QUANTUM_BOUND_STATES/quantum-bound-states/model/QuantumBoundStatesConstants' );
   var Text = require( 'SCENERY/nodes/Text' );
   var SubSupText = require( 'SCENERY_PHET/SubSupText' );
+  
+  // constants
+  var MIN_X = QuantumBoundStatesConstants.XRANGE.min;
+  var MAX_X = QuantumBoundStatesConstants.XRANGE.max;
 
   /**
   * @param {QuantumBoundStatesModel} model
@@ -36,10 +43,10 @@ define( function( require ) {
     var background = new Rectangle(50,0,width,height,0,0, {fill:'black', stroke: 'white'});
     this.addChild( background );
     
-    var divisors = (model.maxX - model.minX);
+    var divisors = (MAX_X - MIN_X);
     var xSpacing = (width  / divisors);
     var xLoc = xSpacing /2;
-    for (var i = model.minX + 0.5; i < divisors + model.minX; i += 1) {
+    for (var i = MIN_X + 0.5; i < divisors + MIN_X; i += 1) {
       var tick = new Line(background.left + xLoc, background.top, background.left+xLoc, background.bottom, {stroke: 'gray'});
       this.addChild( tick );
       this.addChild( new Text( i.toString(), {
@@ -110,7 +117,43 @@ define( function( require ) {
       top: background.top + 5
     });
     this.addChild( eigenText );
-  }
 
+    // Plotting lower graph lines
+    var maxEnergy = model.getMaxEnergy();
+    var xScale    = function(x) { return (MAX_X + x) * (width / (MAX_X - MIN_X)); }
+    var yScale    = function(y) { return (model.getMaxEnergy() - y) * (height / (maxEnergy - model.getMinEnergy())); }
+
+    var time        = 0;
+    var upper       = 10;
+    var tstep       = 1;
+    var currentLine = -1; // at the beginning we have no plotted path
+    var plot        = this;
+    var step = function() {
+      if (currentLine != -1) {
+          console.log('here');
+          plot.removeChild(currentLine);
+      }
+      var points = model.getRealWave(time);
+      var shape = new Shape();
+      shape.moveTo(xScale(points[0][0]), yScale(points[1][0]));
+      // iterate over all points and generate our full shape
+      // this part takes a while so we only grab every 10th point (good enough)
+      // reduction: 1344 points -> 134 points
+      for (var j = 1; j < points[0].length; j += 10) {
+          shape.lineTo(xScale(points[0][j]), yScale(points[1][j]));
+      }
+      var newPath = new Path(shape, {
+          stroke: 'blue',
+          linewidth: 3,
+          lineJoin: 'round',
+          x: 50
+      });
+      plot.addChild(newPath);
+      currentLine = newPath;
+      time += tstep;
+      time %= upper;
+    }
+    setInterval(step, 30);
+  }
   return inherit( Node, WaveFunctionPlotNode);
 } );

@@ -12,13 +12,14 @@ define( function( require ) {
   var inherit = require( 'PHET_CORE/inherit' );
   var EigenstateSolver = require( 'QUANTUM_BOUND_STATES/quantum-bound-states/model/EigenstateSolver' );
   var Property = require( 'AXON/Property' );
+  var QuantumBoundStatesConstants = require( 'QUANTUM_BOUND_STATES/quantum-bound-states/model/QuantumBoundStatesConstants' );
   
   // constants
   var NUM_POINTS = 1350;
+  var MIN_X = QuantumBoundStatesConstants.XRANGE.min;
+  var MAX_X = QuantumBoundStatesConstants.XRANGE.max;
   
   /**
-  * @param {number} minX
-  * @param {number} maxX
   * @param {Particle} particle
   * @param {number} wellOffset
   * @param {number} minEnergy
@@ -28,9 +29,7 @@ define( function( require ) {
   * @param {Image} image
   * @constructor
   */
-  function PotentialWell( minX, maxX, particle, wellOffset, minEnergy, maxEnergy, groundState, name, image ) {
-    this.minX = minX;
-    this.maxX = maxX;
+  function PotentialWell( particle, wellOffset, minEnergy, maxEnergy, groundState, name, image ) {
     this.particle = particle;
     this.wellOffsetProperty = new Property( wellOffset );
     this.minEnergy = minEnergy; // eV
@@ -44,10 +43,10 @@ define( function( require ) {
     this.eigenvals = [];
     
     this.pointsX = new FastArray( NUM_POINTS );
-    var x = this.minX;
+    var x = MIN_X;
     for (var i = 0; i < NUM_POINTS; i++) {
       this.pointsX[i] = x;
-      x += (this.maxX - this.minX) / (NUM_POINTS - 1);
+      x += (MAX_X - MIN_X) / (NUM_POINTS - 1);
     }
     
     this.particle.particleMassProperty.link( this.redrawEigenstates.bind( this ) );
@@ -77,9 +76,9 @@ define( function( require ) {
     getPotentialPoints: function( numPoints ) {
       var pointsX = new FastArray( numPoints );
       var pointsY = new FastArray( numPoints );
-      var delta = (this.maxX - this.minX) / numPoints;
-      var x = this.minX;
-      for (var i = 0; i < numPoints; i++ ) {
+      var delta = (MAX_X - MIN_X) / numPoints;
+      var x = MIN_X;
+      for (var i = 0; i <= numPoints; i++ ) {
         pointsX[i] = x;
         pointsY[i] = this.potentialValue(x);
         x += delta;
@@ -108,7 +107,7 @@ define( function( require ) {
       }
       else {
         var energy = this.getNthEigenvalue( n );
-        var solver = new EigenstateSolver( this.minX, this.maxX, this.particle, NUM_POINTS, this );
+        var solver = new EigenstateSolver( this.particle, NUM_POINTS, this );
         pointsY = solver.calculateWavefunction( energy );
         this.cacheEigenstate( n, pointsY );
       }
@@ -120,7 +119,7 @@ define( function( require ) {
      * Solution will have n-this.groundState nodes
      */
     getNthEigenvalue: function( n ) {
-      var solver = new EigenstateSolver( this.minX, this.maxX, this.particle, NUM_POINTS, this );
+      var solver = new EigenstateSolver( this.particle, NUM_POINTS, this );
       return solver.calculateEnergy( n - this.groundState );
     },
     

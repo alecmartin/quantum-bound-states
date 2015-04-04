@@ -15,6 +15,7 @@ define( function( require ) {
   /**
   * @constructor
   */
+  
   function Particle( ) {
     this.particleMassProperty = new Property( QuantumBoundStatesConstants.ELECTRON_MASS );
   }

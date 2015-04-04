@@ -23,20 +23,18 @@ define( function( require ) {
   var MAX_EIGENSTATES = 10;
   
   /**
-  * @param {number} minX
-  * @param {number} maxX
   * @param {Particle} particle
   * @param {number} wellOffset
   * @constructor
   */
-  function Coulomb3DPotential( minX, maxX, particle, wellOffset ) {
+  function Coulomb3DPotential( particle, wellOffset ) {
     var name = coulomb3DString;
     var image = coulombImage;
     var minEnergy = -15; // eV
     var maxEnergy = 5; // eV
     var groundState = 1;
     
-    PotentialWell.call( this, minX, maxX, particle, wellOffset, minEnergy, maxEnergy, groundState, name, image );
+    PotentialWell.call( this, particle, wellOffset, minEnergy, maxEnergy, groundState, name, image );
   }
   
   return inherit( PotentialWell, Coulomb3DPotential, {
@@ -86,7 +84,7 @@ define( function( require ) {
       }
       else {
         var energy = this.getNthEigenvalue( n );
-        var solver = new Coulomb3DSolver( this.minX, this.maxX, this.particle, this.numPoints );
+        var solver = new Coulomb3DSolver( this.particle, this.numPoints );
         pointsY = solver.calculateWavefunction( energy );
         this.cacheEigenstate( n-1, pointsY );
       }
