@@ -12,9 +12,9 @@ define( function( require ){
   var inherit = require( 'PHET_CORE/inherit' );
   var Line = require( 'SCENERY/nodes/Line' );
   //var PhetFont = require( 'SCENERY_PHET/PhetFont' );
-  //var Text = require( 'SCENERY/nodes/Text' );
+  var Text = require( 'SCENERY/nodes/Text' );
   var Shape = require( 'KITE/Shape' );
-  //var SubSupText = require( 'SCENERY_PHET/SubSupText' );
+  // var SubSupText = require( 'SCENERY_PHET/SubSupText' );
 
   var Path = require( 'SCENERY/nodes/Path' );
   /**
@@ -27,7 +27,8 @@ define( function( require ){
     options = _.extend( {
       stroke: 'green',
       lineWidth: 3,
-      cursor: 'pointer'
+      cursor: 'pointer',
+      levelString: ""
     }, options );
     
     Line.call( this, 0, 0, width, 0 );
@@ -36,6 +37,9 @@ define( function( require ){
     // touch area    
     this.touchArea = Shape.rectangle( 0, -options.lineWidth, width, options.lineWidth );
     this.addChild( new Path( this.touchArea ) );
+
+    this.energyLevelString = new Text( "energy", { font: new PhetFont( 12 ), fill: 'yellow' });
+    this.addChild( this.energyLevelString );
     
     // highlight on pointer over
     this.addInputListener( new ButtonListener( {
