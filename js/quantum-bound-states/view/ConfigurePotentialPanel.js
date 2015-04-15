@@ -49,7 +49,7 @@ define( function( require ) {
     // optionfont
     var optionFont = {font: new PhetFont( 14 ), fill: "palegoldenrod"};
     var parent = new Node();
-    var potentialWellInstance = null;
+    // var potentialWellInstance = null;
     var potentialWellName = "";
     var potentialOffsetMin = 0;
     var potentialOffsetMax = 0;
@@ -71,12 +71,12 @@ define( function( require ) {
     } );
 
     var setPotentialWellProperties = function(){
-      potential = model.currentPotentialProperty.value;
+      potential = model.currentPotentialProperty;
       console.log("setting this bullshit:");
-      potentialWellName = potential.name;
+      potentialWellName = potential.value.name;
       potentialWellInstance = potential;
-      potentialOffsetMin = potential.minEnergy;
-      potentialOffsetMax = potential.maxEnergy;
+      potentialOffsetMin = potential.value.minEnergy;
+      potentialOffsetMax = potential.value.maxEnergy;
       if ( potential instanceof SquareWellPotential ) {
         // potentialWellName = potential.name;
         // squareWellPlot.visible = true;
@@ -114,19 +114,22 @@ define( function( require ) {
         // harmonicOscillatorWellPlot.visible = true;
       }
       console.log("well offset property:");
-      console.log(potential.value.name);
-      console.log(potential.wellOffsetProperty);
+      console.log(potential);
+      // console.log(potential.value.name);
+      console.log(potential.value.wellOffsetProperty);
+      console.log(potentialOffsetMin);
+      console.log(potentialOffsetMax);
     };
     
     setPotentialWellProperties();
 
-    var squarePotentialOffsetSlider = new Slider( {
+    var squarePotentialOffsetSlider = new Slider( {min: potentialOffsetMin , max: potentialOffsetMax }, {
       // sliderX: 60 - 630,
       type: 'button',
       buttonStep: 0.1,
       title: "",
       sliderSize: new Dimension2( 200, 80 ),
-      property: potential.wellOffsetProperty,
+      property: potential.value.wellOffsetProperty,
       patternValueUnit: " Ev",
       rounding: 1,
       range: new Range( potentialOffsetMin, potentialOffsetMax ),
@@ -147,6 +150,9 @@ define( function( require ) {
       // titleVerticalOffset: -10,
       tick: { step: 0.1, minText: String(potentialOffsetMin), maxText: String(potentialOffsetMax), midTick: false }
       } );
+    console.log("slider range:");
+    console.log(squarePotentialOffsetSlider.range);
+    // console.log(squarePotentialOffsetSlider.range);
 
     var offsetHBox = new HBox( { children: [ new HStrut( 10 ), new VStrut( 10 ), squarePotentialOffsetSlider, new HStrut( 15 ) ] } );
 

@@ -47,7 +47,7 @@ define( function( require ) {
       model.setOneCoefficient( i );
       console.log("after set");
       console.log(model.superpositionCoefficientsProperty.value.coefficientsProperty.value);
-    }
+    };
     
     var energyLine;
     var yPos;
@@ -166,7 +166,7 @@ define( function( require ) {
     coefficientsProperty.link( function() {
       var coefficients = coefficientsProperty.value;
       for( var i = 0; i < energyLineArray.length; i++ ){
-        if( coefficients[ i ] != 0 ){
+        if( coefficients[ i ] !== 0 ){
           energyLineArray[ i ].setStroke( 'red' );
         }
         else {
