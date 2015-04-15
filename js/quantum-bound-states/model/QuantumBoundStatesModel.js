@@ -48,8 +48,8 @@ define( function( require ) {
       showImaginary: false,
       showMagnitude: false,
       showPhase: false,
-      showConfigurePotentialPanel: false
-
+      showConfigurePotentialPanel: false,
+      showSuperpositionStatePanel: false
       } );
     
     var thisNode = this;

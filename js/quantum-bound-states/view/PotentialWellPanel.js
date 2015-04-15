@@ -49,7 +49,8 @@ define( function( require ) {
       minWidth: 100,
       scale: 1.5,
       listener: function() {
-        
+        // console.log(model.showConfigurePotentialPanelProperty.value);
+        model.showConfigurePotentialPanelProperty.value = true;
       }
     } );
 
