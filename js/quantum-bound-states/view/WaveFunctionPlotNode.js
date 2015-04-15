@@ -120,8 +120,8 @@ define( function( require ) {
 
     // Plotting lower graph lines
     var maxEnergy = model.getMaxEnergy();
-    var xScale    = function(x) { return (MAX_X + x) * (width / (MAX_X - MIN_X)); }
-    var yScale    = function(y) { return (model.getMaxEnergy() - y) * (height / (maxEnergy - model.getMinEnergy())); }
+    var xScale    = function(x) { return (MAX_X + x) * (width / (MAX_X - MIN_X)); };
+    var yScale    = function(y) { return (model.getMaxEnergy() - y) * (height / (maxEnergy - model.getMinEnergy())); };
 
     var time        = 0;
     var upper       = 10;
@@ -129,7 +129,7 @@ define( function( require ) {
     var currentLine = -1; // at the beginning we have no plotted path
     var plot        = this;
     var step = function() {
-      if (currentLine != -1) {
+      if (currentLine !== -1) {
           console.log('here');
           plot.removeChild(currentLine);
       }
@@ -152,8 +152,8 @@ define( function( require ) {
       currentLine = newPath;
       time += tstep;
       time %= upper;
-    }
-    setInterval(step, 30);
+    };
+    // setInterval(step, 30);
   }
   return inherit( Node, WaveFunctionPlotNode);
 } );
