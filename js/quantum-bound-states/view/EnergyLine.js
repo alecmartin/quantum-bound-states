@@ -63,7 +63,7 @@ define( function( require ){
       }
     } ) );
     
-    this.mutate( options );
+    this.mutate( this.options );
   }
   
   return inherit( Line, EnergyLine, {
