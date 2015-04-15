@@ -100,6 +100,20 @@ define( function( require ) {
     },
     
     /**
+     * Get an array of the current eigenstates in the superposition state
+     */
+    getCurrentEigenstates: function( ) {
+      var coeff = this.superpositionCoefficientsProperty.value;
+      var states = [];
+      for (var i = 0; i < coeff.coefficients.length; i++ ) {
+        if ( coeff.coefficients[i] !== 0 ) {
+          states.push( i );
+        }
+      }
+      return states;
+    },
+    
+    /**
      * Get two arrays containing the subscripts for the current superposition state
      *  and the coefficients of each eigenstate
      * Subscripts contains the integers that describe each eigenstate
@@ -107,15 +121,15 @@ define( function( require ) {
      */
     getSubscriptsAndCoefficients: function( ) {
       var coeff = this.superpositionCoefficientsProperty.value;
-      var nonzero = [];
+      var coefficients = [];
       var subscripts = [];
       for (var i = 0; i < coeff.coefficients.length; i++ ) {
         if ( coeff.coefficients[i] !== 0 ) {
-          nonzero.push(coeff.coefficients[i]);
-          subscripts.push(i + this.currentPotentialProperty.value.groundState);
+          coefficients.push( coeff.coefficients[ i ] );
+          subscripts.push( i + this.currentPotentialProperty.value.groundState );
         }
       }
-      return [subscripts, nonzero];
+      return [subscripts, coefficients];
     },
     
     /**
@@ -137,6 +151,7 @@ define( function( require ) {
      * Called when the user inputs a number into the superposition dialogue box
      */
     setCoefficient: function( i, value ) {
+      i = i - this.currentPotentialProperty.value.groundState;
       this.superpositionCoefficientsProperty.value.setCoefficient( i, value );
     },
     
@@ -146,6 +161,7 @@ define( function( require ) {
      * Called when the user clicks on an eigenstate
      */
     setOneCoefficient: function( i ) {
+      i = i - this.currentPotentialProperty.value.groundState;
       this.superpositionCoefficientsProperty.value.setOneCoefficient( i );
     },
     

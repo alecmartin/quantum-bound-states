@@ -14,6 +14,9 @@ define( function( require ){
   /**
   * @param {Property} potentialProperty
   * @param {boolean} isHorizontal
+  * @param {function} xToValue
+  * @param {function} yToValue
+  * @param {min: number, max: number} range
   * @constructor
   */
   function PotentialPropertyDragHandler( potentialProperty, isHorizontal, xToValue, yToValue, range ){
