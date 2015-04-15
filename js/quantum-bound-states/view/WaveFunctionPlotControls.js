@@ -18,7 +18,6 @@ define( function( require ) {
 
   // PhET modules
   var inherit = require( 'PHET_CORE/inherit' );
-  var Property = require( 'AXON/Property' );
   var HBox = require( 'SCENERY/nodes/HBox' );
   var Image = require( 'SCENERY/nodes/Image' );
   var Line = require( 'SCENERY/nodes/Line' );
@@ -47,7 +46,7 @@ define( function( require ) {
 
     // Layout values
     var radioButtonFont = {font: new PhetFont( 14 ), fill: "palegoldenrod"};
-    var checkBoxFontEnabled = {font: new PhetFont( 12 ), fill: "white"};
+    // var checkBoxFontEnabled = {font: new PhetFont( 12 ), fill: "white"};
     var checkBoxFontDisabled = {font: new PhetFont( 12 ), fill: "grey"};
     var boxwidth = 240;
  
