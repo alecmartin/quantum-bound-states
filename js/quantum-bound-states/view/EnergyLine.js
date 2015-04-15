@@ -25,7 +25,7 @@ define( function( require ){
   * @constructor
   */
   function EnergyLine( hoveredEigenstateProperty, setOneCoefficient, width, index, energy, options ){
-    options = _.extend( {
+    this.options = _.extend( {
       stroke: 'green',
       lineWidth: 2,
       cursor: 'pointer'
@@ -34,7 +34,7 @@ define( function( require ){
     var thisNode = this;
     
     // touch area    
-    this.touchArea = Shape.rectangle( 0, -options.lineWidth * 2, width, options.lineWidth * 2 );
+    this.touchArea = Shape.rectangle( 0, -this.options.lineWidth * 2, width, this.options.lineWidth * 2 );
     this.addChild( new Path( this.touchArea ) );
 
     //label on energy line
@@ -52,7 +52,7 @@ define( function( require ){
       },
       up: function( event ) {
         console.log( "up" );
-        thisNode.stroke = options.stroke;
+        thisNode.stroke = thisNode.options.stroke;
         hoveredEigenstateProperty.value = -1;
         energyLevelString.visible = false;
       },
@@ -63,12 +63,13 @@ define( function( require ){
       }
     } ) );
     
-    this.mutate( options );
+    this.mutate( this.options );
   }
   
   return inherit( Line, EnergyLine, {
 
     setStroke: function( color ) {
+      this.options.stroke = color;
       this.stroke = color;
     }
 
