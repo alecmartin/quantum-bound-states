@@ -47,7 +47,9 @@ define( function( require ) {
       showReal: true,
       showImaginary: false,
       showMagnitude: false,
-      showPhase: false
+      showPhase: false,
+      showConfigurePotentialPanel: false
+
       } );
     
     var thisNode = this;

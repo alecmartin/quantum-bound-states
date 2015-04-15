@@ -111,13 +111,13 @@ define( function( require ) {
         };
       };
       buttonNode.addChild( plusButton = new ArrowButton( 'right', buttonPropertyUpdate( options.buttonStep ), {
-        right: thisNode.width - 15,
+        right: thisNode.width - 5,
         // centerY: 5,
         arrowHeight: options.arrowHeight,
         arrowWidth: options.arrowHeight * Math.sqrt( 3 ) / 2
       } ) );
       buttonNode.addChild( minusButton = new ArrowButton( 'left', buttonPropertyUpdate( -options.buttonStep ), { 
-        left: 15, 
+        left: 5, 
         // centerY: 15, 
         arrowHeight: options.arrowHeight,
         arrowWidth: options.arrowHeight * Math.sqrt( 3 ) / 2
