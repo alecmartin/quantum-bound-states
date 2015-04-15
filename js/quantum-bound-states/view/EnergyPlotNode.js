@@ -72,6 +72,9 @@ define( function( require ) {
     }
 
     //Creating and Positioning Energy Lines
+    var setCoefficient = function( i ) {
+      model.setOneCoefficient( i );
+    }
     var eigenVals = model.eigenvalsProperty.value;
     var energyLine;  // = new EnergyLine( model.hoveredEigenstateProperty, model.setOneCoeffient, width, 0, 1, {x: 50, y: 50} );
     var yScale = height / (model.getMaxEnergy() - model.getMinEnergy());
@@ -81,7 +84,7 @@ define( function( require ) {
     for( var i = eigenVals.length - 1; i >= 0; i-- ){
       yPos = ( model.getMaxEnergy() - eigenVals[ i ] ) * yScale;
       eigenIndex = i + model.currentPotentialProperty.value.groundState;
-      energyLine = new EnergyLine( model.hoveredEigenstateProperty, model.setOneCoeffient, width, eigenIndex, eigenVals[ i ], {x: 50, y: yPos} );
+      energyLine = new EnergyLine( model.hoveredEigenstateProperty, setCoefficient, width, eigenIndex, eigenVals[ i ], {x: 50, y: yPos} );
       background.addChild( energyLine );
       energyLineArray[ i ] = energyLine;
     } 
