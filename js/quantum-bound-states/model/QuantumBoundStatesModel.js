@@ -105,10 +105,9 @@ define( function( require ) {
      * Get an array of the current eigenstates in the superposition state
      */
     getCurrentEigenstates: function( ) {
-      var coeff = this.superpositionCoefficientsProperty.value;
-      var states = [];
-      for (var i = 0; i < coeff.coefficients.length; i++ ) {
-        if ( coeff.coefficients[i] !== 0 ) {
+      var allCoefficients = this.getCoefficientsProperty.value;
+      for (var i = 0; i < allCoefficients.length; i++ ) {
+        if ( allCoefficients[ i ] !== 0 ) {
           states.push( i );
         }
       }
@@ -122,12 +121,13 @@ define( function( require ) {
      * Coefficients contains floats between 0 and 1
      */
     getSubscriptsAndCoefficients: function( ) {
-      var coeff = this.superpositionCoefficientsProperty.value;
+      var superposition = this.superpositionCoefficientsProperty.value;
+      var allCoefficients = superposition.coefficientsProperty.value;
       var coefficients = [];
       var subscripts = [];
-      for (var i = 0; i < coeff.coefficients.length; i++ ) {
-        if ( coeff.coefficients[i] !== 0 ) {
-          coefficients.push( coeff.coefficients[ i ] );
+      for (var i = 0; i < allCoefficients.length; i++ ) {
+        if ( allCoefficients[ i ] !== 0 ) {
+          coefficients.push( allCoefficients[ i ] );
           subscripts.push( i + this.currentPotentialProperty.value.groundState );
         }
       }
@@ -146,6 +146,13 @@ define( function( require ) {
      */
     getNormalizedProperty: function( ) {
       return this.superpositionCoefficientsProperty.value.normalizedProperty;
+    },
+    
+    /**
+     * Returns the property that contains an array of coefficients
+     */
+    getCoefficientsProperty: function( ) {
+      return  this.superpositionCoefficientsProperty.value.coefficientsProperty;
     },
     
     /**
