@@ -102,22 +102,36 @@ define( function( require ) {
     },
     
     /**
+     * Get an array of the current eigenstates in the superposition state
+     */
+    getCurrentEigenstates: function( ) {
+      var allCoefficients = this.getCoefficientsProperty.value;
+      for (var i = 0; i < allCoefficients.length; i++ ) {
+        if ( allCoefficients[ i ] !== 0 ) {
+          states.push( i );
+        }
+      }
+      return states;
+    },
+    
+    /**
      * Get two arrays containing the subscripts for the current superposition state
      *  and the coefficients of each eigenstate
      * Subscripts contains the integers that describe each eigenstate
      * Coefficients contains floats between 0 and 1
      */
     getSubscriptsAndCoefficients: function( ) {
-      var coeff = this.superpositionCoefficientsProperty.value;
-      var nonzero = [];
+      var superposition = this.superpositionCoefficientsProperty.value;
+      var allCoefficients = superposition.coefficientsProperty.value;
+      var coefficients = [];
       var subscripts = [];
-      for (var i = 0; i < coeff.coefficients.length; i++ ) {
-        if ( coeff.coefficients[i] !== 0 ) {
-          nonzero.push(coeff.coefficients[i]);
-          subscripts.push(i + this.currentPotentialProperty.value.groundState);
+      for (var i = 0; i < allCoefficients.length; i++ ) {
+        if ( allCoefficients[ i ] !== 0 ) {
+          coefficients.push( allCoefficients[ i ] );
+          subscripts.push( i + this.currentPotentialProperty.value.groundState );
         }
       }
-      return [subscripts, nonzero];
+      return [subscripts, coefficients];
     },
     
     /**
@@ -135,10 +149,18 @@ define( function( require ) {
     },
     
     /**
+     * Returns the property that contains an array of coefficients
+     */
+    getCoefficientsProperty: function( ) {
+      return this.superpositionCoefficientsProperty.value.coefficientsProperty;
+    },
+    
+    /**
      * Set a single coefficient of a superposition state
      * Called when the user inputs a number into the superposition dialogue box
      */
     setCoefficient: function( i, value ) {
+      i = i - this.currentPotentialProperty.value.groundState;
       this.superpositionCoefficientsProperty.value.setCoefficient( i, value );
     },
     
@@ -148,6 +170,7 @@ define( function( require ) {
      * Called when the user clicks on an eigenstate
      */
     setOneCoefficient: function( i ) {
+      i = i - this.currentPotentialProperty.value.groundState;
       this.superpositionCoefficientsProperty.value.setOneCoefficient( i );
     },
     

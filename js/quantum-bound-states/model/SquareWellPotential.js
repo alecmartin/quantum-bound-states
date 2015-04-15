@@ -26,8 +26,8 @@ define( function( require ) {
   * @constructor
   */
   function SquareWellPotential( particle, wellOffset, wellWidth, wellHeight ) {
-    this.wellWidthProperty = new Property( wellWidth );
-    this.wellHeightProperty = new Property( wellHeight );
+    this.wellWidthProperty = new Property( wellWidth, { propertyID: "wellWidth" } );
+    this.wellHeightProperty = new Property( wellHeight, { propertyID: "wellHeight" } );
     var name = squareString;
     var image = squareImage;
     var minEnergy = -5; // eV

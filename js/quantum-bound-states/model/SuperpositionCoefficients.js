@@ -18,12 +18,16 @@ define( function( require ) {
   * @constructor
   */
   function SuperpositionCoefficients( potential ) {
-    this.coefficients = new FastArray( potential.getNumberOfEigenstates() );
-    for (var i = 0; i < this.coefficients.length; i++) {
-      this.coefficients[i] = 0.0;
+    var coefficients = new FastArray( potential.getNumberOfEigenstates() );
+    for (var i = 0; i < coefficients.length; i++) {
+      coefficients[ i ] = 0.0;
     }
-    this.coefficients[0] = 1.0;
-    this.normalizedProperty = new Property( true );
+    coefficients[ 0 ] = 1.0;
+    this.coefficientsProperty = new Property( coefficients, { propertyID: "coefficients" } );
+    this.normalizedProperty = new Property( true, { propertyID: "normalized" } );
+    console.log("first");
+    console.log(coefficients);
+    this.coefficientsProperty.link(function(){console.log("coefficients")});
   }
   
   return inherit( Object, SuperpositionCoefficients, {
@@ -32,7 +36,7 @@ define( function( require ) {
      * Returns the ith coefficient
      */
     getCoefficient: function( i ) {
-      return this.coefficients[i];
+      return this.coefficientsProperty.value[ i ];
     },
     
     /**
@@ -40,7 +44,10 @@ define( function( require ) {
      * Sets the normalized property to false
      */
     setCoefficient: function( i, value ) {
-      this.coefficients[i] = value;
+      var coefficients = this.coefficientsProperty.value;
+      coefficients[ i ] = value;
+      console.log("setCoefficient");
+      this.coefficientsProperty.set( coefficients );
       this.normalizedProperty.value = false;
     },
     
@@ -50,10 +57,16 @@ define( function( require ) {
      * Sets the normalized property to true
      */
     setOneCoefficient: function( i ) {
-      for (var j = 0; j < this.coefficients.length; j++ ) {
-        this.coefficients[j] = 0;
+      var coefficients = this.coefficientsProperty.value;
+      console.log("before");
+      console.log(coefficients);
+      for (var j = 0; j < coefficients.length; j++ ) {
+        coefficients[ j ] = 0;
       }
-      this.coefficients[i] = 1.0;
+      coefficients[ i ] = 1.0;
+      this.coefficientsProperty.set( coefficients );
+      console.log("after");
+      console.log(coefficients);
       this.normalizedProperty.value = true;
     },
     
@@ -62,13 +75,15 @@ define( function( require ) {
      */
     normalize: function( ) {
       var sum = 0;
-      for (var i = 0; i < this.coefficients.length; i++) {
-        sum += this.coefficients[i] * this.coefficients[i];
+      var coefficients = this.coefficientsProperty.value;
+      for (var i = 0; i < coefficients.length; i++) {
+        sum += coefficients[ i ] * coefficients[ i ];
       }
-      sum = Math.sqrt(sum);
-      for (var j = 0; j < this.coefficients.length; j++) {
-        this.coefficients[i] = this.coefficients[i] / sum;
+      sum = Math.sqrt( sum );
+      for (var j = 0; j < coefficients.length; j++) {
+        coefficients[ j ] = coefficients[ j ] / sum;
       }
+      this.coefficientsProperty.value = coefficients;
       this.normalizedProperty.value = true;
     },
     
@@ -77,8 +92,9 @@ define( function( require ) {
      */
     getNumNonZeroCoefficients: function( ) {
       var count = 0;
-      for (var i = 0; i < this.coefficients.length; i++ ) {
-        if ( this.coefficients[i] !== 0 ) {
+      var coefficients = this.coefficientsProperty.value;
+      for (var i = 0; i < coefficients.length; i++ ) {
+        if ( coefficients[ i ] !== 0 ) {
           count++;
         }
       }

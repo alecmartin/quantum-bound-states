@@ -34,11 +34,11 @@ define( function( require ) {
     });
     this.addChild( energyPlotNode );
 
-    /*var energyLine = new EnergyLine( quantumBoundStatesModel, 600, 250, {
-      x: 50,
-      y: 100,
-    });
-    this.addChild( energyLine );*/
+    // var energyLine = new EnergyLine( quantumBoundStatesModel, 600, 250, {
+    //   x: 50,
+    //   y: 100,
+    // });
+    // this.addChild( energyLine );
 
     var waveFunctionPlotNode = new WaveFunctionPlotNode( quantumBoundStatesModel, 600, 200, {
       x: 0,
