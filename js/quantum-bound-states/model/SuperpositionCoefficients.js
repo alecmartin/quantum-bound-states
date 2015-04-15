@@ -41,7 +41,9 @@ define( function( require ) {
      * Sets the normalized property to false
      */
     setCoefficient: function( i, value ) {
-      this.coefficientsProperty.value[ i ] = value;
+      var coefficients = this.coefficientsProperty.value;
+      coefficients[ i ] = value;
+      this.coefficientsProperty.set( coefficients );
       this.normalizedProperty.value = false;
     },
     
@@ -52,10 +54,12 @@ define( function( require ) {
      */
     setOneCoefficient: function( i ) {
       var coefficients = this.coefficientsProperty.value;
+      console.log(coefficients);
       for (var j = 0; j < coefficients.length; j++ ) {
         coefficients[ j ] = 0;
       }
       coefficients[ i ] = 1.0;
+      this.coefficientsProperty.set( coefficients );
       this.normalizedProperty.value = true;
     },
     
