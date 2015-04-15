@@ -170,7 +170,6 @@ define( function( require ) {
      * Called when the user clicks on an eigenstate
      */
     setOneCoefficient: function( i ) {
-      console.log("setting i="+i);
       i = i - this.currentPotentialProperty.value.groundState;
       this.superpositionCoefficientsProperty.value.setOneCoefficient( i );
     },

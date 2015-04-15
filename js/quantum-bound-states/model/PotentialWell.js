@@ -31,7 +31,7 @@ define( function( require ) {
   */
   function PotentialWell( particle, wellOffset, minEnergy, maxEnergy, groundState, name, image ) {
     this.particle = particle;
-    this.wellOffsetProperty = new Property( wellOffset );
+    this.wellOffsetProperty = new Property( wellOffset, { propertyID: "wellOffset" } );
     this.minEnergy = minEnergy; // eV
     this.maxEnergy = maxEnergy; // eV
     this.groundState = groundState;

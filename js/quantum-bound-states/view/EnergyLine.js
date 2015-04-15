@@ -45,20 +45,16 @@ define( function( require ){
     // highlight on pointer over
     this.addInputListener( new ButtonListener( {
       over: function( event ) {
-        console.log("over");
         thisNode.stroke = 'yellow';
         hoveredEigenstateProperty.value = index;
         energyLevelString.visible = true;
       },
       up: function( event ) {
-        console.log( "up" );
         thisNode.stroke = thisNode.options.stroke;
         hoveredEigenstateProperty.value = -1;
         energyLevelString.visible = false;
       },
       down: function( event ){
-        console.log( "down" );
-        // thisNode.stroke = 'red';
         setOneCoefficient( index );
       }
     } ) );

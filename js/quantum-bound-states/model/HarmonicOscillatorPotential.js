@@ -26,7 +26,7 @@ define( function( require ) {
   * @constructor
   */
   function HarmonicOscillatorPotential( particle, wellOffset, frequency ) {
-    this.frequencyProperty = new Property( frequency );
+    this.frequencyProperty = new Property( frequency, { propertyID: "frequency" } );
     var name = harmonicString;
     var image = harmonicImage;
     var minEnergy = -5; // eV
