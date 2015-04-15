@@ -30,7 +30,6 @@ define( function( require ){
       lineWidth: 2,
       cursor: 'pointer'
     }, options );
-    
     Line.call( this, 0, 0, width, 0 );
     var thisNode = this;
     
