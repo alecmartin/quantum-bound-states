@@ -70,11 +70,24 @@ define( function( require ) {
       background.addChild( line );
       xLoc += xSpacing;
     }
+
+    //Creating and Positioning Energy Lines
+    var eigenVals = model.eigenvalsProperty.value;
+    var energyLine;  // = new EnergyLine( model.hoveredEigenstateProperty, model.setOneCoeffient, width, 0, 1, {x: 50, y: 50} );
+    var yScale = height / (model.getMaxEnergy() - model.getMinEnergy());
+    var yPos;
+    var eigenIndex;
+    var energyLineArray = [];
+    for( var i = eigenVals.length - 1; i >= 0; i-- ){
+      yPos = ( model.getMaxEnergy() - eigenVals[ i ] ) * yScale;
+      eigenIndex = i + model.currentPotentialProperty.value.groundState;
+      energyLine = new EnergyLine( model.hoveredEigenstateProperty, model.setOneCoeffient, width, eigenIndex, eigenVals[ i ], {x: 50, y: yPos} );
+      background.addChild( energyLine );
+      energyLineArray[ i ] = energyLine;
+    } 
     
     var well = new PotentialWellPlot( model, width, height + padding, {x: 50} );
-    background.addChild( well );
-    var energyLine = new EnergyLine( model.hoveredEigenstateProperty, width, 0, {x: 50, y: 50} );
-    this.addChild( energyLine );
+    background.addChild( well );   
     
     var title = new Text( titleString, {
       font: new PhetFont( 18 ),
@@ -114,6 +127,21 @@ define( function( require ) {
       ]
     });
     this.addChild( units );
+
+    var coefficientsProperty = model.getCoefficientsProperty();
+    coefficientsProperty.link( function() {
+      var coefficients = coefficientsProperty.value;
+      for( var i = 0; i < energyLineArray.length; i++ ){
+        if( coefficients[ i ] != 0 ){
+          energyLineArray[ i ].setStroke( 'red' );
+        }
+        else {
+          energyLineArray[ i ].setStroke( 'green' );
+        }
+      }
+
+    });
+
   }
   
   return inherit( Node, EnergyPlotNode );
