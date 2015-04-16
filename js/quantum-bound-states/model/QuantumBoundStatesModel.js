@@ -105,7 +105,8 @@ define( function( require ) {
      * Get an array of the current eigenstates in the superposition state
      */
     getCurrentEigenstates: function( ) {
-      var allCoefficients = this.getCoefficientsProperty.value;
+      var allCoefficients = this.getCoefficientsProperty().value;
+      var states = [];
       for (var i = 0; i < allCoefficients.length; i++ ) {
         if ( allCoefficients[ i ] !== 0 ) {
           states.push( i );

@@ -42,11 +42,7 @@ define( function( require ) {
     var thisNode = this;
     
     var setCoefficient = function( i ) {
-      console.log("calling set");
-      console.log(model.superpositionCoefficientsProperty.value.coefficientsProperty.value);
       model.setOneCoefficient( i );
-      console.log("after set");
-      console.log(model.superpositionCoefficientsProperty.value.coefficientsProperty.value);
     }
     
     var energyLine;
@@ -63,7 +59,12 @@ define( function( require ) {
       for( var i = eigenVals.length - 1; i >= 0; i-- ){
         yPos = ( model.getMaxEnergy() - eigenVals[ i ] ) * yScale + PADDING / 2;
         eigenIndex = i + model.currentPotentialProperty.value.groundState;
-        energyLine = new EnergyLine( model.hoveredEigenstateProperty, setCoefficient, width, eigenIndex, eigenVals[ i ], {x: 50, y: yPos} );
+        energyLine = new EnergyLine( model.hoveredEigenstateProperty,
+                                    setCoefficient,
+                                    width,
+                                    eigenIndex,
+                                    eigenVals[ i ],
+                                    {x: background.left, y: yPos} );
         background.addChild( energyLine );
         energyLineArray[ i ] = energyLine;
       } 
@@ -95,31 +96,15 @@ define( function( require ) {
     var xSpacing = (width  / divisors);
     var xLoc = xSpacing / 2;
     for (i = MIN_X + 0.5; i < divisors + MIN_X; i += 1) {
-      var line = new Line(background.left + xLoc, background.top, background.left+xLoc, background.bottom, {stroke: 'gray'});
+      var line = new Line(background.left + xLoc, background.top, background.left + xLoc, background.bottom, {stroke: 'gray'});
       background.addChild( line );
       xLoc += xSpacing;
     }
 
     //Creating and Positioning Energy Lines
-    /*var setCoefficient = function( i ) {
-      model.setOneCoefficient( i );
-    }
-    var eigenVals = model.eigenvalsProperty.value;
-    var energyLine;  // = new EnergyLine( model.hoveredEigenstateProperty, model.setOneCoeffient, width, 0, 1, {x: 50, y: 50} );
-    var yScale = (height + PADDING) / (model.getMaxEnergy() - model.getMinEnergy());
-    var yPos;
-    var eigenIndex;
-    var energyLineArray = [];
-    for( var i = eigenVals.length - 1; i >= 0; i-- ){
-      yPos = ( model.getMaxEnergy() - eigenVals[ i ] ) * yScale;
-      eigenIndex = i + model.currentPotentialProperty.value.groundState;
-      energyLine = new EnergyLine( model.hoveredEigenstateProperty, setCoefficient, width, eigenIndex, eigenVals[ i ], {x: 50, y: yPos} );
-      background.addChild( energyLine );
-      energyLineArray[ i ] = energyLine;
-    } */
     drawEnergyLines();
     
-    var well = new PotentialWellPlot( model, width, height - PADDING, {x: 50, y: PADDING / 2} );
+    var well = new PotentialWellPlot( model, width, height - PADDING, {x: background.left, y: PADDING / 2} );
     background.addChild( well );   
     
     var title = new Text( titleString, {
@@ -162,8 +147,8 @@ define( function( require ) {
     this.addChild( units );
 
     var coefficientsProperty = model.getCoefficientsProperty();
-    console.log(coefficientsProperty);
     coefficientsProperty.link( function() {
+      console.log(model.getCurrentEigenstates());
       var coefficients = coefficientsProperty.value;
       for( var i = 0; i < energyLineArray.length; i++ ){
         if( coefficients[ i ] != 0 ){

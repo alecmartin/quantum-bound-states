@@ -25,9 +25,6 @@ define( function( require ) {
     coefficients[ 0 ] = 1.0;
     this.coefficientsProperty = new Property( coefficients, { propertyID: "coefficients" } );
     this.normalizedProperty = new Property( true, { propertyID: "normalized" } );
-    console.log("first");
-    console.log(coefficients);
-    this.coefficientsProperty.link(function(){console.log("coefficients")});
   }
   
   return inherit( Object, SuperpositionCoefficients, {
@@ -46,8 +43,8 @@ define( function( require ) {
     setCoefficient: function( i, value ) {
       var coefficients = this.coefficientsProperty.value;
       coefficients[ i ] = value;
-      console.log("setCoefficient");
       this.coefficientsProperty.set( coefficients );
+      this.coefficientsProperty.notifyObserversStatic();
       this.normalizedProperty.value = false;
     },
     
@@ -58,15 +55,12 @@ define( function( require ) {
      */
     setOneCoefficient: function( i ) {
       var coefficients = this.coefficientsProperty.value;
-      console.log("before");
-      console.log(coefficients);
       for (var j = 0; j < coefficients.length; j++ ) {
         coefficients[ j ] = 0;
       }
       coefficients[ i ] = 1.0;
       this.coefficientsProperty.set( coefficients );
-      console.log("after");
-      console.log(coefficients);
+      this.coefficientsProperty.notifyObserversStatic();
       this.normalizedProperty.value = true;
     },
     
