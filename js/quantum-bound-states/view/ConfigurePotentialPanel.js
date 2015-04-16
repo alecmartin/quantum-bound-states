@@ -18,6 +18,7 @@ define( function( require ) {
   var HStrut = require( 'SUN/HStrut' );
   var VStrut = require( 'SUN/VStrut' );
   var Panel = require( 'SUN/Panel' );
+  var Range = require( 'DOT/Range' );
   // var VerticalCheckBoxGroup = require( 'SUN/VerticalCheckBoxGroup' );
   var VBox = require( 'SCENERY/nodes/VBox' );
   var TextPushButton = require( 'SUN/buttons/TextPushButton' );
@@ -123,7 +124,7 @@ define( function( require ) {
     
     setPotentialWellProperties();
 
-    var squarePotentialOffsetSlider = new Slider( {min: potentialOffsetMin , max: potentialOffsetMax }, {
+    var squarePotentialOffsetSlider = new Slider( {
       // sliderX: 60 - 630,
       type: 'button',
       buttonStep: 0.1,
