@@ -31,7 +31,7 @@ define( function( require ) {
     var coulomb1D = new Coulomb1DPotential( particle, 0.0 );
     var coulomb3D = new Coulomb3DPotential( particle, 0.0 );
     var oscillatorWell = new HarmonicOscillatorPotential( particle, 0.0, 1.0 );
-    this.potentials = [squareWell, asymWell, coulomb1D, coulomb3D, oscillatorWell];
+    this.potentials = [ squareWell, asymWell, coulomb1D, coulomb3D, oscillatorWell ];
     var coefficients = new SuperpositionCoefficients( squareWell );
     
     PropertySet.call( this, {
@@ -39,7 +39,6 @@ define( function( require ) {
       particleMass: QuantumBoundStatesConstants.ELECTRON_MASS,
       hoveredEigenstate: -1,
       currentPotential: squareWell,
-      eigenvals: squareWell.getEigenvalues(),
       superpositionCoefficients: coefficients,
       
       showMagnifyingGlass: false,
@@ -51,11 +50,6 @@ define( function( require ) {
       showConfigurePotentialPanel: false,
       showSuperpositionStatePanel: false
       } );
-    
-    var thisNode = this;
-    this.currentPotentialProperty.link( function() {
-      thisNode.eigenvalsProperty.value = thisNode.currentPotentialProperty.value.getEigenvalues();
-    });
   }
 
   return inherit( PropertySet, QuantumBoundStatesModel, {

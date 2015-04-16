@@ -13,6 +13,7 @@ define( function( require ) {
   var Coulomb1DPotential = require( 'QUANTUM_BOUND_STATES/quantum-bound-states/model/Coulomb1DPotential' );
   var Coulomb3DPotential = require( 'QUANTUM_BOUND_STATES/quantum-bound-states/model/Coulomb3DPotential' );
   var CoulombWellPlot = require( 'QUANTUM_BOUND_STATES/quantum-bound-states/view/potentials/CoulombWellPlot' );
+  var EnergyLine = require( 'QUANTUM_BOUND_STATES/quantum-bound-states/view/EnergyLine' );
   var HarmonicOscillatorPotential = require( 'QUANTUM_BOUND_STATES/quantum-bound-states/model/HarmonicOscillatorPotential' );
   var HarmonicOscillatorWellPlot = require( 'QUANTUM_BOUND_STATES/quantum-bound-states/view/potentials/HarmonicOscillatorWellPlot' );
   var inherit = require( 'PHET_CORE/inherit' );
@@ -39,6 +40,7 @@ define( function( require ) {
     var xScale = width / (MAX_X - MIN_X);
     var yScale = height / (maxEnergy - model.getMinEnergy());
     var potential = model.currentPotentialProperty.value;
+    var coefficientsProperty = model.getCoefficientsProperty();
     
     // convert a value in nm to a pixel value
     var valueToX = function( x ) {
@@ -51,7 +53,7 @@ define( function( require ) {
     };
     
     var valueToCoulombY = function( y ) {
-      return (model.potentials[2].maxEnergy - y) * yScale;
+      return (model.potentials[ 2 ].maxEnergy - y) * yScale;
     };
     
     // convert a value in pixels to nm
@@ -65,14 +67,72 @@ define( function( require ) {
     };
     
     var yToCoulombValue = function( y ) {
-      return model.potentials[2].maxEnergy - y / yScale;
+      return model.potentials[ 2 ].maxEnergy - y / yScale;
     };
     
-    var squareWellPlot = new SquareWellPlot( model.potentials[0], valueToX, valueToY, xToValue, yToValue );
-    var asymmetricWellPlot = new AsymmetricWellPlot( model.potentials[1], valueToX, valueToY, xToValue, yToValue );
-    var coulomb1DWellPlot = new CoulombWellPlot( model.potentials[2], valueToX, valueToCoulombY, xToValue, yToCoulombValue );
-    var coulomb3DWellPlot = new CoulombWellPlot( model.potentials[3], valueToX, valueToCoulombY, xToValue, yToCoulombValue );
-    var harmonicOscillatorWellPlot = new HarmonicOscillatorWellPlot( model.getParticleMassProperty(), model.potentials[4], valueToX, valueToY, xToValue, yToValue );
+    var setCoefficient = function( i ) {
+      model.setOneCoefficient( i );
+    };
+    
+    var energyLine;
+    var yPos;
+    var eigenIndex;
+    var energyLineNode = new Node();
+    var energyLineArray = [];
+    
+    var colorEnergyLines = function() {
+      var currentEigenstates = model.getCurrentEigenstates();
+      for( var i = 0; i < energyLineArray.length; i++ ){
+        if( currentEigenstates.indexOf( i ) !== -1 ){
+          energyLineArray[ i ].setStroke( 'red' );
+        }
+        else {
+          energyLineArray[ i ].setStroke( 'green' );
+        }
+      }
+    };
+    
+    var drawEnergyLines = function( ) {
+      var eigenvals = potential.eigenvalsProperty.value;
+      for( var i = eigenvals.length - 1; i >= 0; i-- ){
+        if ( potential instanceof Coulomb1DPotential || potential instanceof Coulomb3DPotential ) {
+          yPos = valueToCoulombY( eigenvals[ i ] );
+        }
+        else {
+          yPos = valueToY( eigenvals[ i ] );
+        }
+        eigenIndex = i + potential.groundState;
+        if ( energyLineArray[ i ] ) {
+          energyLineArray[ i ].y = yPos;
+          energyLineArray[ i ].visible = true;
+        }
+        else {
+          energyLine = new EnergyLine( model.hoveredEigenstateProperty,
+                                      setCoefficient,
+                                      width,
+                                      eigenIndex,
+                                      eigenvals[ i ],
+                                      {x: 0, y: yPos} );
+          energyLineNode.addChild( energyLine );
+          energyLineArray[ i ] = energyLine;
+        }
+      }
+      if ( eigenvals.length < energyLineArray.length ) {
+        for ( var j = eigenvals.length; j < energyLineArray.length; j++ ) {
+          energyLineArray[ j ].visible = false;
+        }
+      }
+      colorEnergyLines();
+    };
+    
+    drawEnergyLines();
+    this.addChild( energyLineNode );
+    
+    var squareWellPlot = new SquareWellPlot( model.potentials[ 0 ], valueToX, valueToY, xToValue, yToValue );
+    var asymmetricWellPlot = new AsymmetricWellPlot( model.potentials[ 1 ], valueToX, valueToY, xToValue, yToValue );
+    var coulomb1DWellPlot = new CoulombWellPlot( model.potentials[ 2 ], valueToX, valueToCoulombY, xToValue, yToCoulombValue );
+    var coulomb3DWellPlot = new CoulombWellPlot( model.potentials[ 3 ], valueToX, valueToCoulombY, xToValue, yToCoulombValue );
+    var harmonicOscillatorWellPlot = new HarmonicOscillatorWellPlot( model.getParticleMassProperty(), model.potentials[ 4 ], valueToX, valueToY, xToValue, yToValue );
     this.addChild( squareWellPlot );
     this.addChild( asymmetricWellPlot );
     this.addChild( coulomb1DWellPlot );
@@ -125,7 +185,14 @@ define( function( require ) {
       maxEnergy = model.getMaxEnergy();
       yScale = height / (maxEnergy - model.getMinEnergy());
       drawWell();
+      drawEnergyLines();
     } );
+    
+    coefficientsProperty.link( colorEnergyLines );
+    
+    for ( var p = 0; p < model.potentials.length; p++ ) {
+      model.potentials[ p ].eigenvalsProperty.link( drawEnergyLines );
+    }
   }
 
   return inherit( Node, PotentialWellPlot );

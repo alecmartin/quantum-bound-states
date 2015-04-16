@@ -68,12 +68,14 @@ define( function( require ) {
     getEigenvalues: function() {
       var n = 0;
       var energy = this.getNthEigenvalue( n );
+      var eigenvals = [];
       while ( energy < this.maxEnergy ) {
-        this.eigenvals[n-this.groundState] = energy;
+        eigenvals[ n - this.groundState ] = energy;
         n++;
         energy = this.getNthEigenvalue( n );
       }
-      return this.eigenvals;
+      this.eigenvalsProperty.set( eigenvals );
+      return eigenvals;
     },
   } );
 } );

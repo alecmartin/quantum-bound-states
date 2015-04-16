@@ -98,7 +98,7 @@ define( function( require ) {
       drawWell();
       wellPath.shape = wellShape;
       wellHeightControl.centerY = valueToY( potential.wellOffsetProperty.value + potential.wellHeightProperty.value );
-      wellWidthControl.centerY = valueToY( (potential.wellOffsetProperty.value + potential.wellHeightProperty.value) / 2 );
+      wellWidthControl.centerY = valueToY( potential.wellOffsetProperty.value + potential.wellHeightProperty.value / 2 );
     });
   }
 

@@ -64,12 +64,14 @@ define( function( require ) {
     getEigenvalues: function() {
       var n = this.groundState;
       var energy = this.getNthEigenvalue( n );
+      var eigenvals = [];
       while ( n <= MAX_EIGENSTATES ) {
-        this.eigenvals[n - this.groundState] = energy;
+        eigenvals[ n - this.groundState ] = energy;
         n++;
-        energy = this.getNthEigenvalue(n);
+        energy = this.getNthEigenvalue( n );
       }
-      return this.eigenvals;
+      this.eigenvalsProperty.set( eigenvals );
+      return eigenvals;
     },
     
     /**
@@ -88,7 +90,7 @@ define( function( require ) {
         pointsY = solver.calculateWavefunction( energy );
         this.cacheEigenstate( n-1, pointsY );
       }
-      return [this.pointsX, pointsY];
+      return [ this.pointsX, pointsY ];
     },
   } );
 } );

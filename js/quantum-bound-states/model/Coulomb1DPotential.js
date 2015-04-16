@@ -66,12 +66,14 @@ define( function( require ) {
       var maxStates = solver.getMaxEigenstates();
       var cutoffEnergy = this.potentialValue( MAX_X );
       var energy = this.getNthEigenvalue(n);
+      var eigenvals = [];
       while ( energy < cutoffEnergy && n <= maxStates ) {
-        this.eigenvals[n-this.groundState] = energy;
+        eigenvals[ n - this.groundState ] = energy;
         n++;
         energy = this.getNthEigenvalue(n);
       }
-      return this.eigenvals;
+      this.eigenvalsProperty.set( eigenvals );
+      return eigenvals;
     },
     
     /**

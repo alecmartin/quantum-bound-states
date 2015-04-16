@@ -8,7 +8,6 @@ define( function( require ) {
   'use strict';
 
   // modules
-  var EnergyLine = require( 'QUANTUM_BOUND_STATES/quantum-bound-states/view/EnergyLine' );
   var HBox = require( 'SCENERY/nodes/HBox' );
   var HStrut = require( 'SUN/HStrut' );
   var inherit = require( 'PHET_CORE/inherit' );
@@ -39,36 +38,6 @@ define( function( require ) {
   function EnergyPlotNode( model, width, height, options ) {
 
     Node.call( this, options );
-    var thisNode = this;
-    
-    var setCoefficient = function( i ) {
-      model.setOneCoefficient( i );
-    };
-    
-    var energyLine;
-    var yPos;
-    var eigenIndex;
-    var energyLineArray = [];
-    function drawEnergyLines() {
-      var eigenVals = model.eigenvalsProperty.value;
-      var yScale = (height - PADDING) / (model.getMaxEnergy() - model.getMinEnergy());
-      for ( var j = 0; j < energyLineArray.length; j++ ) {
-        thisNode.removeChild( energyLineArray[ j ] );
-      }
-      energyLineArray = [];
-      for( var i = eigenVals.length - 1; i >= 0; i-- ){
-        yPos = ( model.getMaxEnergy() - eigenVals[ i ] ) * yScale + PADDING / 2;
-        eigenIndex = i + model.currentPotentialProperty.value.groundState;
-        energyLine = new EnergyLine( model.hoveredEigenstateProperty,
-                                    setCoefficient,
-                                    width,
-                                    eigenIndex,
-                                    eigenVals[ i ],
-                                    {x: background.left, y: yPos} );
-        background.addChild( energyLine );
-        energyLineArray[ i ] = energyLine;
-      } 
-    }
     
     var i;
     var background = new Rectangle(50, 0, width, height, 0, 0, {fill:'black', stroke: 'white'});
@@ -102,7 +71,7 @@ define( function( require ) {
     }
 
     //Creating and Positioning Energy Lines
-    drawEnergyLines();
+    //drawEnergyLines();
     
     var well = new PotentialWellPlot( model, width, height - PADDING, {x: background.left, y: PADDING / 2} );
     background.addChild( well );   
@@ -145,25 +114,6 @@ define( function( require ) {
       ]
     });
     this.addChild( units );
-
-    var coefficientsProperty = model.getCoefficientsProperty();
-    coefficientsProperty.link( function() {
-      console.log(model.getCurrentEigenstates());
-      var coefficients = coefficientsProperty.value;
-      for( var i = 0; i < energyLineArray.length; i++ ){
-        if( coefficients[ i ] !== 0 ){
-          energyLineArray[ i ].setStroke( 'red' );
-        }
-        else {
-          energyLineArray[ i ].setStroke( 'green' );
-        }
-      }
-    });
-    
-    model.eigenvalsProperty.link( function() {
-      console.log("egein");
-      //drawEnergyLines();
-    });
   }
   
   return inherit( Node, EnergyPlotNode );
