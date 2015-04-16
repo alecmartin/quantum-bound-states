@@ -43,7 +43,7 @@ define( function( require ) {
     
     var setCoefficient = function( i ) {
       model.setOneCoefficient( i );
-    }
+    };
     
     var energyLine;
     var yPos;
@@ -151,7 +151,7 @@ define( function( require ) {
       console.log(model.getCurrentEigenstates());
       var coefficients = coefficientsProperty.value;
       for( var i = 0; i < energyLineArray.length; i++ ){
-        if( coefficients[ i ] != 0 ){
+        if( coefficients[ i ] !== 0 ){
           energyLineArray[ i ].setStroke( 'red' );
         }
         else {

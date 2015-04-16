@@ -15,6 +15,11 @@
 
   "bottom-chart-particle-mass" : "Particle Mass",
 
+  "close-string" : "Close",
+  "width-string" : "Width",
+  "height-string" : "Height",
+  "offset-string" : "Offset",
+
   "potential-well": "Potential Well",
   "square": "Square",
   "asymmetric": "Asymmetric",
