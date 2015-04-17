@@ -17,14 +17,52 @@ define( function( require ) {
   * @param {PotentialWell} potential
   * @constructor
   */
-  function SuperpositionCoefficients( potential ) {
-    var coefficients = new FastArray( potential.getNumberOfEigenstates() );
+  function SuperpositionCoefficients( currentPotentialProperty ) {
+    this.potential = currentPotentialProperty.value;
+    var coefficients = [];
     for (var i = 0; i < coefficients.length; i++) {
       coefficients[ i ] = 0.0;
     }
     coefficients[ 0 ] = 1.0;
     this.coefficientsProperty = new Property( coefficients, { propertyID: "coefficients" } );
     this.normalizedProperty = new Property( true, { propertyID: "normalized" } );
+    
+    var thisNode = this;
+    
+    var matchEigenvals = function() {
+      var eigenvals = thisNode.potential.eigenvalsProperty.value;
+      var coefficients = thisNode.coefficientsProperty.value;
+      if ( eigenvals.length > coefficients.length ) {
+        for ( var i = coefficients.length; i < eigenvals.length; i++ ) {
+          coefficients.push( 0.0 );
+        }
+        thisNode.coefficientsProperty.set( coefficients );
+        thisNode.coefficientsProperty.notifyObserversStatic();
+      }
+      else if ( eigenvals.length < coefficients.length ) {
+        var visibleStates = 0;
+        for ( var i = 0; i < eigenvals.length; i++ ) {
+          if ( coefficients[ i ] > 0.0 ) {
+            visibleStates++;
+          }
+        }
+        for ( var j = coefficients.length - 1; j >= eigenvals.length; j-- ) {
+          coefficients.pop();
+        }
+        if ( visibleStates === 0 ) {
+          coefficients[ 0 ] = 1.0;
+        }
+        thisNode.normalize( coefficients );
+      }
+    };
+    
+    this.potential.eigenvalsProperty.link( matchEigenvals );
+    
+    currentPotentialProperty.link( function() {
+      thisNode.potential.eigenvalsProperty.unlink( matchEigenvals );
+      thisNode.potential = currentPotentialProperty.value;
+      thisNode.potential.eigenvalsProperty.link( matchEigenvals );
+    });
   }
   
   return inherit( Object, SuperpositionCoefficients, {
@@ -67,9 +105,8 @@ define( function( require ) {
     /**
      * Normalizes coefficients so the sum of the squared values is 1
      */
-    normalize: function( ) {
+    normalize: function( coefficients ) {
       var sum = 0;
-      var coefficients = this.coefficientsProperty.value;
       for (var i = 0; i < coefficients.length; i++) {
         sum += coefficients[ i ] * coefficients[ i ];
       }
@@ -78,6 +115,7 @@ define( function( require ) {
         coefficients[ j ] = coefficients[ j ] / sum;
       }
       this.coefficientsProperty.value = coefficients;
+      this.coefficientsProperty.notifyObserversStatic();
       this.normalizedProperty.value = true;
     },
     

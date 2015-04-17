@@ -32,14 +32,12 @@ define( function( require ) {
     var coulomb3D = new Coulomb3DPotential( particle, 0.0 );
     var oscillatorWell = new HarmonicOscillatorPotential( particle, 0.0, 1.0 );
     this.potentials = [ squareWell, asymWell, coulomb1D, coulomb3D, oscillatorWell ];
-    var coefficients = new SuperpositionCoefficients( squareWell );
     
     PropertySet.call( this, {
       particle: particle,
       particleMass: QuantumBoundStatesConstants.ELECTRON_MASS,
       hoveredEigenstate: -1,
       currentPotential: squareWell,
-      superpositionCoefficients: coefficients,
       
       showMagnifyingGlass: false,
       showProbDensity: true,
@@ -50,6 +48,9 @@ define( function( require ) {
       showConfigurePotentialPanel: false,
       showSuperpositionStatePanel: false
       } );
+    
+    
+    this.superpositionCoefficients = new SuperpositionCoefficients( this.currentPotentialProperty );
   }
 
   return inherit( PropertySet, QuantumBoundStatesModel, {
@@ -116,7 +117,7 @@ define( function( require ) {
      * Coefficients contains floats between 0 and 1
      */
     getSubscriptsAndCoefficients: function( ) {
-      var superposition = this.superpositionCoefficientsProperty.value;
+      var superposition = this.superpositionCoefficients;
       var allCoefficients = superposition.coefficientsProperty.value;
       var coefficients = [];
       var subscripts = [];
@@ -140,14 +141,14 @@ define( function( require ) {
      * Returns the property that determines if the superposition coefficients are normalized
      */
     getNormalizedProperty: function( ) {
-      return this.superpositionCoefficientsProperty.value.normalizedProperty;
+      return this.superpositionCoefficients.normalizedProperty;
     },
     
     /**
      * Returns the property that contains an array of coefficients
      */
     getCoefficientsProperty: function( ) {
-      return this.superpositionCoefficientsProperty.value.coefficientsProperty;
+      return this.superpositionCoefficients.coefficientsProperty;
     },
     
     /**
@@ -156,7 +157,7 @@ define( function( require ) {
      */
     setCoefficient: function( i, value ) {
       i = i - this.currentPotentialProperty.value.groundState;
-      this.superpositionCoefficientsProperty.value.setCoefficient( i, value );
+      this.superpositionCoefficients.setCoefficient( i, value );
     },
     
     /**
@@ -166,21 +167,21 @@ define( function( require ) {
      */
     setOneCoefficient: function( i ) {
       i = i - this.currentPotentialProperty.value.groundState;
-      this.superpositionCoefficientsProperty.value.setOneCoefficient( i );
+      this.superpositionCoefficients.setOneCoefficient( i );
     },
     
     /**
      * Normalize the superposition coefficients
      */
     normalize: function( ) {
-      this.superpositionCoefficientsProperty.value.normalize();
+      this.superpositionCoefficients.normalize();
     },
     
     /**
      * Returns true if more than one eigenstate is selected
      */
     isSuperpositionState: function( ) {
-      return this.superpositionCoefficientsProperty.value.isSuperpositionState();
+      return this.superpositionCoefficients.isSuperpositionState();
     },
     
     /**
