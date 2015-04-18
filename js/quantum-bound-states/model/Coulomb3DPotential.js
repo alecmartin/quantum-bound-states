@@ -39,6 +39,10 @@ define( function( require ) {
   
   return inherit( PotentialWell, Coulomb3DPotential, {
     
+    reset: function( ) {
+      PotentialWell.prototype.reset.call( this );
+    },
+    
     /**
     * Get the value of the potential well at a point r
     * @param {double} r: distance from center of well (origin) in nanometers

@@ -43,6 +43,7 @@ define( function( require ) {
   return inherit( PotentialWell, AsymmetricPotential, {
     
     reset: function( ) {
+      PotentialWell.prototype.reset.call( this );
       this.wellWidthProperty.reset();
       this.wellHeightProperty.reset();
     },

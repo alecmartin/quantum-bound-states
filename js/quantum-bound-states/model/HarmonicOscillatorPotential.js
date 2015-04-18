@@ -41,6 +41,7 @@ define( function( require ) {
   return inherit( PotentialWell, HarmonicOscillatorPotential, {
     
     reset: function( ) {
+      PotentialWell.prototype.reset.call( this );
       this.frequencyProperty.reset();
     },
     
