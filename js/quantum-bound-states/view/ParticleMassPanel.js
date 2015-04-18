@@ -28,7 +28,7 @@ define( function( require ) {
   * @param {Property} particleMassProperty
   * @constructor
   */
-  function ParticleMassPanel( particleMassProperty ) {
+  function ParticleMassPanel( particleMassProperty, options ) {
 
     // constants
     var optionFont = {font: new PhetFont( 14 ), fill: "palegoldenrod"};
@@ -85,12 +85,13 @@ define( function( require ) {
       align: 'left'
     } );
 
-    Panel.call( this, particleMassVBox, {
+    options = _.extend( {
       fill: 'black',
       stroke: 'white',
       lineWidth: 2,
       top: 5
-    } );
+    }, options );
+    Panel.call( this, particleMassVBox, options );
 
   }
   return inherit( Panel, ParticleMassPanel );

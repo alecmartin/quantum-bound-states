@@ -20,5 +20,9 @@ define( function( require ) {
     this.particleMassProperty = new Property( QuantumBoundStatesConstants.ELECTRON_MASS );
   }
   
-  return inherit( Object, Particle );
+  return inherit( Object, Particle, {
+    reset: function( ) {
+      this.particleMassProperty.reset();
+    }
+  });
 } );

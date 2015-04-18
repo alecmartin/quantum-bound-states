@@ -25,19 +25,21 @@ define( function( require ) {
    */
   function QuantumBoundStatesModel() {
 
-    var particle = new Particle();
-    var squareWell = new SquareWellPotential( particle, 0.0, 1.0, 10.0 );
-    var asymWell = new AsymmetricPotential( particle, 0.0, 1.0, 10.0 );
-    var coulomb1D = new Coulomb1DPotential( particle, 0.0 );
-    var coulomb3D = new Coulomb3DPotential( particle, 0.0 );
-    var oscillatorWell = new HarmonicOscillatorPotential( particle, 0.0, 1.0 );
+    this.particle = new Particle();
+    var squareWell = new SquareWellPotential( this.particle, 0.0, 1.0, 10.0 );
+    var asymWell = new AsymmetricPotential( this.particle, 0.0, 1.0, 10.0 );
+    var coulomb1D = new Coulomb1DPotential( this.particle, 0.0 );
+    var coulomb3D = new Coulomb3DPotential( this.particle, 0.0 );
+    var oscillatorWell = new HarmonicOscillatorPotential( this.particle, 0.0, 1.0 );
     this.potentials = [ squareWell, asymWell, coulomb1D, coulomb3D, oscillatorWell ];
     
     PropertySet.call( this, {
-      particle: particle,
-      particleMass: QuantumBoundStatesConstants.ELECTRON_MASS,
       hoveredEigenstate: -1,
       currentPotential: squareWell,
+      
+      running: false,
+      time: 0.0,
+      speed: 'normal',
       
       showMagnifyingGlass: false,
       showProbDensity: true,
@@ -54,10 +56,24 @@ define( function( require ) {
   }
 
   return inherit( PropertySet, QuantumBoundStatesModel, {
+    
+    reset: function( ) {
+      PropertySet.prototype.reset.call( this );
+      this.potentials.forEach( function( potential ) { potential.reset(); } );
+      this.superpositionCoefficients.reset();
+      this.particle.reset();
+    },
 
     // Called by the animation loop. Optional, so if your model has no animation, you can omit this.
     step: function( dt ) {
-      // Handle model animation here.
+      if ( this.running ) {
+        if ( this.speed === 'normal' ) {
+          this.time = this.time + dt / 2;
+        }
+        else {
+          this.time = this.time + dt;
+        }
+      }
     },
     
     /**
@@ -134,7 +150,7 @@ define( function( require ) {
      * Return the property that governs the mass of the particle
      */
     getParticleMassProperty: function( ) {
-      return this.particleProperty.value.particleMassProperty;
+      return this.particle.particleMassProperty;
     },
     
     /**

@@ -4,7 +4,6 @@
   "energy-plot-total-energy": "Total Energy",
   "energy-plot-potential-energy": "Potential Energy",
 
-
   "bottom-plot-position": "Position (nm)",
   "bottom-plot-pd-title": "Probability Density",
   "bottom-plot-wf-title": "Wave Function",
@@ -32,5 +31,14 @@
   "real-part": "Real Part",
   "imaginary-part": "Imaginary Part",
   "magnitude": "Magnitude",
-  "phase": "Phase"
+  "phase": "Phase",
+  
+  "normal": "Normal",
+  "fast-forward": "Fast Forward",
+  
+  "fs": "fs",
+  "fs.inverse": "fs<sup>–1",
+  "electron-volt": "eV",
+  "nanometer": "nm",
+  "omega": "ω"
 }

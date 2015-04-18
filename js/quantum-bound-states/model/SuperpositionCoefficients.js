@@ -9,7 +9,6 @@ define( function( require ) {
   'use strict';
   
   // modules
-  var FastArray = require( 'DOT/dot' ).FastArray;
   var inherit = require( 'PHET_CORE/inherit' );
   var Property = require( 'AXON/Property' );
   
@@ -19,6 +18,7 @@ define( function( require ) {
   */
   function SuperpositionCoefficients( currentPotentialProperty ) {
     this.potential = currentPotentialProperty.value;
+    this.firstPotential = this.potential;
     var coefficients = [];
     for (var i = 0; i < coefficients.length; i++) {
       coefficients[ i ] = 0.0;
@@ -32,8 +32,9 @@ define( function( require ) {
     var matchEigenvals = function() {
       var eigenvals = thisNode.potential.eigenvalsProperty.value;
       var coefficients = thisNode.coefficientsProperty.value;
+      var i;
       if ( eigenvals.length > coefficients.length ) {
-        for ( var i = coefficients.length; i < eigenvals.length; i++ ) {
+        for ( i = coefficients.length; i < eigenvals.length; i++ ) {
           coefficients.push( 0.0 );
         }
         thisNode.coefficientsProperty.set( coefficients );
@@ -41,7 +42,7 @@ define( function( require ) {
       }
       else if ( eigenvals.length < coefficients.length ) {
         var visibleStates = 0;
-        for ( var i = 0; i < eigenvals.length; i++ ) {
+        for ( i = 0; i < eigenvals.length; i++ ) {
           if ( coefficients[ i ] > 0.0 ) {
             visibleStates++;
           }
@@ -66,6 +67,12 @@ define( function( require ) {
   }
   
   return inherit( Object, SuperpositionCoefficients, {
+    
+    reset: function( ) {
+      this.potential = this.firstPotential;
+      this.coefficientsProperty.reset();
+      this.normalizedProperty.reset();
+    },
     
     /**
      * Returns the ith coefficient

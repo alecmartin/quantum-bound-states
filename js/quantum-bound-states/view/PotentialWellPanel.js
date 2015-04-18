@@ -30,8 +30,7 @@ define( function( require ) {
   * @param {QuantumBoundStatesModel} model
   * @constructor
   */
-  function PotentialWellPanel( model) {
-    // Panel.call( this, options );
+  function PotentialWellPanel( model, options ) {
 
     // optionfont
     var optionFont = {font: new PhetFont( 14 ), fill: "palegoldenrod"};
@@ -86,12 +85,13 @@ define( function( require ) {
       align: 'left'
     } );
     
-    Panel.call( this, PotentialWellVBox, {
+    options = _.extend( {
       fill: 'black',
       stroke: 'white',
       lineWidth: 2,
       top: 5
-    } );
+    }, options );
+    Panel.call( this, PotentialWellVBox, options );
     this.addChild( parent );
   }
 

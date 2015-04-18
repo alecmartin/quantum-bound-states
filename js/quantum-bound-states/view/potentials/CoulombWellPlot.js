@@ -16,6 +16,10 @@ define( function( require ) {
   var Range = require( 'DOT/Range' );
   var Shape = require( 'KITE/Shape' );
   
+  // strings
+  var offsetString = require( 'string!QUANTUM_BOUND_STATES/offset-string' );
+  var eVString = require( 'string!QUANTUM_BOUND_STATES/electron-volt' );
+  
   var NUM_POINTS = 200;
   var MAX_X = QuantumBoundStatesConstants.XRANGE.max;
 
@@ -40,7 +44,13 @@ define( function( require ) {
       return yToValue( y + QuantumBoundStatesConstants.PROPERTY_INDICATOR_LENGTH / 2 );
     };
     
-    var wellOffsetControl = new PotentialPropertyIndicator( potential.wellOffsetProperty, false, xToValue, getOffset, energyRange );
+    var wellOffsetControl = new PotentialPropertyIndicator( potential.wellOffsetProperty,
+                                                           false,
+                                                           offsetString,
+                                                           eVString,
+                                                           xToValue,
+                                                           getOffset,
+                                                           energyRange );
 
     wellOffsetControl.centerX = valueToX( MAX_X / 3 );
     
