@@ -16,6 +16,12 @@ define( function( require ) {
   var Range = require( 'DOT/Range' );
   var Shape = require( 'KITE/Shape' );
   
+  // strings
+  var offsetString = require( 'string!QUANTUM_BOUND_STATES/offset-string' );
+  var frequencyString = require( 'string!QUANTUM_BOUND_STATES/omega' );
+  var eVString = require( 'string!QUANTUM_BOUND_STATES/electron-volt' );
+  var fsString = require( 'string!QUANTUM_BOUND_STATES/fs.inverse' );
+  
   var NUM_POINTS = 500;
 
   /**
@@ -53,8 +59,20 @@ define( function( require ) {
       return freq;
     };
     
-    var wellOffsetControl = new PotentialPropertyIndicator( potential.wellOffsetProperty, false, xToValue, getOffset, energyRange );
-    var wellFrequencyControl =  new PotentialPropertyIndicator( potential.frequencyProperty, true, getFrequency, yToValue, frequencyRange );
+    var wellOffsetControl = new PotentialPropertyIndicator( potential.wellOffsetProperty,
+                                                           false,
+                                                           offsetString,
+                                                           eVString,
+                                                           xToValue,
+                                                           getOffset,
+                                                           energyRange );
+    var wellFrequencyControl =  new PotentialPropertyIndicator( potential.frequencyProperty,
+                                                               true,
+                                                               frequencyString,
+                                                               fsString,
+                                                               getFrequency,
+                                                               yToValue,
+                                                               frequencyRange );
     
     wellOffsetControl.centerX = valueToX( 0 );
     wellFrequencyControl.centerY = valueToY( (maxEnergy - potential.minEnergy) / 5 );

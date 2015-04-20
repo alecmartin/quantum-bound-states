@@ -11,13 +11,13 @@ define( function( require ) {
   var inherit = require( 'PHET_CORE/inherit' );
   var ScreenView = require( 'JOIST/ScreenView' );
   var ResetAllButton = require( 'SCENERY_PHET/buttons/ResetAllButton' );
-  //var EnergyLine = require( 'QUANTUM_BOUND_STATES/quantum-bound-states/view/EnergyLine' );
   var EnergyPlotNode = require( 'QUANTUM_BOUND_STATES/quantum-bound-states/view/EnergyPlotNode' );
   var WaveFunctionPlotNode = require( 'QUANTUM_BOUND_STATES/quantum-bound-states/view/WaveFunctionPlotNode' );
   var PotentialWellPanel = require( 'QUANTUM_BOUND_STATES/quantum-bound-states/view/PotentialWellPanel' );
   var WaveFunctionPlotControls = require( 'QUANTUM_BOUND_STATES/quantum-bound-states/view/WaveFunctionPlotControls' );
   var ParticleMassPanel = require( 'QUANTUM_BOUND_STATES/quantum-bound-states/view/ParticleMassPanel' );
   var ConfigurePotentialPanel = require( 'QUANTUM_BOUND_STATES/quantum-bound-states/view/ConfigurePotentialPanel' );
+  var TimeControls = require( 'QUANTUM_BOUND_STATES/quantum-bound-states/view/TimeControls' );
   /**
    * @param {QuantumBoundStatesModel} quantumBoundStatesModel
    * @constructor
@@ -34,41 +34,44 @@ define( function( require ) {
     });
     this.addChild( energyPlotNode );
 
-    // var energyLine = new EnergyLine( quantumBoundStatesModel, 600, 250, {
-    //   x: 50,
-    //   y: 100,
-    // });
-    // this.addChild( energyLine );
-
-    var waveFunctionPlotNode = new WaveFunctionPlotNode( quantumBoundStatesModel, 600, 200, {
+    var waveFunctionPlotNode = new WaveFunctionPlotNode( quantumBoundStatesModel, 600, 150, {
       x: 0,
       y: energyPlotNode.bottom + 20,
     });
     this.addChild( waveFunctionPlotNode );
 
-    var potentialWellPanel = new PotentialWellPanel( quantumBoundStatesModel ).mutate( {
+    var potentialWellPanel = new PotentialWellPanel( quantumBoundStatesModel, {
       right: this.layoutBounds.maxX - 10,
       top: 10,
     });
     this.addChild( potentialWellPanel );
 
-    var configurePotentialPanel = new ConfigurePotentialPanel( quantumBoundStatesModel ).mutate( {
+    var configurePotentialPanel = new ConfigurePotentialPanel( quantumBoundStatesModel, {
       left: this.layoutBounds.centerX - 240,
       top: this.layoutBounds.centerY - 100,
     });
     this.addChild( configurePotentialPanel );
     
-    var waveFunctionPlotControls = new WaveFunctionPlotControls( quantumBoundStatesModel ).mutate( {
+    var waveFunctionPlotControls = new WaveFunctionPlotControls( quantumBoundStatesModel, {
       right: this.layoutBounds.maxX - 10,
       top: potentialWellPanel.bottom + 10
     } );
     this.addChild( waveFunctionPlotControls );
 
-    var particleMassPanel = new ParticleMassPanel( particleMassProperty ).mutate( {
+    var particleMassPanel = new ParticleMassPanel( particleMassProperty, {
       right: this.layoutBounds.maxX - 10,
       top: waveFunctionPlotControls.bottom + 10,
     });
     this.addChild( particleMassPanel );
+    
+    var timeControls = new TimeControls( quantumBoundStatesModel.timeProperty,
+                                        quantumBoundStatesModel.runningProperty,
+                                        quantumBoundStatesModel.speedProperty,
+                                        {
+      centerX: waveFunctionPlotNode.centerX,
+      top: waveFunctionPlotNode.bottom + 25
+    } );
+    this.addChild( timeControls );
 
     // Create and add the Reset All Button in the bottom right, which resets the model
     var resetAllButton = new ResetAllButton( {
@@ -85,7 +88,7 @@ define( function( require ) {
 
     // Called by the animation loop. Optional, so if your view has no animation, you can omit this.
     step: function( dt ) {
-      // Handle view animation here.
+      //console.log("stepping, dt="+dt);
     }
   } );
 } );

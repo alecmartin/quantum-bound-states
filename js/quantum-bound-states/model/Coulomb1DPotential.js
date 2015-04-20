@@ -39,6 +39,10 @@ define( function( require ) {
   
   return inherit( PotentialWell, Coulomb1DPotential, {
     
+    reset: function( ) {
+      PotentialWell.prototype.reset.call( this );
+    },
+    
     /**
     * Get the value of the potential well at a point x
     * @param {double} x: distance from center of well in nanometers
@@ -66,12 +70,14 @@ define( function( require ) {
       var maxStates = solver.getMaxEigenstates();
       var cutoffEnergy = this.potentialValue( MAX_X );
       var energy = this.getNthEigenvalue(n);
+      var eigenvals = [];
       while ( energy < cutoffEnergy && n <= maxStates ) {
-        this.eigenvals[n-this.groundState] = energy;
+        eigenvals[ n - this.groundState ] = energy;
         n++;
         energy = this.getNthEigenvalue(n);
       }
-      return this.eigenvals;
+      this.eigenvalsProperty.set( eigenvals );
+      return eigenvals;
     },
     
     /**

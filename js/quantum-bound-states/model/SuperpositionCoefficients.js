@@ -9,7 +9,6 @@ define( function( require ) {
   'use strict';
   
   // modules
-  var FastArray = require( 'DOT/dot' ).FastArray;
   var inherit = require( 'PHET_CORE/inherit' );
   var Property = require( 'AXON/Property' );
   
@@ -17,20 +16,63 @@ define( function( require ) {
   * @param {PotentialWell} potential
   * @constructor
   */
-  function SuperpositionCoefficients( potential ) {
-    var coefficients = new FastArray( potential.getNumberOfEigenstates() );
+  function SuperpositionCoefficients( currentPotentialProperty ) {
+    this.potential = currentPotentialProperty.value;
+    this.firstPotential = this.potential;
+    var coefficients = [];
     for (var i = 0; i < coefficients.length; i++) {
       coefficients[ i ] = 0.0;
     }
     coefficients[ 0 ] = 1.0;
     this.coefficientsProperty = new Property( coefficients, { propertyID: "coefficients" } );
     this.normalizedProperty = new Property( true, { propertyID: "normalized" } );
-    console.log("first");
-    console.log(coefficients);
-    this.coefficientsProperty.link(function(){console.log("coefficients")});
+    
+    var thisNode = this;
+    
+    var matchEigenvals = function() {
+      var eigenvals = thisNode.potential.eigenvalsProperty.value;
+      var coefficients = thisNode.coefficientsProperty.value;
+      var i;
+      if ( eigenvals.length > coefficients.length ) {
+        for ( i = coefficients.length; i < eigenvals.length; i++ ) {
+          coefficients.push( 0.0 );
+        }
+        thisNode.coefficientsProperty.set( coefficients );
+        thisNode.coefficientsProperty.notifyObserversStatic();
+      }
+      else if ( eigenvals.length < coefficients.length ) {
+        var visibleStates = 0;
+        for ( i = 0; i < eigenvals.length; i++ ) {
+          if ( coefficients[ i ] > 0.0 ) {
+            visibleStates++;
+          }
+        }
+        for ( var j = coefficients.length - 1; j >= eigenvals.length; j-- ) {
+          coefficients.pop();
+        }
+        if ( visibleStates === 0 ) {
+          coefficients[ 0 ] = 1.0;
+        }
+        thisNode.normalize( coefficients );
+      }
+    };
+    
+    this.potential.eigenvalsProperty.link( matchEigenvals );
+    
+    currentPotentialProperty.link( function() {
+      thisNode.potential.eigenvalsProperty.unlink( matchEigenvals );
+      thisNode.potential = currentPotentialProperty.value;
+      thisNode.potential.eigenvalsProperty.link( matchEigenvals );
+    });
   }
   
   return inherit( Object, SuperpositionCoefficients, {
+    
+    reset: function( ) {
+      this.potential = this.firstPotential;
+      this.coefficientsProperty.reset();
+      this.normalizedProperty.reset();
+    },
     
     /**
      * Returns the ith coefficient
@@ -46,8 +88,8 @@ define( function( require ) {
     setCoefficient: function( i, value ) {
       var coefficients = this.coefficientsProperty.value;
       coefficients[ i ] = value;
-      console.log("setCoefficient");
       this.coefficientsProperty.set( coefficients );
+      this.coefficientsProperty.notifyObserversStatic();
       this.normalizedProperty.value = false;
     },
     
@@ -58,24 +100,20 @@ define( function( require ) {
      */
     setOneCoefficient: function( i ) {
       var coefficients = this.coefficientsProperty.value;
-      console.log("before");
-      console.log(coefficients);
       for (var j = 0; j < coefficients.length; j++ ) {
         coefficients[ j ] = 0;
       }
       coefficients[ i ] = 1.0;
       this.coefficientsProperty.set( coefficients );
-      console.log("after");
-      console.log(coefficients);
+      this.coefficientsProperty.notifyObserversStatic();
       this.normalizedProperty.value = true;
     },
     
     /**
      * Normalizes coefficients so the sum of the squared values is 1
      */
-    normalize: function( ) {
+    normalize: function( coefficients ) {
       var sum = 0;
-      var coefficients = this.coefficientsProperty.value;
       for (var i = 0; i < coefficients.length; i++) {
         sum += coefficients[ i ] * coefficients[ i ];
       }
@@ -84,6 +122,7 @@ define( function( require ) {
         coefficients[ j ] = coefficients[ j ] / sum;
       }
       this.coefficientsProperty.value = coefficients;
+      this.coefficientsProperty.notifyObserversStatic();
       this.normalizedProperty.value = true;
     },
     

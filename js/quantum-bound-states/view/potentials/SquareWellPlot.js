@@ -15,6 +15,13 @@ define( function( require ) {
   var QuantumBoundStatesConstants = require( 'QUANTUM_BOUND_STATES/quantum-bound-states/model/QuantumBoundStatesConstants' );
   var Range = require( 'DOT/Range' );
   var Shape = require( 'KITE/Shape' );
+  
+  // strings
+  var heightString = require( 'string!QUANTUM_BOUND_STATES/height-string' );
+  var widthString = require( 'string!QUANTUM_BOUND_STATES/width-string' );
+  var offsetString = require( 'string!QUANTUM_BOUND_STATES/offset-string' );
+  var eVString = require( 'string!QUANTUM_BOUND_STATES/electron-volt' );
+  var nmString = require( 'string!QUANTUM_BOUND_STATES/nanometer' );
 
   var MAX_X = QuantumBoundStatesConstants.XRANGE.max;
   
@@ -47,9 +54,27 @@ define( function( require ) {
       return yToValue( y + QuantumBoundStatesConstants.PROPERTY_INDICATOR_LENGTH / 2 );
     };
     
-    var wellOffsetControl = new PotentialPropertyIndicator( potential.wellOffsetProperty, false, xToValue, getHeight, energyRange );
-    var wellHeightControl =  new PotentialPropertyIndicator( potential.wellHeightProperty, false, xToValue, getHeight, heightRange );
-    var wellWidthControl =  new PotentialPropertyIndicator( potential.wellWidthProperty, true, getWidth, yToValue, widthRange );
+    var wellOffsetControl = new PotentialPropertyIndicator( potential.wellOffsetProperty,
+                                                           false,
+                                                           offsetString,
+                                                           eVString,
+                                                           xToValue,
+                                                           getHeight,
+                                                           energyRange );
+    var wellHeightControl =  new PotentialPropertyIndicator( potential.wellHeightProperty,
+                                                            false,
+                                                            heightString,
+                                                            eVString,
+                                                            xToValue,
+                                                            getHeight,
+                                                            heightRange );
+    var wellWidthControl =  new PotentialPropertyIndicator( potential.wellWidthProperty,
+                                                           true,
+                                                           widthString,
+                                                           nmString,
+                                                           getWidth,
+                                                           yToValue,
+                                                           widthRange );
 
     wellOffsetControl.centerX = valueToX( 0 );
     
@@ -99,7 +124,7 @@ define( function( require ) {
       drawWell();
       wellPath.shape = wellShape;
       wellHeightControl.centerY = valueToY( potential.wellOffsetProperty.value + potential.wellHeightProperty.value );
-      wellWidthControl.centerY = valueToY( (potential.wellOffsetProperty.value + potential.wellHeightProperty.value) / 2 );
+      wellWidthControl.centerY = valueToY( potential.wellOffsetProperty.value + potential.wellHeightProperty.value / 2 );
     });
   }
 

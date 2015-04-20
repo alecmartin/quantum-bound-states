@@ -22,7 +22,7 @@ define( function( require ) {
   var ArrowButton = require( 'SCENERY_PHET/buttons/ArrowButton' );
   var PhetFont = require( 'SCENERY_PHET/PhetFont' );
   var HSlider = require( 'SUN/HSlider' );
-  // var StringUtils = require( 'PHETCOMMON/util/StringUtils' );
+  
   function Slider( options ) {
     var thisNode = this,
       defaultOptions = {
@@ -33,6 +33,7 @@ define( function( require ) {
         tick: { step: 1, minText: '', maxText: '', midTick: true },
         title: '',
         patternValueUnit: '',
+        titleDivisor: 1.0,
         buttonStep: 1,
         rounding: false,
         trackLineWidth: 1.0,
@@ -73,17 +74,24 @@ define( function( require ) {
     
     thisNode.addChild( new Rectangle( 0, 0, options.sliderSize.width, options.sliderSize.height ) );
     //if a title has been set, draw it
-    if(options.title !== '')
-    {
-      this.addChild( new Text( options.title, { centerX: thisNode.width / 2, top: options.titleVerticalOffset, font: new PhetFont( 18 ) } ) );
+    if(options.title !== '') {
+      this.addChild( new Text( options.title, {
+        centerX: thisNode.width / 2,
+        top: options.titleVerticalOffset,
+        font: new PhetFont( 18 )
+      } ) );
     }
 
     var buttonNode, plusButton, minusButton, valueLabel;
     var hSlider = new HSlider( options.property, options.range, options );
-    var hSliderNode = new Node( { children: [ hSlider ], x: (thisNode.width - options.trackSize.width) / 2, bottom: thisNode.height - 0 } );
+    var hSliderNode = new Node( {
+      children: [ hSlider ],
+      x: (thisNode.width - options.trackSize.width) / 2,
+      bottom: thisNode.height - 0
+    } );
     thisNode.addChild( hSliderNode );
 
-    if ( options.tick && options.tick.step ) {
+    /*if ( options.tick && options.tick.step ) {
       var i = options.range.min;
 
       for ( ; i <= options.range.max; i += options.tick.step ) {
@@ -101,7 +109,15 @@ define( function( require ) {
           hSlider.addMinorTick( i );
         }
       }
-    }
+    }*/
+    hSlider.addMajorTick( options.range.min, new Text( options.tick.minText, {
+      font: options.labelFont,
+      fill: options.labelColor
+    } ) );
+    hSlider.addMajorTick( options.range.max, new Text( options.tick.maxText, {
+      font: options.labelFont,
+      fill: options.labelColor
+    } ) );
 
     if ( options.type === 'button' ) {
       buttonNode = new Node( { y: 0 } );
@@ -112,18 +128,27 @@ define( function( require ) {
       };
       buttonNode.addChild( plusButton = new ArrowButton( 'right', buttonPropertyUpdate( options.buttonStep ), {
         right: thisNode.width - 5,
-        // centerY: 5,
         arrowHeight: options.arrowHeight,
         arrowWidth: options.arrowHeight * Math.sqrt( 3 ) / 2
       } ) );
       buttonNode.addChild( minusButton = new ArrowButton( 'left', buttonPropertyUpdate( -options.buttonStep ), { 
-        left: 5, 
-        // centerY: 15, 
+        left: 5,
         arrowHeight: options.arrowHeight,
         arrowWidth: options.arrowHeight * Math.sqrt( 3 ) / 2
       } ) );
-      buttonNode.addChild( new Rectangle( 0, 0, 90, 22, 5, 5, { fill: '#FFF', stroke: '#000', lineWidth: 1, centerX: thisNode.width / 2, top: 0 } ) );
-      buttonNode.addChild( valueLabel = new Text( '0', { font: options.textFont, fill: options.textColor, centerX: options.width / 2, top: 5 } ) );
+      buttonNode.addChild( new Rectangle( 0, 0, 90, 22, 5, 5, {
+        fill: '#FFF',
+        stroke: '#000',
+        lineWidth: 1,
+        centerX: thisNode.width / 2,
+        top: 0
+      } ) );
+      buttonNode.addChild( valueLabel = new Text( '0', {
+        font: options.textFont,
+        fill: options.textColor,
+        centerX: options.width / 2,
+        top: 5
+      } ) );
       this.addChild( buttonNode );
     }
 
@@ -134,11 +159,7 @@ define( function( require ) {
     options.property.link( function updateProperty( value ) {
       if ( options.type === 'button' ) {
         var text = value;
-        // if ( options.rounding !== false && options.rounding >= 0 ) {
-          // text = options.property.get().toFixed( options.rounding );
-        // }
-        text = options.property.get().toFixed( options.rounding );
-        console.log(text);
+        text = ( options.property.get() / options.titleDivisor ).toFixed( options.rounding );
         valueLabel.text = text + options.patternValueUnit;
         valueLabel.centerX = thisNode.width / 2;
         plusButton.enabled = ( value < options.range.max );

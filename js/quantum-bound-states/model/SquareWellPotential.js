@@ -43,6 +43,7 @@ define( function( require ) {
   return inherit( PotentialWell, SquareWellPotential, {
     
     reset: function( ) {
+      PotentialWell.prototype.reset.call( this );
       this.wellWidthProperty.reset();
       this.wellHeightProperty.reset();
     },
@@ -67,12 +68,14 @@ define( function( require ) {
     getEigenvalues: function() {
       var n = this.groundState;
       var energy = this.getNthEigenvalue( n );
+      var eigenvals = [];
       while ( energy < this.wellHeightProperty.value + this.wellOffsetProperty.value ) {
-        this.eigenvals[n-this.groundState] = energy;
+        eigenvals[ n - this.groundState ] = energy;
         n++;
         energy = this.getNthEigenvalue( n );
       }
-      return this.eigenvals;
+      this.eigenvalsProperty.set( eigenvals );
+      return eigenvals;
     },
   } );
 } );

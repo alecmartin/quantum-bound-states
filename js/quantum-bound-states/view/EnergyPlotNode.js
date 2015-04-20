@@ -8,7 +8,6 @@ define( function( require ) {
   'use strict';
 
   // modules
-  var EnergyLine = require( 'QUANTUM_BOUND_STATES/quantum-bound-states/view/EnergyLine' );
   var HBox = require( 'SCENERY/nodes/HBox' );
   var HStrut = require( 'SUN/HStrut' );
   var inherit = require( 'PHET_CORE/inherit' );
@@ -39,35 +38,6 @@ define( function( require ) {
   function EnergyPlotNode( model, width, height, options ) {
 
     Node.call( this, options );
-    var thisNode = this;
-    
-    var setCoefficient = function( i ) {
-      console.log("calling set");
-      console.log(model.superpositionCoefficientsProperty.value.coefficientsProperty.value);
-      model.setOneCoefficient( i );
-      console.log("after set");
-      console.log(model.superpositionCoefficientsProperty.value.coefficientsProperty.value);
-    };
-    
-    var energyLine;
-    var yPos;
-    var eigenIndex;
-    var energyLineArray = [];
-    function drawEnergyLines() {
-      var eigenVals = model.eigenvalsProperty.value;
-      var yScale = (height - PADDING) / (model.getMaxEnergy() - model.getMinEnergy());
-      for ( var j = 0; j < energyLineArray.length; j++ ) {
-        thisNode.removeChild( energyLineArray[ j ] );
-      }
-      energyLineArray = [];
-      for( var i = eigenVals.length - 1; i >= 0; i-- ){
-        yPos = ( model.getMaxEnergy() - eigenVals[ i ] ) * yScale + PADDING / 2;
-        eigenIndex = i + model.currentPotentialProperty.value.groundState;
-        energyLine = new EnergyLine( model.hoveredEigenstateProperty, setCoefficient, width, eigenIndex, eigenVals[ i ], {x: 50, y: yPos} );
-        background.addChild( energyLine );
-        energyLineArray[ i ] = energyLine;
-      } 
-    }
     
     var i;
     var background = new Rectangle(50, 0, width, height, 0, 0, {fill:'black', stroke: 'white'});
@@ -95,31 +65,15 @@ define( function( require ) {
     var xSpacing = (width  / divisors);
     var xLoc = xSpacing / 2;
     for (i = MIN_X + 0.5; i < divisors + MIN_X; i += 1) {
-      var line = new Line(background.left + xLoc, background.top, background.left+xLoc, background.bottom, {stroke: 'gray'});
+      var line = new Line(background.left + xLoc, background.top, background.left + xLoc, background.bottom, {stroke: 'gray'});
       background.addChild( line );
       xLoc += xSpacing;
     }
 
     //Creating and Positioning Energy Lines
-    /*var setCoefficient = function( i ) {
-      model.setOneCoefficient( i );
-    }
-    var eigenVals = model.eigenvalsProperty.value;
-    var energyLine;  // = new EnergyLine( model.hoveredEigenstateProperty, model.setOneCoeffient, width, 0, 1, {x: 50, y: 50} );
-    var yScale = (height + PADDING) / (model.getMaxEnergy() - model.getMinEnergy());
-    var yPos;
-    var eigenIndex;
-    var energyLineArray = [];
-    for( var i = eigenVals.length - 1; i >= 0; i-- ){
-      yPos = ( model.getMaxEnergy() - eigenVals[ i ] ) * yScale;
-      eigenIndex = i + model.currentPotentialProperty.value.groundState;
-      energyLine = new EnergyLine( model.hoveredEigenstateProperty, setCoefficient, width, eigenIndex, eigenVals[ i ], {x: 50, y: yPos} );
-      background.addChild( energyLine );
-      energyLineArray[ i ] = energyLine;
-    } */
-    drawEnergyLines();
+    //drawEnergyLines();
     
-    var well = new PotentialWellPlot( model, width, height - PADDING, {x: 50, y: PADDING / 2} );
+    var well = new PotentialWellPlot( model, width, height - PADDING, {x: background.left, y: PADDING / 2} );
     background.addChild( well );   
     
     var title = new Text( titleString, {
@@ -160,25 +114,6 @@ define( function( require ) {
       ]
     });
     this.addChild( units );
-
-    var coefficientsProperty = model.getCoefficientsProperty();
-    console.log(coefficientsProperty);
-    coefficientsProperty.link( function() {
-      var coefficients = coefficientsProperty.value;
-      for( var i = 0; i < energyLineArray.length; i++ ){
-        if( coefficients[ i ] !== 0 ){
-          energyLineArray[ i ].setStroke( 'red' );
-        }
-        else {
-          energyLineArray[ i ].setStroke( 'green' );
-        }
-      }
-    });
-    
-    model.eigenvalsProperty.link( function() {
-      console.log("egein");
-      //drawEnergyLines();
-    });
   }
   
   return inherit( Node, EnergyPlotNode );

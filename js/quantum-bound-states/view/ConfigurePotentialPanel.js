@@ -12,14 +12,11 @@ define( function( require ) {
   var inherit = require( 'PHET_CORE/inherit' );
   var PhetFont = require( 'SCENERY_PHET/PhetFont' );
   var Text = require( 'SCENERY/nodes/Text' );
-  var Node = require( 'SCENERY/nodes/Node' );
-  // var PotentialComboBox = require( 'QUANTUM_BOUND_STATES/quantum-bound-states/view/PotentialComboBox' );
   var HBox = require( 'SCENERY/nodes/HBox' );
   var HStrut = require( 'SUN/HStrut' );
   var VStrut = require( 'SUN/VStrut' );
   var Panel = require( 'SUN/Panel' );
   var Range = require( 'DOT/Range' );
-  // var VerticalCheckBoxGroup = require( 'SUN/VerticalCheckBoxGroup' );
   var VBox = require( 'SCENERY/nodes/VBox' );
   var TextPushButton = require( 'SUN/buttons/TextPushButton' );
   var SquareWellPotential = require( 'QUANTUM_BOUND_STATES/quantum-bound-states/model/SquareWellPotential' );
@@ -31,7 +28,7 @@ define( function( require ) {
 
 
   var closeString = require( 'string!QUANTUM_BOUND_STATES/close-string' );
-  var offsetString = require( 'string!QUANTUM_BOUND_STATES/offset-string' );
+  //var offsetString = require( 'string!QUANTUM_BOUND_STATES/offset-string' );
   // var widthString = require( 'string!QUANTUM_BOUND_STATES/width-string' );
   // var heightString = require( 'string!QUANTUM_BOUND_STATES/height-string' );
   // var harmonicString = require( 'string!QUANTUM_BOUND_STATES/harmonic-oscillator' );
@@ -43,15 +40,15 @@ define( function( require ) {
   * @param {QuantumBoundStatesModel} model
   * @constructor
   */
-  function ConfigurePotentialPanel( model) {
+  function ConfigurePotentialPanel( model, options ) {
     // Panel.call( this, options );
     var thisNode = this;
 
     var potentials;
     // optionfont
     var optionFont = {font: new PhetFont( 14 ), fill: "palegoldenrod"};
-    var parent = new Node();
     // var potentialWellInstance = null;
+<<<<<<< HEAD
 
     var potential = model.currentPotentialProperty.value;
     var potentialWellName = potential.name;
@@ -70,6 +67,12 @@ define( function( require ) {
     var harmonicPotentialWidthSlider;
     var squarePotentialHeightSlider;
     var assymetricPotentialHeightSlider;
+=======
+    var potentialWellName = "";
+    var potentialOffsetMin = 0;
+    var potentialOffsetMax = 0;
+    var potentialWellInstance;
+>>>>>>> d5b86657fe9e65af169325f20aa42c2f72e56b17
 
     //boxwidth
     var boxwidth = 240;
@@ -231,15 +234,19 @@ define( function( require ) {
       align: 'left'
     } );
     
+<<<<<<< HEAD
     console.log("configurePotentialVBox defined");
 
     Panel.call( this, configurePotentialVBox, {
+=======
+    options = _.extend( {
+>>>>>>> d5b86657fe9e65af169325f20aa42c2f72e56b17
       fill: 'black',
       stroke: 'white',
       lineWidth: 2,
       top: 5
-    } );
-    this.addChild( parent );
+    }, options );
+    Panel.call( this, configurePotentialVBox, options );
 
     console.log("panel called. wtf?");
 

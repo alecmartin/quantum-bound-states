@@ -30,6 +30,11 @@ define( function( require ) {
   * @constructor
   */
   function PotentialWell( particle, wellOffset, minEnergy, maxEnergy, groundState, name, image ) {
+    this.numPoints = NUM_POINTS;
+    this.eigenstateCache = [];
+    var eigenvals = [];
+    this.eigenvalsProperty = new Property( eigenvals );
+    
     this.particle = particle;
     this.wellOffsetProperty = new Property( wellOffset, { propertyID: "wellOffset" } );
     this.minEnergy = minEnergy; // eV
@@ -37,10 +42,6 @@ define( function( require ) {
     this.groundState = groundState;
     this.name = name;
     this.image = image;
-    
-    this.numPoints = NUM_POINTS;
-    this.eigenstateCache = [];
-    this.eigenvals = [];
     
     this.pointsX = new FastArray( NUM_POINTS );
     var x = MIN_X;
@@ -55,7 +56,6 @@ define( function( require ) {
   }
   
   return inherit( Object, PotentialWell, {
-
     reset: function( ) {
       this.wellOffsetProperty.reset();
     },
@@ -64,10 +64,8 @@ define( function( require ) {
      * Recalculate eigenstates when variables change
      */
     redrawEigenstates: function() {
-      if ( this.groundState ) {
-        this.getEigenvalues();
-        this.eigenstateCache = [];
-      }
+      this.getEigenvalues();
+      this.eigenstateCache = [];
     },
 
     /**
@@ -90,10 +88,10 @@ define( function( require ) {
      * Get the number of eigenstates available
      */
     getNumberOfEigenstates: function() {
-      if ( this.eigenvals.length === 0 ) {
+      if ( this.eigenvalsProperty.value.length === 0 ) {
         this.getEigenvalues();
       }
-      return this.eigenvals.length;
+      return this.eigenvalsProperty.value.length;
     },
     
     /**

@@ -136,12 +136,13 @@ define( function( require ) {
       align: 'left'
     } );
 
-    Panel.call( this, controlPanelLayout, {
+    options = _.extend( {
       fill: 'black',
       stroke: 'white',
       lineWidth: 2,
       top: 5
-    } );
+    }, options );
+    Panel.call( this, controlPanelLayout, options );
   }
   return inherit( Panel, WaveFunctionPlotControls );
 } );

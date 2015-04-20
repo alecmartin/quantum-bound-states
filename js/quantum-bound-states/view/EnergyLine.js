@@ -19,6 +19,7 @@ define( function( require ){
   var Path = require( 'SCENERY/nodes/Path' );
   /**
   * @param {Property} hoveredEigenstateProperty
+  * @param {function} setOneCoefficient
   * @param {number} width
   * @param {number} index
   * @param {number} energy
@@ -46,12 +47,12 @@ define( function( require ){
     this.addInputListener( new ButtonListener( {
       over: function( event ) {
         thisNode.stroke = 'yellow';
-        hoveredEigenstateProperty.value = index;
+        hoveredEigenstateProperty.set( index );
         energyLevelString.visible = true;
       },
       up: function( event ) {
         thisNode.stroke = thisNode.options.stroke;
-        hoveredEigenstateProperty.value = -1;
+        hoveredEigenstateProperty.set( -1 );
         energyLevelString.visible = false;
       },
       down: function( event ){
