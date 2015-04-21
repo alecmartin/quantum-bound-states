@@ -11,6 +11,7 @@ define( function( require ) {
   var AsymmetricPotential = require( 'QUANTUM_BOUND_STATES/quantum-bound-states/model/AsymmetricPotential' );
   var Coulomb1DPotential = require( 'QUANTUM_BOUND_STATES/quantum-bound-states/model/Coulomb1DPotential' );
   var Coulomb3DPotential = require( 'QUANTUM_BOUND_STATES/quantum-bound-states/model/Coulomb3DPotential' );
+  var FastArray = require( 'DOT/dot' ).FastArray;
   var HarmonicOscillatorPotential = require( 'QUANTUM_BOUND_STATES/quantum-bound-states/model/HarmonicOscillatorPotential' );
   var inherit = require( 'PHET_CORE/inherit' );
   var Particle = require( 'QUANTUM_BOUND_STATES/quantum-bound-states/model/Particle' );
@@ -36,6 +37,11 @@ define( function( require ) {
     PropertySet.call( this, {
       hoveredEigenstate: -1,
       currentPotential: squareWell,
+      probabilityDensity: [],
+      realWave: [],
+      imaginaryWave: [],
+      magnitude: [],
+      phase: [],
       
       running: false,
       time: 0.0,
@@ -51,8 +57,29 @@ define( function( require ) {
       showSuperpositionStatePanel: false
       } );
     
-    
     this.superpositionCoefficients = new SuperpositionCoefficients( this.currentPotentialProperty );
+    
+    var thisNode = this;
+    var setWaves = function() {
+      if ( thisNode.showProbDensityProperty.value ) {
+        thisNode.probabilityDensityProperty.set( thisNode.getProbabilityDensity() );
+      }
+      if ( thisNode.showRealProperty.value ) {
+        thisNode.realWaveProperty.set( thisNode.getRealWave( thisNode.time ) );
+      }
+      if ( thisNode.showImaginaryProperty.value ) {
+        thisNode.imaginaryWaveProperty.set( thisNode.getImaginaryWave( thisNode.time ) );
+      }
+      if ( thisNode.showMagnitude ) {
+        thisNode.magnitudeProperty.set( thisNode.getMagnitude() );
+      }
+    };
+    
+    setWaves();
+    
+    for ( var i = 0; i < this.potentials.length; i++ ) {
+      this.potentials[i].eigenvalsProperty.lazyLink( setWaves );
+    }
   }
 
   return inherit( PropertySet, QuantumBoundStatesModel, {
@@ -72,6 +99,15 @@ define( function( require ) {
         }
         else {
           this.time = this.time + dt;
+        }
+        if ( this.showReal ) {
+          this.realWaveProperty.set( this.getRealWave( this.time ) );
+        }
+        if ( this.showImaginary ) {
+          this.imaginaryWaveProperty.set( this.getImaginaryWave( this.time ) );
+        }
+        if ( this.showMagnitude ) {
+          this.magnitudeProperty.set( this.getMagnitude() );
         }
       }
     },
@@ -210,18 +246,20 @@ define( function( require ) {
       var superposition = this.getSubscriptsAndCoefficients();
       var nodeArray = superposition[0];
       var coefficients = superposition[1];
-      var psi = potential.getNthEigenstate( nodeArray[0] );
+      var eigenstate = potential.getNthEigenstate( nodeArray[0] );
       var energy = potential.getNthEigenvalue( nodeArray[0] );
+      var psi = [ eigenstate[0], new FastArray( eigenstate[1].length ) ];
       
       // multiply by the propagator
       for (var l = 0; l < psi[1].length; l++) {
         if (isReal) {
-          psi[1][l] *= Math.cos(-energy * t / QuantumBoundStatesConstants.HBAR);
+          psi[1][l] = eigenstate[1][l] * Math.cos(-energy * t / QuantumBoundStatesConstants.HBAR);
         }
         else {
-          psi[1][l] *= Math.sin(-energy * t / QuantumBoundStatesConstants.HBAR);
+          psi[1][l] = eigenstate[1][l] * Math.sin(-energy * t / QuantumBoundStatesConstants.HBAR);
         }
       }
+      
       // If there's only one selected eigenstate, return the wavefunction
       if (coefficients.length === 1) {
         return psi;
