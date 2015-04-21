@@ -21,7 +21,14 @@ define( function( require ) {
   // constants
   var MIN_X = QuantumBoundStatesConstants.XRANGE.min;
   var MAX_X = QuantumBoundStatesConstants.XRANGE.max;
-
+  
+  // strings
+  var psiString = "Ψ";
+  var titleWFString = require( 'string!QUANTUM_BOUND_STATES/bottom-plot-wf-title' );
+  var titlePDString = require( 'string!QUANTUM_BOUND_STATES/bottom-plot-pd-title' );
+  var positionString = require( 'string!QUANTUM_BOUND_STATES/bottom-plot-position' );
+  
+  
   /**
   * @param {QuantumBoundStatesModel} model
   * @param {number} width
@@ -30,17 +37,12 @@ define( function( require ) {
   */
   function WaveFunctionPlotNode( model, width, height, options ) {
 
-    // strings
-    var psiString = "Ψ";
-    var pd = false;
-    var titleWFString = require( 'string!QUANTUM_BOUND_STATES/bottom-plot-wf-title' );
-    var titlePDString = require( 'string!QUANTUM_BOUND_STATES/bottom-plot-pd-title' );
-    var positionString = require( 'string!QUANTUM_BOUND_STATES/bottom-plot-position' );
-
-
-    Node.call( this, options );
+    var pd = true;
+    
+    Node.call( this );
+    
     //create black background
-    var background = new Rectangle(50,0,width,height,0,0, {fill:'black', stroke: 'white'});
+    var background = new Rectangle( 50, 0, width, height, 0, 0, {fill:'black', stroke: 'white'});
     this.addChild( background );
     
     var divisors = (MAX_X - MIN_X);
@@ -57,8 +59,6 @@ define( function( require ) {
       xLoc += xSpacing;
     }
 
-
-
     // right now default to WFString
     var title = new Text( titleWFString, {
       font: new PhetFont( 18 ),
@@ -69,20 +69,16 @@ define( function( require ) {
     });
     this.addChild( title );
 
-
-    model.showProbDensityProperty.link( function() {
-      if (model.showProbDensityProperty.value) {
-        title.text = titlePDString;
-        pd = true;
-      }
-      else {
-        title.text = titleWFString;
-        pd = false;
-      }
+    var units = new Text( positionString, {
+      font: new PhetFont( 18 ),
+      centerX: background.centerX,
+      y: background.bottom + 40,
+      fill: 'white'
     });
+    this.addChild( units );
 
     // gets the substring for the superposition
-    function superpositionEigenSubString() {
+    var getSuperpositionEigenSubString = function() {
       var arr = model.getSubscriptsAndCoefficients();
       var string = "";
       if(model.isSuperpositionState()){
@@ -97,27 +93,40 @@ define( function( require ) {
         string += psiString + "<sub>" + arr[0][0] + "</sub>(x,t)";
       }
       return string;
-    }
-
-    var units = new Text( positionString, {
-      font: new PhetFont( 18 ),
-      centerX: background.centerX,
-      y: background.bottom + 40,
-      fill: 'white'
-    });
-    this.addChild( units );
+    };
     
-    var eigenSubString =  superpositionEigenSubString();
+    var getHoveredEigenstateString = function( index ) {
+      var string = psiString + "<sub>" + index + "</sub>(x,t)";
+      return pd ? "|" + string + "|<sup>2</sup>" : string ;
+    };
+    
+    var eigenSubString =  getSuperpositionEigenSubString();
     var eigenString = pd ? "|" + eigenSubString + "|<sup>2</sup>" : eigenSubString ;
 
     var eigenText = new SubSupText( eigenString , {
-      font: new PhetFont( 18 ),
+      font: new PhetFont( 22 ),
       fill: "#ff0000",
       right: background.right - 5,
       top: background.top + 5
-    });
+    } );
     this.addChild( eigenText );
-
+    
+    var hoveredEigenText = new SubSupText( getHoveredEigenstateString( -1 ) , {
+      font: new PhetFont( 22 ),
+      fill: "yellow",
+      right: eigenText.right,
+      top: eigenText.bottom + 10,
+      visible: false
+    });
+    this.addChild( hoveredEigenText );
+    
+    var setEigenText = function() {
+      eigenSubString = getSuperpositionEigenSubString();
+      eigenString = pd ? "|" + eigenSubString + "|<sup>2</sup>" : eigenSubString ;
+      eigenText.text = eigenString;
+      eigenText.right = background.right - 5;
+    };
+    
     // Plotting lower graph lines
     var maxEnergy = model.getMaxEnergy();
     var xScale    = function(x) { return (MAX_X + x) * (width / (MAX_X - MIN_X)); };
@@ -154,6 +163,38 @@ define( function( require ) {
       time %= upper;
     };
     // setInterval(step, 30);
+    
+    this.mutate( options );
+    
+    model.showProbDensityProperty.link( function() {
+      if (model.showProbDensityProperty.value) {
+        title.text = titlePDString;
+        pd = true;
+      }
+      else {
+        title.text = titleWFString;
+        pd = false;
+      }
+      title.centerY = background.centerY;
+      
+      setEigenText();
+    } );
+    
+    var superpositionProperty = model.getCoefficientsProperty();
+    superpositionProperty.link( setEigenText );
+    
+    model.hoveredEigenstateProperty.link( function() {
+      var string = getHoveredEigenstateString( model.hoveredEigenstateProperty.value );
+      hoveredEigenText.text = string;
+      hoveredEigenText.right = eigenText.right;
+      if ( model.hoveredEigenstateProperty.value >= 0 ) {
+        hoveredEigenText.visible = true;
+      }
+      else {
+        hoveredEigenText.visible = false;
+      }
+    } );
+    
   }
   return inherit( Node, WaveFunctionPlotNode);
 } );
