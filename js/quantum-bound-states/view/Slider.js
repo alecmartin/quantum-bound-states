@@ -24,6 +24,7 @@ define( function( require ) {
   var HSlider = require( 'SUN/HSlider' );
   
   function Slider( options ) {
+    // console.log("slider init'd");
     var thisNode = this,
       defaultOptions = {
         type: 'simple',
@@ -63,6 +64,7 @@ define( function( require ) {
         titleVerticalOffset: 0
       };
     Node.call( thisNode );
+    // console.log("$!$!$!");
     options = _.extend( {}, defaultOptions, options );
 
     if ( !options.endDrag && options.rounding !== false ) {
