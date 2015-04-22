@@ -46,7 +46,7 @@ define( function( require ) {
 
     // Layout values
     var radioButtonFont = {font: new PhetFont( 14 ), fill: "palegoldenrod"};
-    // var checkBoxFontEnabled = {font: new PhetFont( 12 ), fill: "white"};
+    var checkBoxFontEnabled = {font: new PhetFont( 12 ), fill: "white"};
     var checkBoxFontDisabled = {font: new PhetFont( 12 ), fill: "grey"};
     var boxwidth = 240;
  
@@ -114,12 +114,13 @@ define( function( require ) {
 
         // Grey out type:
         if( probDensitySelected ) {
-          // Make text white
-          checkBoxGroup.children[i].children[0].content._children[0].options.children[0]._fill ='grey';
+          // Make text grey
+          realPartText.mutate( checkBoxFontDisabled );
+          //checkBoxGroup.children[i].children[0].content._children[0].options.children[0]._fill ='grey';
         }
         else {
           //Make text grey
-          checkBoxGroup.children[i].children[0].content._children[0].options.children[0]._fill ='white';
+          //checkBoxGroup.children[i].children[0].content._children[0].options.children[0]._fill ='white';
         }
       }
     } );
