@@ -33,6 +33,7 @@ define( function( require ){
     }, options );
     Line.call( this, 0, 0, width, 0 );
     var thisNode = this;
+    this.index = index;
     
     // touch area    
     this.touchArea = Shape.rectangle( 0, -this.options.lineWidth * 2, width, this.options.lineWidth * 2 );
@@ -47,7 +48,7 @@ define( function( require ){
     this.addInputListener( new ButtonListener( {
       over: function( event ) {
         thisNode.stroke = 'yellow';
-        hoveredEigenstateProperty.set( index );
+        hoveredEigenstateProperty.set( thisNode.index );
         energyLevelString.visible = true;
       },
       up: function( event ) {
@@ -56,7 +57,7 @@ define( function( require ){
         energyLevelString.visible = false;
       },
       down: function( event ){
-        setOneCoefficient( index );
+        setOneCoefficient( thisNode.index );
       }
     } ) );
     
@@ -68,6 +69,10 @@ define( function( require ){
     setStroke: function( color ) {
       this.options.stroke = color;
       this.stroke = color;
+    },
+    
+    setIndex: function( index ) {
+      this.index = index;
     }
 
   } );
