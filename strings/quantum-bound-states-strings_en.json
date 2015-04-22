@@ -14,7 +14,11 @@
 
   "bottom-chart-particle-mass" : "Particle Mass",
 
+  "apply-string": "Apply",
+  "clear-string": "Clear",
   "close-string" : "Close",
+  "normalize-string": "Normalize",
+
   "width-string" : "Width",
   "height-string" : "Height",
   "offset-string" : "Offset",
@@ -41,4 +45,8 @@
   "electron-volt": "eV",
   "nanometer": "nm",
   "omega": "Ï‰"
+  
+  "superpostion-state-title-string": "Superposition State",
+  "superposition-state-instructions-string": "Create a superposition state by setting coefficients, such that:<br>Î(x) = c<sub>1</subÎ<sub>1</sub> + ..."
+
 }
