@@ -42,6 +42,8 @@ define( function( require ) {
       imaginaryWave: [],
       magnitude: [],
       phase: [],
+      hoveredProbabilityDensity: [],
+      hoveredRealWave: [],
       
       running: false,
       time: 0.0,
@@ -80,6 +82,19 @@ define( function( require ) {
     for ( var i = 0; i < this.potentials.length; i++ ) {
       this.potentials[i].eigenvalsProperty.lazyLink( setWaves );
     }
+    
+    this.hoveredEigenstateProperty.lazyLink( function() {
+      if ( thisNode.hoveredEigenstateProperty.value !== -1 ) {
+        var potential = thisNode.currentPotentialProperty.value;
+        var eigenstate = potential.getNthEigenstate( thisNode.hoveredEigenstateProperty.value );
+        thisNode.hoveredRealWaveProperty.set( eigenstate );
+        var probability = [ eigenstate[ 0 ], new FastArray( eigenstate[ 1 ].length ) ];
+        for ( var i = 0; i < eigenstate[ 1 ].length; i++ ) {
+          probability[ 1 ][ i ] = eigenstate[ 1 ][ i ] * eigenstate[ 1 ][ i ];
+        }
+        thisNode.hoveredProbabilityDensityProperty.set( probability );
+      }
+    } );
   }
 
   return inherit( PropertySet, QuantumBoundStatesModel, {
