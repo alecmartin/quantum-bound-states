@@ -51,7 +51,7 @@ define( function( require ) {
       title: "",
       sliderSize: new Dimension2( 200, 80 ),
       property: particleMassProperty,
-      patternValueUnit: " mₑ",
+      patternValueUnit: "mₑ",
       titleDivisor: QuantumBoundStatesConstants.ELECTRON_MASS,
       rounding: 2,
       range: new Range( particleMassMin, particleMassMax ),
