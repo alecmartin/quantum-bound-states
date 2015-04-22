@@ -164,12 +164,16 @@ define( function( require ) {
       console.log("assym slider initd");
       //1D Coulomb offset
       // potential = potentials[2];
+      console.log("1d coulomb slider:");
+      console.log(potentials[2]);
       coulomb3DPotentialOffsetSlider = new Slider( 
         sliderProperties( potentials[2].wellOffsetProperty, potentials[2].minEnergy, potentials[2].maxEnergy )
         );
       console.log("1d coulomb slider initd");
       //3D Coulomb offset
       // potential = potentials[3];
+      console.log("3d coulomb slider:");
+      console.log(potentials[3]);
       coulomb1DPotentialOffsetSlider = new Slider( 
         sliderProperties( potentials[3].wellOffsetProperty, potentials[3].minEnergy, potentials[3].maxEnergy )
         );
@@ -335,7 +339,7 @@ define( function( require ) {
       potentialWellName = model.currentPotentialProperty.name;
       // maxEnergy = model.getMaxEnergy();
       // yScale = height / (maxEnergy - model.getMinEnergy());
-      console.log(potential);
+      // console.log(potential);
       setPotentialWellProperties();
     } );
 
