@@ -162,7 +162,7 @@ define( function( require ) {
       if ( options.type === 'button' ) {
         var text = value;
         text = ( options.property.get() / options.titleDivisor ).toFixed( options.rounding );
-        valueLabel.text = text + options.patternValueUnit;
+        valueLabel.text = text + " " + options.patternValueUnit;
         valueLabel.centerX = thisNode.width / 2;
         plusButton.enabled = ( value < options.range.max );
         minusButton.enabled = ( value > options.range.min );
