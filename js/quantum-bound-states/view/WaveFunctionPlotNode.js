@@ -153,7 +153,7 @@ define( function( require ) {
     };
 
     var currentLine = -1; // at the beginning we have no plotted path
-    model.realWaveProperty.link( function() {
+    /*model.realWaveProperty.link( function() {
       if (currentLine !== -1) {
           plot.removeChild(currentLine);
       }
@@ -161,7 +161,7 @@ define( function( require ) {
       var newPath = plotFunction(points, currentLine);
       plot.addChild(newPath);
       currentLine = newPath;
-    });
+    });*/
 
     this.mutate( options );
 

@@ -59,7 +59,7 @@ define( function( require ) {
         right: tick.left - 5,
         centerY: yLoc,
         font: new PhetFont( 12 ),
-        fill: 'white'} )
+        fill: 'white'} );
       tickTextArray.unshift( tickText );
       this.addChild( tickText );
       yLoc += ySpacing;
