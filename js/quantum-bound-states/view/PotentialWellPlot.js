@@ -41,6 +41,8 @@ define( function( require ) {
     var yScale = height / (maxEnergy - model.getMinEnergy());
     var potential = model.currentPotentialProperty.value;
     var coefficientsProperty = model.getCoefficientsProperty();
+    var timeProperty = model.timeProperty;
+    var runningProperty = model.runningProperty;
     
     // convert a value in nm to a pixel value
     var valueToX = function( x ) {
@@ -130,11 +132,11 @@ define( function( require ) {
     drawEnergyLines();
     this.addChild( energyLineNode );
     
-    var squareWellPlot = new SquareWellPlot( model.potentials[ 0 ], valueToX, valueToY, xToValue, yToValue );
-    var asymmetricWellPlot = new AsymmetricWellPlot( model.potentials[ 1 ], valueToX, valueToY, xToValue, yToValue );
-    var coulomb1DWellPlot = new CoulombWellPlot( model.potentials[ 2 ], valueToX, valueToCoulombY, xToValue, yToCoulombValue );
-    var coulomb3DWellPlot = new CoulombWellPlot( model.potentials[ 3 ], valueToX, valueToCoulombY, xToValue, yToCoulombValue );
-    var harmonicOscillatorWellPlot = new HarmonicOscillatorWellPlot( model.getParticleMassProperty(), model.potentials[ 4 ], valueToX, valueToY, xToValue, yToValue );
+    var squareWellPlot = new SquareWellPlot( model.potentials[ 0 ], timeProperty, runningProperty, valueToX, valueToY, xToValue, yToValue );
+    var asymmetricWellPlot = new AsymmetricWellPlot( model.potentials[ 1 ], timeProperty, runningProperty, valueToX, valueToY, xToValue, yToValue );
+    var coulomb1DWellPlot = new CoulombWellPlot( model.potentials[ 2 ], timeProperty, runningProperty, valueToX, valueToCoulombY, xToValue, yToCoulombValue );
+    var coulomb3DWellPlot = new CoulombWellPlot( model.potentials[ 3 ], timeProperty, runningProperty, valueToX, valueToCoulombY, xToValue, yToCoulombValue );
+    var harmonicOscillatorWellPlot = new HarmonicOscillatorWellPlot( model.getParticleMassProperty(), model.potentials[ 4 ], timeProperty, runningProperty, valueToX, valueToY, xToValue, yToValue );
     this.addChild( squareWellPlot );
     this.addChild( asymmetricWellPlot );
     this.addChild( coulomb1DWellPlot );

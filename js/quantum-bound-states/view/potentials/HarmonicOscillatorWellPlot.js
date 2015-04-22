@@ -27,13 +27,15 @@ define( function( require ) {
   /**
    * @param {Property} particleMassProperty
    * @param {HarmonicOscillatorPotential} potential
+   * @param {Property} timeProperty
+   * @param {Property} runningProperty
    * @param {function} valueToX
    * @param {function} valueToY
    * @param {function} xToValue
    * @param {function} yToValue
    * @constructor
    */
-  function HarmonicOscillatorWellPlot( particleMassProperty, potential, valueToX, valueToY, xToValue, yToValue, options ) {
+  function HarmonicOscillatorWellPlot( particleMassProperty, potential, timeProperty, runningProperty, valueToX, valueToY, xToValue, yToValue, options ) {
 
     Node.call( this, options );
     var thisNode = this;
@@ -60,6 +62,8 @@ define( function( require ) {
     };
     
     var wellOffsetControl = new PotentialPropertyIndicator( potential.wellOffsetProperty,
+                                                           timeProperty,
+                                                           runningProperty,
                                                            false,
                                                            offsetString,
                                                            eVString,
@@ -67,6 +71,8 @@ define( function( require ) {
                                                            getOffset,
                                                            energyRange );
     var wellFrequencyControl =  new PotentialPropertyIndicator( potential.frequencyProperty,
+                                                               timeProperty,
+                                                               runningProperty,
                                                                true,
                                                                frequencyString,
                                                                fsString,

@@ -19,9 +19,11 @@ define( function( require ){
   * @param {min: number, max: number} range
   * @constructor
   */
-  function PotentialPropertyDragHandler( potentialProperty, isHorizontal, xToValue, yToValue, range ){
+  function PotentialPropertyDragHandler( potentialProperty, timeProperty, runningProperty, isHorizontal, xToValue, yToValue, range ){
     var clickXOffset; // x-offset between initial click and thumb's origin
     var clickYOffset; // y-offset between initial click and thumb's origin
+    var isRunning;
+    console.log(runningProperty);
     SimpleDragHandler.call( this, {
       
       allowTouchSnag: true,
@@ -30,6 +32,9 @@ define( function( require ){
       start: function( event ) {
         clickXOffset = event.currentTarget.globalToParentPoint( event.pointer.point ).x - event.currentTarget.x;
         clickYOffset = event.currentTarget.globalToParentPoint( event.pointer.point ).y - event.currentTarget.y;
+        isRunning = runningProperty.value;
+        runningProperty.set( false );
+        timeProperty.set( 0.0 );
       },
       
       drag: function( event ) {
@@ -49,6 +54,10 @@ define( function( require ){
           energy = Util.clamp( energy, range.min, range.max );
           potentialProperty.set( energy );
         }
+      },
+      
+      end: function( event ) {
+        runningProperty.set( isRunning );
       }
     } );
   }

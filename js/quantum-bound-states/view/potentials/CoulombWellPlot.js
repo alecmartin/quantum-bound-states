@@ -25,13 +25,15 @@ define( function( require ) {
 
   /**
    * @param {CoulombPotential} potential
+   * @param {Property} timeProperty
+   * @param {Property} runningProperty
    * @param {function} valueToX
    * @param {function} valueToY
    * @param {function} xToValue
    * @param {function} yToValue
    * @constructor
    */
-  function CoulombWellPlot( potential, valueToX, valueToY, xToValue, yToValue, options ) {
+  function CoulombWellPlot( potential, timeProperty, runningProperty, valueToX, valueToY, xToValue, yToValue, options ) {
 
     Node.call( this, options );
     var thisNode = this;
@@ -45,6 +47,8 @@ define( function( require ) {
     };
     
     var wellOffsetControl = new PotentialPropertyIndicator( potential.wellOffsetProperty,
+                                                           timeProperty,
+                                                           runningProperty,
                                                            false,
                                                            offsetString,
                                                            eVString,

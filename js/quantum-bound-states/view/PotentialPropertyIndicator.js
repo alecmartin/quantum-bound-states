@@ -19,6 +19,8 @@ define( function( require ){
   
   /**
   * @param {Property} potentialProperty
+  * @param {Property} timeProperty
+  * @param {Property} runningProperty
   * @param {boolean} isHorizontal
   * @param {string} propertyString
   * @param {string} unitString
@@ -27,7 +29,7 @@ define( function( require ){
   * @param {min: number, max: number} range
   * @constructor
   */
-  function PotentialPropertyIndicator( potentialProperty, isHorizontal, propertyString, unitString, xToValue, yToValue, range, options ){
+  function PotentialPropertyIndicator( potentialProperty, timeProperty, runningProperty, isHorizontal, propertyString, unitString, xToValue, yToValue, range, options ){
     var rotation = 0;
     if ( !isHorizontal ) {
       rotation = Math.PI / 2;
@@ -76,7 +78,13 @@ define( function( require ){
       }
     } ) );
     
-    this.addInputListener( new PotentialPropertyDragHandler( potentialProperty, isHorizontal, xToValue, yToValue, range ) );
+    this.addInputListener( new PotentialPropertyDragHandler( potentialProperty,
+                                                            timeProperty,
+                                                            runningProperty,
+                                                            isHorizontal,
+                                                            xToValue,
+                                                            yToValue,
+                                                            range ) );
   }
   
   return inherit( ArrowNode, PotentialPropertyIndicator );
