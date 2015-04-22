@@ -137,9 +137,8 @@ define( function( require ) {
     var tstep       = 1;
     var currentLine = -1; // at the beginning we have no plotted path
     var plot        = this;
-    var step = function() {
+    model.realWaveProperty.link( function() {
       if (currentLine !== -1) {
-          console.log('here');
           plot.removeChild(currentLine);
       }
       var points = model.getRealWave(time);
@@ -148,7 +147,7 @@ define( function( require ) {
       // iterate over all points and generate our full shape
       // this part takes a while so we only grab every 10th point (good enough)
       // reduction: 1344 points -> 134 points
-      for (var j = 1; j < points[0].length; j += 10) {
+      for (var j = 1; j < points[0].length; j += 20) {
           shape.lineTo(xScale(points[0][j]), yScale(points[1][j]));
       }
       var newPath = new Path(shape, {
@@ -160,9 +159,8 @@ define( function( require ) {
       plot.addChild(newPath);
       currentLine = newPath;
       time += tstep;
-      time %= upper;
-    };
-    // setInterval(step, 30);
+      //time %= upper;
+    });
     
     this.mutate( options );
     
