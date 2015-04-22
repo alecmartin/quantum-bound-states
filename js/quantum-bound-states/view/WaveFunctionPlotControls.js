@@ -46,7 +46,6 @@ define( function( require ) {
 
     // Layout values
     var radioButtonFont = {font: new PhetFont( 14 ), fill: "palegoldenrod"};
-    var checkBoxFontEnabled = {font: new PhetFont( 12 ), fill: "white"};
     var checkBoxFontDisabled = {font: new PhetFont( 12 ), fill: "grey"};
     var boxwidth = 240;
  
@@ -112,15 +111,20 @@ define( function( require ) {
         // containing the checkbox we need to manipulate as its only element.
         checkBoxGroup.children[i].children[0].enabled = !probDensitySelected;
 
-        // Grey out type:
+        // Change text color with checkboxes:
         if( probDensitySelected ) {
-          // Make text grey
-          realPartText.mutate( checkBoxFontDisabled );
-          //checkBoxGroup.children[i].children[0].content._children[0].options.children[0]._fill ='grey';
+          // If a checkbox is disabled, make corresponding text grey
+          realPartText.fill = "grey";
+          imaginaryPartText.fill = "grey";
+          magnitudeText.fill = "grey";
+          phaseText.fill = "grey";
         }
         else {
-          //Make text grey
-          //checkBoxGroup.children[i].children[0].content._children[0].options.children[0]._fill ='white';
+          // If a checkbox is enabled, make corresponding text white
+          realPartText.fill = "white";
+          imaginaryPartText.fill = "white";
+          magnitudeText.fill = "white";
+          phaseText.fill = "white";
         }
       }
     } );
