@@ -23,6 +23,7 @@ define( function( require ) {
   var MIN_X = QuantumBoundStatesConstants.XRANGE.min;
   var MAX_X = QuantumBoundStatesConstants.XRANGE.max;
   var PADDING = 10;
+  var TICK_SPACING = 5;
 
   // strings
   var titleString = require( 'string!QUANTUM_BOUND_STATES/energy-plot-title' );
@@ -40,7 +41,7 @@ define( function( require ) {
     Node.call( this, options );
     
     var i;
-    var background = new Rectangle(50, 0, width, height, 0, 0, {fill:'black', stroke: 'white'});
+    var background = new Rectangle( 50, 0, width, height, 0, 0, { fill:'black', stroke: 'white' } );
     var backgroundClipArea = background.createRectangleShape();
     background.setClipArea( backgroundClipArea );
     this.addChild( background );
@@ -49,14 +50,18 @@ define( function( require ) {
     var ySpacing = (height - PADDING) / 4;
     var tickLength = 5;
     var yLoc = PADDING / 2;
-    for (i = model.getMaxEnergy(); i >= model.getMinEnergy(); i -= 5) {
-      var tick = new Line(background.left, yLoc, background.left - tickLength, yLoc, {stroke: 'white'});
+    var tickTextArray = [];
+    var tick;
+    for (i = model.getMaxEnergy(); i >= model.getMinEnergy(); i -= TICK_SPACING) {
+      tick = new Line(background.left, yLoc, background.left - tickLength, yLoc, {stroke: 'white'});
       this.addChild( tick );
-      this.addChild( new Text( i.toString(), {
+      var tickText = new Text( i.toString(), {
         right: tick.left - 5,
         centerY: yLoc,
         font: new PhetFont( 12 ),
-        fill: 'white'} ) );
+        fill: 'white'} )
+      tickTextArray.unshift( tickText );
+      this.addChild( tickText );
       yLoc += ySpacing;
     }
     
@@ -114,6 +119,15 @@ define( function( require ) {
       ]
     });
     this.addChild( units );
+    
+    model.currentPotentialProperty.lazyLink( function() {
+      var energy = model.getMinEnergy();
+      for ( var i = 0; i < tickTextArray.length; i++ ) {
+        tickTextArray[ i ].text = energy.toString();
+        tickTextArray[ i ].right = tick.left - 5;
+        energy += TICK_SPACING;
+      }
+    } );
   }
   
   return inherit( Node, EnergyPlotNode );

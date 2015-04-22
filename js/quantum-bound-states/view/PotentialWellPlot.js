@@ -106,6 +106,7 @@ define( function( require ) {
           energyLineArray[ i ].y = yPos;
           energyLineArray[ i ].visible = true;
           energyLineArray[ i ].setIndex( eigenIndex );
+          energyLineArray[ i ].setEnergy( eigenvals[ i ] );
         }
         else {
           energyLine = new EnergyLine( model.hoveredEigenstateProperty,

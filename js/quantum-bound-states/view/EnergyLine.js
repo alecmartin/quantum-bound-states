@@ -34,27 +34,28 @@ define( function( require ){
     Line.call( this, 0, 0, width, 0 );
     var thisNode = this;
     this.index = index;
+    this.energy = energy;
     
     // touch area    
     this.touchArea = Shape.rectangle( 0, -this.options.lineWidth * 2, width, this.options.lineWidth * 2 );
     this.addChild( new Path( this.touchArea ) );
 
     //label on energy line
-    var textString = 'E <sub>' + index + '</sub> = '  + energy.toFixed( 2 );
-    var energyLevelString = new SubSupText( textString, { font: new PhetFont( 14 ), fill: 'yellow', visible: false, bottom: this.top + 2 });
-    this.addChild( energyLevelString );
+    var textString = 'E <sub>' + this.index + '</sub> = '  + this.energy.toFixed( 2 );
+    this.energyLevelString = new SubSupText( textString, { font: new PhetFont( 14 ), fill: 'yellow', visible: false, bottom: this.top + 2 });
+    this.addChild( this.energyLevelString );
     
     // highlight on pointer over
     this.addInputListener( new ButtonListener( {
       over: function( event ) {
         thisNode.stroke = 'yellow';
         hoveredEigenstateProperty.set( thisNode.index );
-        energyLevelString.visible = true;
+        thisNode.energyLevelString.visible = true;
       },
       up: function( event ) {
         thisNode.stroke = thisNode.options.stroke;
         hoveredEigenstateProperty.set( -1 );
-        energyLevelString.visible = false;
+        thisNode.energyLevelString.visible = false;
       },
       down: function( event ){
         setOneCoefficient( thisNode.index );
@@ -73,6 +74,14 @@ define( function( require ){
     
     setIndex: function( index ) {
       this.index = index;
+      var textString = 'E <sub>' + this.index + '</sub> = '  + this.energy.toFixed( 2 );
+      this.energyLevelString.text = textString;
+    },
+    
+    setEnergy: function( energy ) {
+      this.energy = energy;
+      var textString = 'E <sub>' + this.index + '</sub> = '  + this.energy.toFixed( 2 );
+      this.energyLevelString.text = textString;
     }
 
   } );
