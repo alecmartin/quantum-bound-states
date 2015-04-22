@@ -17,6 +17,7 @@ define( function( require ) {
   var VStrut = require( 'SUN/VStrut' );
   var Panel = require( 'SUN/Panel' );
   var Range = require( 'DOT/Range' );
+  var Rectangle = require( 'SCENERY/nodes/Rectangle' );
   var VBox = require( 'SCENERY/nodes/VBox' );
   var TextPushButton = require( 'SUN/buttons/TextPushButton' );
   var SquareWellPotential = require( 'QUANTUM_BOUND_STATES/quantum-bound-states/model/SquareWellPotential' );
@@ -25,7 +26,8 @@ define( function( require ) {
   var Coulomb3DPotential = require( 'QUANTUM_BOUND_STATES/quantum-bound-states/model/Coulomb3DPotential' );
   var AsymmetricPotential = require( 'QUANTUM_BOUND_STATES/quantum-bound-states/model/AsymmetricPotential' );
   var Slider = require( 'QUANTUM_BOUND_STATES/quantum-bound-states/view/Slider' );
-
+  var QuantumBoundStatesConstants = require( 'QUANTUM_BOUND_STATES/quantum-bound-states/model/QuantumBoundStatesConstants' );
+  
 
   var closeString = require( 'string!QUANTUM_BOUND_STATES/close-string' );
   var offsetString = require( 'string!QUANTUM_BOUND_STATES/offset-string' );
@@ -55,6 +57,8 @@ define( function( require ) {
     var widthHBox;
     var heightHBox;
 
+    var wellWidthRange = QuantumBoundStatesConstants.WELL_WIDTH_RANGE;
+    var wellHeightRange = QuantumBoundStatesConstants.WELL_HEIGHT_RANGE;
     //Sliders, so many sliders
     var squarePotentialOffsetSlider;
     var assymetricPotentialOffsetSlider;
@@ -67,9 +71,10 @@ define( function( require ) {
     var squarePotentialHeightSlider;
     var assymetricPotentialHeightSlider;
     var potentialWellName = "";
-    var potentialOffsetMin = 0;
-    var potentialOffsetMax = 0;
-    var potentialWellInstance;
+    // var potentialOffsetMin = 0;
+    // var potentialOffsetMax = 0;
+    // var potentialWellInstance;
+    var configurePotentialVBox;
 
 
     //boxwidth
@@ -116,7 +121,7 @@ define( function( require ) {
       // titleVerticalOffset: -10,
       tick: { step: 0.1, minText: String(rangeMin), maxText: String(rangeMax), midTick: false }
     };
-    console.log("finished");
+    // console.log("finished");
     return sliderProperties;
   };
 
@@ -129,27 +134,46 @@ define( function( require ) {
       // var potential;
       //square offset
       // potential = potentials[0];
-      // console.log(potentials);
-      // console.log("$$$$$$$$$$$$$$$$$");
+      console.log(potentials);
+      console.log("$$$$$$$$$$$$$$$$$");
       // console.log(potential.minEnergy);
       // console.log(potential.minEnergy.value); //undefined
       // var offsetProperty  = potentials[0].wellOffsetProperty; 
+    //   var squarePotentialWidthSlider;
+    // var assymetricPotentialWidthSlider;
+    // var harmonicPotentialWidthSlider;
       squarePotentialOffsetSlider = new Slider( 
         sliderProperties( potentials[0].wellOffsetProperty, potentials[0].minEnergy, potentials[0].maxEnergy )
         );
-      // console.log("square slider initd");
+      squarePotentialWidthSlider = new Slider( 
+        sliderProperties( potentials[0].wellWidthProperty, wellWidthRange.min, wellWidthRange.max )
+        );
+      squarePotentialHeightSlider = new Slider( 
+        sliderProperties( potentials[0].wellHeightProperty, wellHeightRange.min, wellHeightRange.max )
+        );
+      console.log("square slider initd");
       assymetricPotentialOffsetSlider = new Slider( 
         sliderProperties( potentials[1].wellOffsetProperty, potentials[1].minEnergy, potentials[1].maxEnergy )
+        );
+      assymetricPotentialWidthSlider = new Slider( 
+        sliderProperties( potentials[1].wellWidthProperty, wellWidthRange.min, wellWidthRange.max )
+        );
+      assymetricPotentialHeightSlider = new Slider( 
+        sliderProperties( potentials[1].wellHeightProperty, wellHeightRange.min, wellHeightRange.max )
         );
       console.log("assym slider initd");
       //1D Coulomb offset
       // potential = potentials[2];
+      console.log("1d coulomb slider:");
+      console.log(potentials[2]);
       coulomb3DPotentialOffsetSlider = new Slider( 
         sliderProperties( potentials[2].wellOffsetProperty, potentials[2].minEnergy, potentials[2].maxEnergy )
         );
       console.log("1d coulomb slider initd");
       //3D Coulomb offset
       // potential = potentials[3];
+      console.log("3d coulomb slider:");
+      console.log(potentials[3]);
       coulomb1DPotentialOffsetSlider = new Slider( 
         sliderProperties( potentials[3].wellOffsetProperty, potentials[3].minEnergy, potentials[3].maxEnergy )
         );
@@ -159,64 +183,111 @@ define( function( require ) {
       harmonicPotentialOffsetSlider = new Slider( 
         sliderProperties( potentials[4].wellOffsetProperty, potentials[4].minEnergy, potentials[4].maxEnergy )
         );
+      harmonicPotentialWidthSlider = new Slider( 
+        sliderProperties( potentials[4].frequencyProperty, wellWidthRange.min, wellWidthRange.max )
+        );
       console.log("harmonic slider initd");
     };
 
     init();
-    console.log("init finished");
 
-    // var buildHBox = function(content){
-    //   return new HBox( { children: [ new HStrut( 10 ), new VStrut( 10 ), content, new HStrut( 15 ) ] } );
-    // };
+    var width = squarePotentialOffsetSlider.width;
+    var height = squarePotentialOffsetSlider.height;
+    var offsetSliderRectangle = new Rectangle(0, 0, width, height, 0, 0, {fill:'black', stroke: 'black'});
+    offsetSliderRectangle.addChild( squarePotentialOffsetSlider );
+    offsetSliderRectangle.addChild( assymetricPotentialOffsetSlider );
+    offsetSliderRectangle.addChild( coulomb1DPotentialOffsetSlider );
+    offsetSliderRectangle.addChild( squarePotentialOffsetSlider );
+    offsetSliderRectangle.addChild( harmonicPotentialOffsetSlider );
+    var widthSliderRectangle = new Rectangle(0, 0, width, height, 0, 0, {fill:'black', stroke: 'black'});
+    widthSliderRectangle.addChild( squarePotentialWidthSlider );
+    widthSliderRectangle.addChild( assymetricPotentialWidthSlider );
+    widthSliderRectangle.addChild( harmonicPotentialWidthSlider );
+    var heightSliderRectangle = new Rectangle(0, 0, width, height, 0, 0, {fill:'black', stroke: 'black'});
+    heightSliderRectangle.addChild( squarePotentialHeightSlider );
+    heightSliderRectangle.addChild( assymetricPotentialHeightSlider );
 
     offsetHBox = new HBox( { children: [ new HStrut( 10 ), new VStrut( 10 ),
-        squarePotentialOffsetSlider,
-        assymetricPotentialOffsetSlider,
-        coulomb1DPotentialOffsetSlider,
-        coulomb3DPotentialOffsetSlider,
-        harmonicPotentialOffsetSlider,
+        offsetSliderRectangle,
+        new HStrut( 15 ) ] } );
+    widthHBox = new HBox( { children: [ new HStrut( 10 ), new VStrut( 10 ),
+        widthSliderRectangle,
+        new HStrut( 15 ) ] } );
+    heightHBox = new HBox( { children: [ new HStrut( 10 ), new VStrut( 10 ),
+        heightSliderRectangle,
         new HStrut( 15 ) ] } );
 
     var setPotentialWellProperties = function(){
       
       if ( potential instanceof SquareWellPotential ) {
+        // offsetHBox = buildHBox(squarePotentialOffsetSlider);
+        // console.log(squarePotentialOffsetSlider);
         squarePotentialOffsetSlider.visible = true;
+        squarePotentialWidthSlider.visible = true;
+        squarePotentialHeightSlider.visible = true;
         assymetricPotentialOffsetSlider.visible = false;
+        assymetricPotentialWidthSlider.visible = false;
+        assymetricPotentialHeightSlider.visible = false;
         coulomb1DPotentialOffsetSlider.visible = false;
         coulomb3DPotentialOffsetSlider.visible = false;
         harmonicPotentialOffsetSlider.visible = false;
+        harmonicPotentialWidthSlider.visible = false;
+
+
       }
       else if ( potential instanceof AsymmetricPotential ) {
-        // console.log("assym running");
+        // offsetHBox = buildHBox(assymetricPotentialOffsetSlider);
+        // console.log(assymetricPotentialOffsetSlider);
         squarePotentialOffsetSlider.visible = false;
+        squarePotentialWidthSlider.visible = false;
+        squarePotentialHeightSlider.visible = false;
         assymetricPotentialOffsetSlider.visible = true;
+        assymetricPotentialWidthSlider.visible = true;
+        assymetricPotentialHeightSlider.visible = true;
         coulomb1DPotentialOffsetSlider.visible = false;
         coulomb3DPotentialOffsetSlider.visible = false;
         harmonicPotentialOffsetSlider.visible = false;
+        harmonicPotentialWidthSlider.visible = false;
       }
       else if ( potential instanceof Coulomb1DPotential ) {
         // offsetHBox = buildHBox(coulomb1DPotentialOffsetSlider);
         squarePotentialOffsetSlider.visible = false;
+        squarePotentialWidthSlider.visible = false;
+        squarePotentialHeightSlider.visible = false;
+
         assymetricPotentialOffsetSlider.visible = false;
+        assymetricPotentialWidthSlider.visible = false;
+        assymetricPotentialHeightSlider.visible = false;
         coulomb1DPotentialOffsetSlider.visible = true;
         coulomb3DPotentialOffsetSlider.visible = false;
         harmonicPotentialOffsetSlider.visible = false;
+        harmonicPotentialWidthSlider.visible = false;
       }
       else if ( potential instanceof Coulomb3DPotential ) {
         // offsetHBox = buildHBox(coulomb3DPotentialOffsetSlider);
         squarePotentialOffsetSlider.visible = false;
+        squarePotentialWidthSlider.visible = false;
+        squarePotentialHeightSlider.visible = false;
         assymetricPotentialOffsetSlider.visible = false;
+        assymetricPotentialWidthSlider.visible = false;
+        assymetricPotentialHeightSlider.visible = false;
         coulomb1DPotentialOffsetSlider.visible = false;
         coulomb3DPotentialOffsetSlider.visible = true;
         harmonicPotentialOffsetSlider.visible = false;
+        harmonicPotentialWidthSlider.visible = false;
       }
       else if ( potential instanceof HarmonicOscillatorPotential ) {
         // offsetHBox = buildHBox(harmonicPotentialOffsetSlider);
         squarePotentialOffsetSlider.visible = false;
+        squarePotentialWidthSlider.visible = false;
+        squarePotentialHeightSlider.visible = false;
         assymetricPotentialOffsetSlider.visible = false;
+        assymetricPotentialWidthSlider.visible = false;
+        assymetricPotentialHeightSlider.visible = false;
         coulomb1DPotentialOffsetSlider.visible = false;
         coulomb3DPotentialOffsetSlider.visible = false;
         harmonicPotentialOffsetSlider.visible = true;
+        harmonicPotentialWidthSlider.visible = true;
       }
     };
     
@@ -225,13 +296,16 @@ define( function( require ) {
 
 
     // var offsetHBox = new HBox( { children: [ new HStrut( 10 ), new VStrut( 10 ), squarePotentialOffsetSlider, new HStrut( 15 ) ] } );
-
-    var configurePotentialVBox = new VBox( {
+    configurePotentialVBox = new VBox( {
       children: [
       new HBox( { children: [ new HStrut( boxwidth - 20 ) ] } ),
       new HBox( { children: [ new HStrut( 10 ), new VStrut( 10 ), new Text( potentialWellName, optionFont ), new HStrut( 15 ) ] } ), 
       new VStrut( 10 ),
-      new HBox( { children: [ new HStrut( 10 ), new VStrut( 10 ), offsetHBox, new HStrut( 15 ) ] } ), 
+      offsetHBox, 
+      new VStrut( 10 ),
+      widthHBox, 
+      new VStrut( 10 ),
+      heightHBox, 
       new VStrut( 10 ),
       new HBox( { children: [ new HStrut( 10 ), new VStrut( 10 ), closeButton, new HStrut( 15 ) ] } ),
       new VStrut( 10 ),
@@ -256,7 +330,7 @@ define( function( require ) {
     // link the visibility of this panel to a button press
     model.showConfigurePotentialPanelProperty.link( function( ) {
       thisNode.visible = model.showConfigurePotentialPanelProperty.value;
-      console.log("on");
+      // console.log("on");
     } );
 
     //link the currentPotentialPanel
@@ -265,7 +339,7 @@ define( function( require ) {
       potentialWellName = model.currentPotentialProperty.name;
       // maxEnergy = model.getMaxEnergy();
       // yScale = height / (maxEnergy - model.getMinEnergy());
-      console.log(potential);
+      // console.log(potential);
       setPotentialWellProperties();
     } );
 

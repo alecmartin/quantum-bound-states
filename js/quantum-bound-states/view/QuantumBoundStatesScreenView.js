@@ -48,7 +48,7 @@ define( function( require ) {
 
     var configurePotentialPanel = new ConfigurePotentialPanel( quantumBoundStatesModel, {
       left: this.layoutBounds.centerX - 240,
-      top: this.layoutBounds.centerY - 100,
+      top: this.layoutBounds.centerY - 200,
     });
     this.addChild( configurePotentialPanel );
     
