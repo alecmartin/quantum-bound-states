@@ -150,7 +150,7 @@ define( function( require ) {
           y: -30
       });
       return newPath;
-    }
+    };
 
     var currentLine = -1; // at the beginning we have no plotted path
     model.realWaveProperty.link( function() {
