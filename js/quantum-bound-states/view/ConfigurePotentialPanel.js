@@ -31,6 +31,8 @@ define( function( require ) {
 
   var closeString = require( 'string!QUANTUM_BOUND_STATES/close-string' );
   var offsetString = require( 'string!QUANTUM_BOUND_STATES/offset-string' );
+  var fsinverseString = require( 'string!QUANTUM_BOUND_STATES/fs.inverse' );
+  
   // var widthString = require( 'string!QUANTUM_BOUND_STATES/width-string' );
   // var heightString = require( 'string!QUANTUM_BOUND_STATES/height-string' );
   // var harmonicString = require( 'string!QUANTUM_BOUND_STATES/harmonic-oscillator' );
@@ -197,7 +199,7 @@ define( function( require ) {
     offsetSliderRectangle.addChild( squarePotentialOffsetSlider );
     offsetSliderRectangle.addChild( assymetricPotentialOffsetSlider );
     offsetSliderRectangle.addChild( coulomb1DPotentialOffsetSlider );
-    offsetSliderRectangle.addChild( squarePotentialOffsetSlider );
+    offsetSliderRectangle.addChild( coulomb3DPotentialOffsetSlider );
     offsetSliderRectangle.addChild( harmonicPotentialOffsetSlider );
     var widthSliderRectangle = new Rectangle(0, 0, width, height, 0, 0, {fill:'black', stroke: 'black'});
     widthSliderRectangle.addChild( squarePotentialWidthSlider );
