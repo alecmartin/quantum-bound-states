@@ -130,40 +130,41 @@ define( function( require ) {
     // Plotting lower graph lines
     var maxEnergy = model.getMaxEnergy();
     var xScale    = function(x) { return (MAX_X + x) * (width / (MAX_X - MIN_X)); };
-    var yScale    = function(y) { return (model.getMaxEnergy() - y) * (height / (maxEnergy - model.getMinEnergy())); };
-
-    var time        = 0;
-    var upper       = 10;
-    var tstep       = 1;
-    var currentLine = -1; // at the beginning we have no plotted path
+    var yScale    = function(y) { return (model.getMaxEnergy() - (6 * y)) * (height / (maxEnergy - model.getMinEnergy())); };
     var plot        = this;
-    model.realWaveProperty.link( function() {
-      if (currentLine !== -1) {
-          plot.removeChild(currentLine);
-      }
-      var points = model.getRealWave(time);
+
+    var plotFunction = function(points) {
       var shape = new Shape();
       shape.moveTo(xScale(points[0][0]), yScale(points[1][0]));
       // iterate over all points and generate our full shape
       // this part takes a while so we only grab every 10th point (good enough)
       // reduction: 1344 points -> 134 points
-      for (var j = 1; j < points[0].length; j += 20) {
+      for (var j = 1; j < points[0].length; j += 10) {
           shape.lineTo(xScale(points[0][j]), yScale(points[1][j]));
       }
       var newPath = new Path(shape, {
           stroke: 'blue',
-          linewidth: 3,
+          linewidth: 10,
           lineJoin: 'round',
-          x: 50
+          x: 50,
+          y: -30
       });
+      return newPath;
+    }
+
+    var currentLine = -1; // at the beginning we have no plotted path
+    model.realWaveProperty.link( function() {
+      if (currentLine !== -1) {
+          plot.removeChild(currentLine);
+      }
+      var points = model.realWaveProperty._value;
+      var newPath = plotFunction(points, currentLine);
       plot.addChild(newPath);
       currentLine = newPath;
-      time += tstep;
-      //time %= upper;
     });
-    
+
     this.mutate( options );
-    
+
     model.showProbDensityProperty.link( function() {
       if (model.showProbDensityProperty.value) {
         title.text = titlePDString;
