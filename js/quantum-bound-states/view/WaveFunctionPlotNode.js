@@ -133,7 +133,10 @@ define( function( require ) {
     var yScale    = function(y) { return (model.getMaxEnergy() - (6 * y)) * (height / (maxEnergy - model.getMinEnergy())); };
     var plot        = this;
 
-    var plotFunction = function(points) {
+    var plotFunction = function(points, path) {
+      /*
+       * Converts a set of points to a shape and then sets path.shape equal to said shape
+       */
       var shape = new Shape();
       shape.moveTo(xScale(points[0][0]), yScale(points[1][0]));
       // iterate over all points and generate our full shape
@@ -142,26 +145,32 @@ define( function( require ) {
       for (var j = 1; j < points[0].length; j += 10) {
           shape.lineTo(xScale(points[0][j]), yScale(points[1][j]));
       }
-      var newPath = new Path(shape, {
+      path.shape = shape;
+      return path;
+    }
+
+    // at the beginning we have no plotted paths
+    var realLine        = new Path(null, {
           stroke: 'blue',
           linewidth: 10,
           lineJoin: 'round',
           x: 50,
           y: -30
       });
-      return newPath;
-    };
+    var imaginaryLine   = new Path(null);
+    var magnitudeLine   = new Path(null);
+    var probabilityLine = new Path(null);
 
-    var currentLine = -1; // at the beginning we have no plotted path
-    /*model.realWaveProperty.link( function() {
-      if (currentLine !== -1) {
-          plot.removeChild(currentLine);
-      }
-      var points = model.realWaveProperty._value;
-      var newPath = plotFunction(points, currentLine);
-      plot.addChild(newPath);
-      currentLine = newPath;
-    });*/
+    this.addChild(realLine);
+
+    model.showRealProperty.link( function() {
+        realLine.visible = model.showRealProperty.value;
+    });
+
+    model.realWaveProperty.link( function() {
+      var points   = model.realWaveProperty.value;
+      var realLine = plotFunction(points, realLine);
+    });
 
     this.mutate( options );
 
