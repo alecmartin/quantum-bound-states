@@ -31,7 +31,7 @@ define( function( require ) {
      */
     getScalingCoefficient: function( nodes ) {
       var ab = this.getBohrRadius();
-      return SQRT_PI * Math.pow((nodes * ab), 1.5);
+      return SQRT_PI * Math.pow( (nodes * ab), 1.5 );
     },
     
     /*

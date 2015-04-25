@@ -80,13 +80,15 @@ define( function( require ) {
     setWaves();
     
     for ( var i = 0; i < this.potentials.length; i++ ) {
-      this.potentials[i].eigenvalsProperty.lazyLink( setWaves );
+      this.potentials[ i ].eigenvalsProperty.lazyLink( setWaves );
     }
     
     this.showProbDensityProperty.link( setWaves );
     this.showRealProperty.link( setWaves );
     this.showImaginaryProperty.link( setWaves );
     this.showMagnitudeProperty.link( setWaves );
+    this.superpositionCoefficients.coefficientsProperty.link( setWaves );
+    this.currentPotentialProperty.link( setWaves );
     
     this.hoveredEigenstateProperty.lazyLink( function() {
       if ( thisNode.hoveredEigenstateProperty.value !== -1 ) {
