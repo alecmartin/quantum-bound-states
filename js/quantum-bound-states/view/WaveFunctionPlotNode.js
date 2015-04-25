@@ -129,27 +129,27 @@ define( function( require ) {
 
     // Plotting lower graph lines
     var maxEnergy = model.getMaxEnergy();
-    var xScale    = function(x) { return (MAX_X + x) * (width / (MAX_X - MIN_X)); };
-    var yScale    = function(y) { return (model.getMaxEnergy() - (6 * y)) * (height / (maxEnergy - model.getMinEnergy())); };
-    var plot      = this;
+    var xScale = function(x) { return (MAX_X + x) * (width / (MAX_X - MIN_X)); };
+    var yScale = function(y) { return (model.getMaxEnergy() - (6 * y)) * (height / (maxEnergy - model.getMinEnergy())); };
+    var plot = this;
 
     // at the beginning we have no plotted paths
     // So we construct null paths
-    var realLine        = new Path(null, {
+    var realLine = new Path(null, {
           stroke: 'orange',
           lineWidth: 4,
           lineJoin: 'round',
           x: 50,
           y: -30
       });
-    var imaginaryLine   = new Path(null, {
+    var imaginaryLine = new Path(null, {
           stroke: 'blue',
           lineWidth: 4,
           lineJoin: 'round',
           x: 50,
           y: -30
       });
-    var magnitudeLine   = new Path(null, {
+    var magnitudeLine = new Path(null, {
           stroke: 'white',
           lineWidth: 4,
           lineJoin: 'round',
@@ -157,7 +157,7 @@ define( function( require ) {
           y: -30
       });
     var probabilityLine = new Path(null, {
-          stroke: 'blue',
+          stroke: 'white',
           lineWidth: 4,
           lineJoin: 'round',
           x: 50,
@@ -181,7 +181,7 @@ define( function( require ) {
       // iterate over all points and generate our full shape
       // this part takes a while so we only grab every 10th point (good enough)
       // reduction: 1344 points -> 134 points
-      for (var j = 1; j < points[0].length; j += 10) {
+      for (var j = 1; j < points[0].length; j += 20) {
           shape.lineTo(xScale(points[0][j]), yScale(points[1][j]));
       }
       return shape;
@@ -207,33 +207,48 @@ define( function( require ) {
 
     // Link "hidden" functions
     model.showRealProperty.link( function() {
-        realLine.visible = model.showRealProperty.value;
+        if (!model.showProbDensity.value) {
+          realLine.visible = model.showRealProperty.value;
+        }
+        else {
+          realLine.visible = false;
+        }
     });
     model.showImaginaryProperty.link( function() {
-        imaginaryLine.visible = model.showImaginaryProperty.value;
+        if (!model.showProbDensity.value) {
+          imaginaryLine.visible = model.showImaginaryProperty.value;
+        }
+        else {
+          imaginaryLine.visible = false;
+        }
     });
     model.showMagnitudeProperty.link( function() {
-        magnitudeLine.visible = model.showMagnitudeProperty.value;
+        if (!model.showProbDensity.value) {
+          magnitudeLine.visible = model.showMagnitudeProperty.value;
+        }
+        else {
+          magnitudeLine.visible = false;
+        }
     });
     model.showProbDensityProperty.link( function() {
-        probabilityLine.visible = model.showProbDensity.value;
+        probabilityLine.visible = true; //model.showProbDensity.value;
     });
 
     // Link properties
     model.realWaveProperty.link( function() {
-      var points   = model.realWaveProperty.value;
+      var points = model.realWaveProperty.value;
       var realLine = plotReal(points);
     });
     model.imaginaryWaveProperty.link( function() {
-      var points   = model.imaginaryWaveProperty.value;
+      var points = model.imaginaryWaveProperty.value;
       var imaginaryLine = plotImaginary(points);
     });
     model.magnitudeProperty.link( function() {
-      var points   = model.magnitudeProperty.value;
+      var points = model.magnitudeProperty.value;
       var magnitudeLine = plotMagnitude(points);
     });
     model.probabilityDensityProperty.link( function() {
-      var points   = model.probabilityDensityProperty.value;
+      var points = model.probabilityDensityProperty.value;
       var probabilityLine = plotProbability(points);
     });
 
