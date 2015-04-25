@@ -157,7 +157,7 @@ define( function( require ) {
           y: -30
       });
     var probabilityLine = new Path(null, {
-          stroke: 'blue',
+          stroke: 'white',
           lineWidth: 4,
           lineJoin: 'round',
           x: 50,
@@ -165,77 +165,79 @@ define( function( require ) {
       });
 
     // We add these paths to our plot
-    plot.addChild(realLine);
-    plot.addChild(imaginaryLine);
-    plot.addChild(magnitudeLine);
-    plot.addChild(probabilityLine);
+    plot.addChild( realLine );
+    plot.addChild( imaginaryLine );
+    plot.addChild( magnitudeLine );
+    plot.addChild( probabilityLine );
 
     // Shape creation function
-    var shapeFunction = function(points) {
+    var shapeFunction = function( points ) {
       /* * Converts a set of points to a shape */
-      if (points.length == 0) {
+      if (points.length === 0) {
           return null;
       }
       var shape = new Shape();
-      shape.moveTo(xScale(points[0][0]), yScale(points[1][0]));
+      shape.moveTo( xScale( points[ 0 ][ 0 ] ), yScale( points[ 1 ][ 0 ] ) );
       // iterate over all points and generate our full shape
       // this part takes a while so we only grab every 10th point (good enough)
       // reduction: 1344 points -> 134 points
-      for (var j = 1; j < points[0].length; j += 10) {
-          shape.lineTo(xScale(points[0][j]), yScale(points[1][j]));
+      for (var j = 1; j < points[ 0 ].length; j += 10) {
+          shape.lineTo( xScale( points[ 0 ][ j ] ), yScale( points[ 1 ][ j ] ) );
       }
       return shape;
     };
 
     // Define plotting functions
-    var plotReal = function(points) {
-      realLine.shape = shapeFunction(points);
+    var plotReal = function( points ) {
+      realLine.shape = shapeFunction( points );
       return realLine;
     };
-    var plotImaginary = function(points) {
-      imaginaryLine.shape = shapeFunction(points);
+    var plotImaginary = function( points ) {
+      imaginaryLine.shape = shapeFunction( points );
       return imaginaryLine;
     };
-    var plotMagnitude = function(points) {
-      magnitudeLine.shape = shapeFunction(points);
+    var plotMagnitude = function( points ) {
+      magnitudeLine.shape = shapeFunction( points );
       return magnitudeLine;
     };
-    var plotProbability = function(points) {
-      probabilityLine.shape = shapeFunction(points);
+    var plotProbability = function( points ) {
+      probabilityLine.shape = shapeFunction( points );
       return probabilityLine;
     };
-
-    // Link "hidden" functions
-    model.showRealProperty.link( function() {
-        realLine.visible = model.showRealProperty.value;
-    });
-    model.showImaginaryProperty.link( function() {
-        imaginaryLine.visible = model.showImaginaryProperty.value;
-    });
-    model.showMagnitudeProperty.link( function() {
-        magnitudeLine.visible = model.showMagnitudeProperty.value;
-    });
-    model.showProbDensityProperty.link( function() {
-        probabilityLine.visible = model.showProbDensity.value;
-    });
+    
+    
 
     // Link properties
     model.realWaveProperty.link( function() {
-      var points   = model.realWaveProperty.value;
-      var realLine = plotReal(points);
+      var points = model.realWaveProperty.value;
+      var realLine = plotReal( points );
     });
     model.imaginaryWaveProperty.link( function() {
-      var points   = model.imaginaryWaveProperty.value;
-      var imaginaryLine = plotImaginary(points);
+      var points = model.imaginaryWaveProperty.value;
+      var imaginaryLine = plotImaginary( points );
     });
     model.magnitudeProperty.link( function() {
-      var points   = model.magnitudeProperty.value;
-      var magnitudeLine = plotMagnitude(points);
+      var points = model.magnitudeProperty.value;
+      var magnitudeLine = plotMagnitude( points );
     });
     model.probabilityDensityProperty.link( function() {
-      var points   = model.probabilityDensityProperty.value;
-      var probabilityLine = plotProbability(points);
+      var points = model.probabilityDensityProperty.value;
+      var probabilityLine = plotProbability( points );
     });
+
+    // Link "hidden" functions
+    model.showRealProperty.link( function() {
+      realLine.visible = model.showRealProperty.value;
+    } );
+    model.showImaginaryProperty.link( function() {
+      imaginaryLine.visible = model.showImaginaryProperty.value;
+    } );
+    model.showMagnitudeProperty.link( function() {
+      magnitudeLine.visible = model.showMagnitudeProperty.value;
+    } );
+    model.showProbDensityProperty.link( function() {
+      probabilityLine.visible = model.showProbDensityProperty.value;
+    } );
 
     this.mutate( options );
 
