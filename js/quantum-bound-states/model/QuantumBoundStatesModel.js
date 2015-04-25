@@ -72,7 +72,7 @@ define( function( require ) {
       if ( thisNode.showImaginaryProperty.value ) {
         thisNode.imaginaryWaveProperty.set( thisNode.getImaginaryWave( thisNode.time ) );
       }
-      if ( thisNode.showMagnitude ) {
+      if ( thisNode.showMagnitudeProperty.value ) {
         thisNode.magnitudeProperty.set( thisNode.getMagnitude() );
       }
     };
@@ -82,6 +82,11 @@ define( function( require ) {
     for ( var i = 0; i < this.potentials.length; i++ ) {
       this.potentials[i].eigenvalsProperty.lazyLink( setWaves );
     }
+    
+    this.showProbDensityProperty.link( setWaves );
+    this.showRealProperty.link( setWaves );
+    this.showImaginaryProperty.link( setWaves );
+    this.showMagnitudeProperty.link( setWaves );
     
     this.hoveredEigenstateProperty.lazyLink( function() {
       if ( thisNode.hoveredEigenstateProperty.value !== -1 ) {
