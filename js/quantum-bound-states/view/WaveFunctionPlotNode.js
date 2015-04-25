@@ -136,15 +136,33 @@ define( function( require ) {
     // at the beginning we have no plotted paths
     // So we construct null paths
     var realLine        = new Path(null, {
-          stroke: 'blue',
-          lineWidth: 10,
+          stroke: 'orange',
+          lineWidth: 4,
           lineJoin: 'round',
           x: 50,
           y: -30
       });
-    var imaginaryLine   = new Path(null);
-    var magnitudeLine   = new Path(null);
-    var probabilityLine = new Path(null);
+    var imaginaryLine   = new Path(null, {
+          stroke: 'blue',
+          lineWidth: 4,
+          lineJoin: 'round',
+          x: 50,
+          y: -30
+      });
+    var magnitudeLine   = new Path(null, {
+          stroke: 'white',
+          lineWidth: 4,
+          lineJoin: 'round',
+          x: 50,
+          y: -30
+      });
+    var probabilityLine = new Path(null, {
+          stroke: 'blue',
+          lineWidth: 4,
+          lineJoin: 'round',
+          x: 50,
+          y: -30
+      });
 
     // We add these paths to our plot
     plot.addChild(realLine);
@@ -152,11 +170,12 @@ define( function( require ) {
     plot.addChild(magnitudeLine);
     plot.addChild(probabilityLine);
 
-    // Define a plotting function
-    var plotFunction = function(points, path) {
-      /*
-       * Converts a set of points to a shape and then sets path.shape equal to said shape
-       */
+    // Shape creation function
+    var shapeFunction = function(points) {
+      /* * Converts a set of points to a shape */
+      if (points.length == 0) {
+          return null;
+      }
       var shape = new Shape();
       shape.moveTo(xScale(points[0][0]), yScale(points[1][0]));
       // iterate over all points and generate our full shape
@@ -165,19 +184,57 @@ define( function( require ) {
       for (var j = 1; j < points[0].length; j += 10) {
           shape.lineTo(xScale(points[0][j]), yScale(points[1][j]));
       }
-      path.shape = shape;
-      return path;
-    }
+      return shape;
+    };
 
-    // Link a "hidden" function
-    //model.showRealProperty.link( function() {
-    //    realLine.visible = model.showRealProperty.value;
-    //});
+    // Define plotting functions
+    var plotReal = function(points) {
+      realLine.shape = shapeFunction(points);
+      return realLine;
+    };
+    var plotImaginary = function(points) {
+      imaginaryLine.shape = shapeFunction(points);
+      return imaginaryLine;
+    };
+    var plotMagnitude = function(points) {
+      magnitudeLine.shape = shapeFunction(points);
+      return magnitudeLine;
+    };
+    var plotProbability = function(points) {
+      probabilityLine.shape = shapeFunction(points);
+      return probabilityLine;
+    };
 
-    // Link property
-    model.realWaveProperty.lazyLink( function() {
+    // Link "hidden" functions
+    model.showRealProperty.link( function() {
+        realLine.visible = model.showRealProperty.value;
+    });
+    model.showImaginaryProperty.link( function() {
+        imaginaryLine.visible = model.showImaginaryProperty.value;
+    });
+    model.showMagnitudeProperty.link( function() {
+        magnitudeLine.visible = model.showMagnitudeProperty.value;
+    });
+    model.showProbDensityProperty.link( function() {
+        probabilityLine.visible = model.showProbDensity.value;
+    });
+
+    // Link properties
+    model.realWaveProperty.link( function() {
       var points   = model.realWaveProperty.value;
-      var realLine = plotFunction(points, realLine);
+      var realLine = plotReal(points);
+    });
+    model.imaginaryWaveProperty.link( function() {
+      var points   = model.imaginaryWaveProperty.value;
+      var imaginaryLine = plotImaginary(points);
+    });
+    model.magnitudeProperty.link( function() {
+      var points   = model.magnitudeProperty.value;
+      var magnitudeLine = plotMagnitude(points);
+    });
+    model.probabilityDensityProperty.link( function() {
+      var points   = model.probabilityDensityProperty.value;
+      var probabilityLine = plotProbability(points);
     });
 
     this.mutate( options );
