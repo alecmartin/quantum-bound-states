@@ -66,7 +66,7 @@ define( function( require ) {
       centerY: background.centerY,
       x: background.left - 30,
       fill: 'white'
-    });
+    } );
     this.addChild( title );
 
     var units = new Text( positionString, {
@@ -74,7 +74,7 @@ define( function( require ) {
       centerX: background.centerX,
       y: background.bottom + 40,
       fill: 'white'
-    });
+    } );
     this.addChild( units );
 
     // gets the substring for the superposition
@@ -117,7 +117,7 @@ define( function( require ) {
       right: eigenText.right,
       top: eigenText.bottom + 10,
       visible: false
-    });
+    } );
     this.addChild( hoveredEigenText );
     
     var setEigenText = function() {
@@ -129,40 +129,29 @@ define( function( require ) {
 
     // Plotting lower graph lines
     var maxEnergy = model.getMaxEnergy();
-    var xScale    = function(x) { return (MAX_X + x) * (width / (MAX_X - MIN_X)); };
-    var yScale    = function(y) { return (model.getMaxEnergy() - (6 * y)) * (height / (maxEnergy - model.getMinEnergy())); };
-    var plot      = this;
+    var xScale = function( x ) {
+      return ( MAX_X + x ) * ( width / ( MAX_X - MIN_X ) );
+    };
+    var yScale = function( y ) {
+      return ( maxEnergy - (6 * y) ) * ( height / ( maxEnergy - model.getMinEnergy() ) );
+    };
+    var plot = this;
 
     // at the beginning we have no plotted paths
     // So we construct null paths
-    var realLine        = new Path(null, {
-          stroke: 'orange',
-          lineWidth: 4,
-          lineJoin: 'round',
-          x: 50,
-          y: -30
-      });
-    var imaginaryLine   = new Path(null, {
-          stroke: 'blue',
-          lineWidth: 4,
-          lineJoin: 'round',
-          x: 50,
-          y: -30
-      });
-    var magnitudeLine   = new Path(null, {
-          stroke: 'white',
-          lineWidth: 4,
-          lineJoin: 'round',
-          x: 50,
-          y: -30
-      });
-    var probabilityLine = new Path(null, {
-          stroke: 'white',
-          lineWidth: 4,
-          lineJoin: 'round',
-          x: 50,
-          y: -30
-      });
+    var lineOptions = {
+      stroke: 'white',
+      lineWidth: 2,
+      lineJoin: 'round',
+      x: background.left,
+      y: -30
+    }
+    var realLine = new Path( null, lineOptions );
+    realLine.stroke = 'orange';
+    var imaginaryLine = new Path( null, lineOptions );
+    imaginaryLine.stroke = 'blue';
+    var magnitudeLine = new Path( null, lineOptions );
+    var probabilityLine = new Path( null, lineOptions );
 
     // We add these paths to our plot
     plot.addChild( realLine );
@@ -174,7 +163,7 @@ define( function( require ) {
     var shapeFunction = function( points ) {
       /* * Converts a set of points to a shape */
       if (points.length === 0) {
-          return null;
+        return null;
       }
       var shape = new Shape();
       shape.moveTo( xScale( points[ 0 ][ 0 ] ), yScale( points[ 1 ][ 0 ] ) );
@@ -182,7 +171,7 @@ define( function( require ) {
       // this part takes a while so we only grab every 10th point (good enough)
       // reduction: 1344 points -> 134 points
       for (var j = 1; j < points[ 0 ].length; j += 10) {
-          shape.lineTo( xScale( points[ 0 ][ j ] ), yScale( points[ 1 ][ j ] ) );
+        shape.lineTo( xScale( points[ 0 ][ j ] ), yScale( points[ 1 ][ j ] ) );
       }
       return shape;
     };
@@ -205,38 +194,42 @@ define( function( require ) {
       return probabilityLine;
     };
     
-    
+    var showWaves = function() {
+      if ( !model.showProbDensityProperty.value ) {
+        realLine.visible = model.showRealProperty.value;
+        imaginaryLine.visible = model.showImaginaryProperty.value;
+        magnitudeLine.visible = model.showMagnitudeProperty.value;
+      }
+      else {
+        realLine.visible = false;
+        imaginaryLine.visible = false;
+        magnitudeLine.visible = false;
+      }
+      probabilityLine.visible = model.showProbDensityProperty.value;
+    };
+
+    // Link "hidden" functions
+    model.showRealProperty.link( showWaves );
+    model.showImaginaryProperty.link( showWaves );
+    model.showMagnitudeProperty.link( showWaves );
+    model.showProbDensityProperty.link( showWaves );
 
     // Link properties
     model.realWaveProperty.link( function() {
       var points = model.realWaveProperty.value;
       var realLine = plotReal( points );
-    });
+    } );
     model.imaginaryWaveProperty.link( function() {
       var points = model.imaginaryWaveProperty.value;
       var imaginaryLine = plotImaginary( points );
-    });
+    } );
     model.magnitudeProperty.link( function() {
       var points = model.magnitudeProperty.value;
       var magnitudeLine = plotMagnitude( points );
-    });
+    } );
     model.probabilityDensityProperty.link( function() {
       var points = model.probabilityDensityProperty.value;
       var probabilityLine = plotProbability( points );
-    });
-
-    // Link "hidden" functions
-    model.showRealProperty.link( function() {
-      realLine.visible = model.showRealProperty.value;
-    } );
-    model.showImaginaryProperty.link( function() {
-      imaginaryLine.visible = model.showImaginaryProperty.value;
-    } );
-    model.showMagnitudeProperty.link( function() {
-      magnitudeLine.visible = model.showMagnitudeProperty.value;
-    } );
-    model.showProbDensityProperty.link( function() {
-      probabilityLine.visible = model.showProbDensityProperty.value;
     } );
 
     this.mutate( options );
@@ -271,5 +264,7 @@ define( function( require ) {
     } );
     
   }
-  return inherit( Node, WaveFunctionPlotNode);
+  
+  return inherit( Node, WaveFunctionPlotNode );
+
 } );
