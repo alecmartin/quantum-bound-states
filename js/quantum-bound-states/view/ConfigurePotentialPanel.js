@@ -200,40 +200,40 @@ define( function( require ) {
         heightSliderRectangle,
         new HStrut( 15 ) ] } );
 
-    //adds hboxes to the configure potential panel
-    var reapplyHbox = function(){
-      // initially remove it all!
-      removeWidthHbox();
-      removeHeightHbox();
-      removeOffsetHbox();
-      configurePotentialVBox.removeChild(closeButton);
-      // add it back in
-      configurePotentialVBox.addChild(offsetText);
-      configurePotentialVBox.addChild(offsetHBox);
-      configurePotentialVBox.addChild(widthText);
-      configurePotentialVBox.addChild(widthHBox);
-      configurePotentialVBox.addChild(heightText);
-      configurePotentialVBox.addChild(heightHBox);
-      configurePotentialVBox.addChild(closeButton);
-    };
+    // //adds hboxes to the configure potential panel
+    // var reapplyHbox = function(){
+    //   // initially remove it all!
+    //   removeWidthHbox();
+    //   removeHeightHbox();
+    //   removeOffsetHbox();
+    //   configurePotentialVBox.removeChild(closeButton);
+    //   // add it back in
+    //   configurePotentialVBox.addChild(offsetText);
+    //   configurePotentialVBox.addChild(offsetHBox);
+    //   configurePotentialVBox.addChild(widthText);
+    //   configurePotentialVBox.addChild(widthHBox);
+    //   configurePotentialVBox.addChild(heightText);
+    //   configurePotentialVBox.addChild(heightHBox);
+    //   configurePotentialVBox.addChild(closeButton);
+    // };
 
-    //removes the Offset hbox to the configure potential panel
-    var removeOffsetHbox = function(){
-      configurePotentialVBox.removeChild(offsetHBox); 
-      configurePotentialVBox.removeChild(offsetText);
-    };
+    // //removes the Offset hbox to the configure potential panel
+    // var removeOffsetHbox = function(){
+    //   configurePotentialVBox.removeChild(offsetHBox); 
+    //   configurePotentialVBox.removeChild(offsetText);
+    // };
 
-    //removes the Width hbox to the configure potential panel
-    var removeWidthHbox = function(){
-      configurePotentialVBox.removeChild(widthHBox); 
-      configurePotentialVBox.removeChild(widthText);
-    };
+    // //removes the Width hbox to the configure potential panel
+    // var removeWidthHbox = function(){
+    //   configurePotentialVBox.removeChild(widthHBox); 
+    //   configurePotentialVBox.removeChild(widthText);
+    // };
 
-    //removes the Height hbox to the configure potential panel
-    var removeHeightHbox = function(){
-      configurePotentialVBox.removeChild(heightHBox);
-      configurePotentialVBox.removeChild(heightText); 
-    };
+    // //removes the Height hbox to the configure potential panel
+    // var removeHeightHbox = function(){
+    //   configurePotentialVBox.removeChild(heightHBox);
+    //   configurePotentialVBox.removeChild(heightText); 
+    // };
 
 
     var setPotentialWellProperties = function(){
@@ -248,7 +248,7 @@ define( function( require ) {
         coulomb3DPotentialOffsetSlider.visible = false;
         harmonicPotentialOffsetSlider.visible = false;
         harmonicPotentialWidthSlider.visible = false;
-        reapplyHbox();
+        // reapplyHbox();
 
       if ( potential instanceof SquareWellPotential ) {
         // offsetHBox = buildHBox(squarePotentialOffsetSlider);
@@ -276,22 +276,22 @@ define( function( require ) {
         // offsetHBox = buildHBox(coulomb1DPotentialOffsetSlider);
         coulomb1DPotentialOffsetSlider.visible = true;
         // configurePotentialVBox.visible = false;
-        removeWidthHbox(); 
-        removeHeightHbox(); 
+        // removeWidthHbox(); 
+        // removeHeightHbox(); 
       }
       else if ( potential instanceof Coulomb3DPotential ) {
         // offsetHBox = buildHBox(coulomb3DPotentialOffsetSlider);
         coulomb3DPotentialOffsetSlider.visible = true;
         // configurePotentialVBox.visible = false;
-        removeWidthHbox();
-        removeHeightHbox(); 
+        // removeWidthHbox();
+        // removeHeightHbox(); 
       }
       else if ( potential instanceof HarmonicOscillatorPotential ) {
         // offsetHBox = buildHBox(harmonicPotentialOffsetSlider);
         harmonicPotentialOffsetSlider.visible = true;
         harmonicPotentialWidthSlider.visible = true;
         // configurePotentialVBox.visible = false;
-        removeHeightHbox(); 
+        // removeHeightHbox(); 
       }
     };
     
