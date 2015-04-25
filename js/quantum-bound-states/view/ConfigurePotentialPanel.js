@@ -27,7 +27,6 @@ define( function( require ) {
   var AsymmetricPotential = require( 'QUANTUM_BOUND_STATES/quantum-bound-states/model/AsymmetricPotential' );
   var Slider = require( 'QUANTUM_BOUND_STATES/quantum-bound-states/view/Slider' );
   var QuantumBoundStatesConstants = require( 'QUANTUM_BOUND_STATES/quantum-bound-states/model/QuantumBoundStatesConstants' );
-  var SubSupText = require( 'SCENERY_PHET/SubSupText' );
 
   var closeString = require( 'string!QUANTUM_BOUND_STATES/close-string' );
   var offsetString = require( 'string!QUANTUM_BOUND_STATES/offset-string' );

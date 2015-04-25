@@ -145,7 +145,8 @@ define( function( require ) {
       lineJoin: 'round',
       x: background.left,
       y: -30
-    }
+    };
+    
     var realLine = new Path( null, lineOptions );
     realLine.stroke = 'orange';
     var imaginaryLine = new Path( null, lineOptions );
@@ -217,19 +218,19 @@ define( function( require ) {
     // Link properties
     model.realWaveProperty.link( function() {
       var points = model.realWaveProperty.value;
-      var realLine = plotReal( points );
+      realLine = plotReal( points );
     } );
     model.imaginaryWaveProperty.link( function() {
       var points = model.imaginaryWaveProperty.value;
-      var imaginaryLine = plotImaginary( points );
+      imaginaryLine = plotImaginary( points );
     } );
     model.magnitudeProperty.link( function() {
       var points = model.magnitudeProperty.value;
-      var magnitudeLine = plotMagnitude( points );
+      magnitudeLine = plotMagnitude( points );
     } );
     model.probabilityDensityProperty.link( function() {
       var points = model.probabilityDensityProperty.value;
-      var probabilityLine = plotProbability( points );
+      probabilityLine = plotProbability( points );
     } );
 
     this.mutate( options );

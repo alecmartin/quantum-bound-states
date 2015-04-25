@@ -47,7 +47,7 @@ define( function( require ) {
       var x = MIN_X;
       var wave = new FastArray( this.n );
       for (var i = 0; i < this.n; i++) {
-        wave[i] = this.psiScaled( nodes, x );
+        wave[ i ] = this.psiScaled( nodes, x );
         x += dx;
       }
       return wave;

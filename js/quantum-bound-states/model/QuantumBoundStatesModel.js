@@ -80,7 +80,7 @@ define( function( require ) {
     setWaves();
     
     for ( var i = 0; i < this.potentials.length; i++ ) {
-      this.potentials[i].eigenvalsProperty.lazyLink( setWaves );
+      this.potentials[ i ].eigenvalsProperty.lazyLink( setWaves );
     }
     
     this.showProbDensityProperty.link( setWaves );
