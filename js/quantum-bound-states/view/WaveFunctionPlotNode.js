@@ -132,10 +132,10 @@ define( function( require ) {
       return ( MAX_X + x ) * ( width / ( MAX_X - MIN_X ) );
     };
     var yScale = function( y ) {
-      return ( ( height / 3 ) * -y ) + ( height / 2 );
+      return height * ( ( -y / 3 ) + ( 1 / 2 ) );
     };
     var probabilityYScale = function( y ) {
-      return ( ( 3 * height / 4 ) * -y ) + ( height );
+      return height * ( ( ( -y * 3 ) / 4 ) + 1 );
     };
     var plot = this;
 
@@ -179,7 +179,7 @@ define( function( require ) {
       var step;
       if ( probScale ) {
         yScaleFunc = probabilityYScale;
-        step = 3;
+        step = 5;
       }
       else {
         yScaleFunc = yScale;
