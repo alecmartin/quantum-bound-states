@@ -132,12 +132,10 @@ define( function( require ) {
       return ( MAX_X + x ) * ( width / ( MAX_X - MIN_X ) );
     };
     var yScale = function( y ) {
-      var yHeight = model.getMaxEnergy() - model.getMinEnergy();
-      return ( yHeight * -y ) + ( height / 2 );
+      return ( ( height / 3 ) * -y ) + ( height / 2 );
     };
     var probabilityYScale = function( y ) {
-      var yHeight = model.getMaxEnergy() - model.getMinEnergy();
-      return ( 2 * yHeight * -y ) + ( height );
+      return ( ( 3 * height / 4 ) * -y ) + ( height );
     };
     var plot = this;
 
