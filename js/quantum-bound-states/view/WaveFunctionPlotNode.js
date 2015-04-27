@@ -128,15 +128,16 @@ define( function( require ) {
     };
 
     // Plotting lower graph lines
-    var maxEnergy = model.getMaxEnergy();
     var xScale = function( x ) {
       return ( MAX_X + x ) * ( width / ( MAX_X - MIN_X ) );
     };
     var yScale = function( y ) {
-      return ( maxEnergy - (6 * y) ) * ( height / ( maxEnergy - model.getMinEnergy() ) );
+      var yHeight = model.getMaxEnergy() - model.getMinEnergy();
+      return ( yHeight * -y ) + ( height / 2 );
     };
     var probabilityYScale = function( y ) {
-      return ( maxEnergy - (12 * y) ) * ( height / ( maxEnergy - model.getMinEnergy() ) );
+      var yHeight = model.getMaxEnergy() - model.getMinEnergy();
+      return ( 2 * yHeight * -y ) + ( height );
     };
     var plot = this;
 
@@ -146,8 +147,7 @@ define( function( require ) {
       stroke: 'white',
       lineWidth: 2,
       lineJoin: 'round',
-      x: background.left,
-      y: -30
+      x: background.left
     };
 
     var realLine = new Path( null, lineOptions );
@@ -156,7 +156,6 @@ define( function( require ) {
     imaginaryLine.stroke = 'blue';
     var magnitudeLine = new Path( null, lineOptions );
     var probabilityLine = new Path( null, lineOptions );
-    probabilityLine.y = height / 4;
 
     // We add these paths to our plot
     plot.addChild( realLine );
@@ -179,6 +178,7 @@ define( function( require ) {
       else {
         yScaleFunc = yScale;
       }
+
       shape.moveTo( xScale( points[ 0 ][ 0 ] ), yScaleFunc( points[ 1 ][ 0 ] ) );
       for (var j = 1; j < numPoints; j += 5) {
         shape.lineTo( xScale( points[ 0 ][ j ] ), yScaleFunc( points[ 1 ][ j ] ) );
