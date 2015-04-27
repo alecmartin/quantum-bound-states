@@ -46,6 +46,6 @@
   "nanometer": "nm",
   "omega": "ω",
   
-  "superpostion-state-title-string": "Superposition State",
+  "superposition-state-title-string": "Superposition State",
   "superposition-state-instructions-string": "Create a superposition state by setting coefficients, such that Ψ(x) = c<sub>1</sub>Ψ<sub>1</sub>(x) + c<sub>2</sub>Ψ<s2b>1</sub>(x) + ... + c<sub>n</sub>Ψ<sub>n</sb>(x)."
 }

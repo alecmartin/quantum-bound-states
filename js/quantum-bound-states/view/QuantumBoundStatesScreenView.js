@@ -17,6 +17,7 @@ define( function( require ) {
   var WaveFunctionPlotControls = require( 'QUANTUM_BOUND_STATES/quantum-bound-states/view/WaveFunctionPlotControls' );
   var ParticleMassPanel = require( 'QUANTUM_BOUND_STATES/quantum-bound-states/view/ParticleMassPanel' );
   var ConfigurePotentialPanel = require( 'QUANTUM_BOUND_STATES/quantum-bound-states/view/ConfigurePotentialPanel' );
+  var SuperpositionStatePanel = require( 'QUANTUM_BOUND_STATES/quantum-bound-states/view/SuperpositionStatePanel' );
   var TimeControls = require( 'QUANTUM_BOUND_STATES/quantum-bound-states/view/TimeControls' );
   /**
    * @param {QuantumBoundStatesModel} quantumBoundStatesModel
@@ -51,6 +52,13 @@ define( function( require ) {
       top: this.layoutBounds.centerY - 200,
     });
     this.addChild( configurePotentialPanel );
+
+
+    var superpositionStatePanel = new SuperpositionStatePanel( quantumBoundStatesModel, {
+      left: this.layoutBounds.centerX - 240,
+      top: this.layoutBounds.centerY - 200,
+    });
+    this.addChild( superpositionStatePanel );
     
     var waveFunctionPlotControls = new WaveFunctionPlotControls( quantumBoundStatesModel, {
       right: this.layoutBounds.maxX - 10,

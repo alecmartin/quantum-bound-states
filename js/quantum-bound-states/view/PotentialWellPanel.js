@@ -49,7 +49,7 @@ define( function( require ) {
       scale: 1.5,
       listener: function() {
         // console.log(model.showConfigurePotentialPanelProperty.value);
-        model.showConfigurePotentialPanelProperty.value = true;
+        model.showConfigurePotentialPanelProperty.value = !model.showConfigurePotentialPanelProperty.value;
       }
     } );
 
@@ -60,7 +60,7 @@ define( function( require ) {
       minWidth: 100,
       scale: 1.5,
       listener: function() {
-        
+        model.showSuperpositionStatePanelProperty.value = !model.showSuperpositionStatePanelProperty.value;
       }
     } );
 

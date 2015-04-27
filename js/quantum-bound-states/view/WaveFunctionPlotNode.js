@@ -98,6 +98,7 @@ define( function( require ) {
     var getHoveredEigenstateString = function( index ) {
       var string = psiString + "<sub>" + index + "</sub>(x,t)";
       return pd ? "|" + string + "|<sup>2</sup>" : string ;
+      console.log("string: " + string);
     };
     
     var eigenSubString =  getSuperpositionEigenSubString();
