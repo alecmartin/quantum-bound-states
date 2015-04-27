@@ -112,6 +112,21 @@ define( function( require ) {
       this.superpositionCoefficients.reset();
       this.particle.reset();
     },
+    
+    updateWaves: function( ) {
+      if ( this.showReal ) {
+        this.realWaveProperty.set( this.getRealWave( this.time ) );
+      }
+      if ( this.showImaginary ) {
+        this.imaginaryWaveProperty.set( this.getImaginaryWave( this.time ) );
+      }
+      if ( this.showMagnitude ) {
+        this.magnitudeProperty.set( this.getMagnitude( this.time ) );
+      }
+      if ( this.showProbDensity ) {
+        this.probabilityDensityProperty.set( this.getProbabilityDensity( this.time ) );
+      }
+    },
 
     // Called by the animation loop. Optional, so if your model has no animation, you can omit this.
     step: function( dt ) {
@@ -122,18 +137,7 @@ define( function( require ) {
         else {
           this.time = this.time + dt;
         }
-        if ( this.showReal ) {
-          this.realWaveProperty.set( this.getRealWave( this.time ) );
-        }
-        if ( this.showImaginary ) {
-          this.imaginaryWaveProperty.set( this.getImaginaryWave( this.time ) );
-        }
-        if ( this.showMagnitude ) {
-          this.magnitudeProperty.set( this.getMagnitude( this.time ) );
-        }
-        if ( this.showProbDensity ) {
-          this.probabilityDensityProperty.set( this.getProbabilityDensity( this.time ) );
-        }
+        this.updateWaves();
       }
     },
     
@@ -144,34 +148,12 @@ define( function( require ) {
       else {
         this.time = this.time + 0.2;
       }
-      if ( this.showReal ) {
-        this.realWaveProperty.set( this.getRealWave( this.time ) );
-      }
-      if ( this.showImaginary ) {
-        this.imaginaryWaveProperty.set( this.getImaginaryWave( this.time ) );
-      }
-      if ( this.showMagnitude ) {
-        this.magnitudeProperty.set( this.getMagnitude( this.time ) );
-      }
-      if ( this.showProbDensity ) {
-        this.probabilityDensityProperty.set( this.getProbabilityDensity( this.time ) );
-      }
+      this.updateWaves();
     },
     
     resetTime: function( ) {
       this.time = 0.0;
-      if ( this.showReal ) {
-        this.realWaveProperty.set( this.getRealWave( this.time ) );
-      }
-      if ( this.showImaginary ) {
-        this.imaginaryWaveProperty.set( this.getImaginaryWave( this.time ) );
-      }
-      if ( this.showMagnitude ) {
-        this.magnitudeProperty.set( this.getMagnitude( this.time ) );
-      }
-      if ( this.showProbDensity ) {
-        this.probabilityDensityProperty.set( this.getProbabilityDensity( this.time ) );
-      }
+      this.updateWaves();
     },
     
     /**
