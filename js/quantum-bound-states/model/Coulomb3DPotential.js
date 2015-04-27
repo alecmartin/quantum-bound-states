@@ -81,18 +81,16 @@ define( function( require ) {
     /**
      * Get an array of wavefunction points for the nth energy level
      * Wavefunction will have n-1 nodes
-     * n starts at 1
      */
     getNthEigenstate: function( n ) {
       var pointsY;
-      if ( this.eigenstateCache[n] ) {
-        pointsY = this.eigenstateCache[n];
+      if ( this.eigenstateCache[ n ] ) {
+        pointsY = this.eigenstateCache[ n ];
       }
       else {
-        var energy = this.getNthEigenvalue( n );
         var solver = new Coulomb3DSolver( this.particle, this.numPoints );
-        pointsY = solver.calculateWavefunction( energy );
-        this.cacheEigenstate( n-1, pointsY );
+        pointsY = solver.calculateWavefunction( n );
+        this.cacheEigenstate( n, pointsY );
       }
       return [ this.pointsX, pointsY ];
     },

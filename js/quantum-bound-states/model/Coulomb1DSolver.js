@@ -32,10 +32,10 @@ define( function( require ) {
     
     /**
      * Gets the scaling coefficient used for a specified eigenstate index.
-     * @param nodes eigenstate subscript, n=1,2,3,...
+     * @param nodes number of nodes in the wave function
      */
     getScalingCoefficient: function( nodes ) {
-      return SCALING_COEFFICIENTS[nodes - 1];
+      return SCALING_COEFFICIENTS[ nodes ];
     },
     
     /*

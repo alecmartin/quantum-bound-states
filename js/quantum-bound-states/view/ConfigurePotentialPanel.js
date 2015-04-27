@@ -27,17 +27,17 @@ define( function( require ) {
   var AsymmetricPotential = require( 'QUANTUM_BOUND_STATES/quantum-bound-states/model/AsymmetricPotential' );
   var Slider = require( 'QUANTUM_BOUND_STATES/quantum-bound-states/view/Slider' );
   var QuantumBoundStatesConstants = require( 'QUANTUM_BOUND_STATES/quantum-bound-states/model/QuantumBoundStatesConstants' );
-  var SubSupText = require( 'SCENERY_PHET/SubSupText' );
 
   var closeString = require( 'string!QUANTUM_BOUND_STATES/close-string' );
   var offsetString = require( 'string!QUANTUM_BOUND_STATES/offset-string' );
+  var widthString = require( 'string!QUANTUM_BOUND_STATES/width-string' );
+  var heightString = require( 'string!QUANTUM_BOUND_STATES/height-string' );
   var fsinverseString = require( 'string!QUANTUM_BOUND_STATES/fs.inverse' );
   // var fsinverseString = new SubSupText(fsinverse, {});
   var electronvoltString = require( 'string!QUANTUM_BOUND_STATES/electron-volt' );
   var nanometerString = require( 'string!QUANTUM_BOUND_STATES/nanometer' );
   
-  // var widthString = require( 'string!QUANTUM_BOUND_STATES/width-string' );
-  // var heightString = require( 'string!QUANTUM_BOUND_STATES/height-string' );
+  
   // var harmonicString = require( 'string!QUANTUM_BOUND_STATES/harmonic-oscillator' );
   // var coulomb3dString = require( 'string!QUANTUM_BOUND_STATES/coulomb_3d' );
   // var coulomb1dString = require( 'string!QUANTUM_BOUND_STATES/coulomb_1d' );
@@ -55,6 +55,9 @@ define( function( require ) {
     // optionfont
     var optionFont = {font: new PhetFont( 14 ), fill: "palegoldenrod"};
     // var potentialWellInstance = null;
+    var offsetText = new Text( offsetString, optionFont );
+    var widthText = new Text( widthString, optionFont );
+    var heightText = new Text( heightString, optionFont );
 
 
     var potential = model.currentPotentialProperty.value;
@@ -75,11 +78,11 @@ define( function( require ) {
     var harmonicPotentialWidthSlider;
     var squarePotentialHeightSlider;
     var asymmetricPotentialHeightSlider;
-    var potentialWellName = "";
+    var potentialWellName = model.currentPotentialProperty.name;
     // var potentialOffsetMin = 0;
     // var potentialOffsetMax = 0;
     // var potentialWellInstance;
-    var configurePotentialVBox;
+    var configurePotentialVBox = new VBox({});
 
 
     //boxwidth
@@ -133,7 +136,7 @@ define( function( require ) {
 
   var init = function(){
     potentials = model.potentials;
-    console.log(potentials);
+    // console.log(potentials);
 
       //build the sliders
       squarePotentialOffsetSlider = new Slider( 
@@ -197,14 +200,47 @@ define( function( require ) {
         heightSliderRectangle,
         new HStrut( 15 ) ] } );
 
+    // //adds hboxes to the configure potential panel
+    // var reapplyHbox = function(){
+    //   // initially remove it all!
+    //   removeWidthHbox();
+    //   removeHeightHbox();
+    //   removeOffsetHbox();
+    //   configurePotentialVBox.removeChild(closeButton);
+    //   // add it back in
+    //   configurePotentialVBox.addChild(offsetText);
+    //   configurePotentialVBox.addChild(offsetHBox);
+    //   configurePotentialVBox.addChild(widthText);
+    //   configurePotentialVBox.addChild(widthHBox);
+    //   configurePotentialVBox.addChild(heightText);
+    //   configurePotentialVBox.addChild(heightHBox);
+    //   configurePotentialVBox.addChild(closeButton);
+    // };
+
+    // //removes the Offset hbox to the configure potential panel
+    // var removeOffsetHbox = function(){
+    //   configurePotentialVBox.removeChild(offsetHBox); 
+    //   configurePotentialVBox.removeChild(offsetText);
+    // };
+
+    // //removes the Width hbox to the configure potential panel
+    // var removeWidthHbox = function(){
+    //   configurePotentialVBox.removeChild(widthHBox); 
+    //   configurePotentialVBox.removeChild(widthText);
+    // };
+
+    // //removes the Height hbox to the configure potential panel
+    // var removeHeightHbox = function(){
+    //   configurePotentialVBox.removeChild(heightHBox);
+    //   configurePotentialVBox.removeChild(heightText); 
+    // };
+
+
     var setPotentialWellProperties = function(){
       
-      if ( potential instanceof SquareWellPotential ) {
-        // offsetHBox = buildHBox(squarePotentialOffsetSlider);
-        // console.log(squarePotentialOffsetSlider);
-        squarePotentialOffsetSlider.visible = true;
-        squarePotentialWidthSlider.visible = true;
-        squarePotentialHeightSlider.visible = true;
+        squarePotentialOffsetSlider.visible = false;
+        squarePotentialWidthSlider.visible = false;
+        squarePotentialHeightSlider.visible = false;
         asymmetricPotentialOffsetSlider.visible = false;
         asymmetricPotentialWidthSlider.visible = false;
         asymmetricPotentialHeightSlider.visible = false;
@@ -212,83 +248,69 @@ define( function( require ) {
         coulomb3DPotentialOffsetSlider.visible = false;
         harmonicPotentialOffsetSlider.visible = false;
         harmonicPotentialWidthSlider.visible = false;
+        // reapplyHbox();
+
+      if ( potential instanceof SquareWellPotential ) {
+        // offsetHBox = buildHBox(squarePotentialOffsetSlider);
+        // console.log(squarePotentialOffsetSlider);
+
+        squarePotentialOffsetSlider.visible = true;
+        squarePotentialWidthSlider.visible = true;
+        squarePotentialHeightSlider.visible = true;
+
+        // configurePotentialVBox.visible = true;
 
 
       }
       else if ( potential instanceof AsymmetricPotential ) {
         // offsetHBox = buildHBox(asymmetricPotentialOffsetSlider);
         // console.log(asymmetricPotentialOffsetSlider);
-        squarePotentialOffsetSlider.visible = false;
-        squarePotentialWidthSlider.visible = false;
-        squarePotentialHeightSlider.visible = false;
         asymmetricPotentialOffsetSlider.visible = true;
         asymmetricPotentialWidthSlider.visible = true;
         asymmetricPotentialHeightSlider.visible = true;
-        coulomb1DPotentialOffsetSlider.visible = false;
-        coulomb3DPotentialOffsetSlider.visible = false;
-        harmonicPotentialOffsetSlider.visible = false;
-        harmonicPotentialWidthSlider.visible = false;
+        // configurePotentialVBox.visible = true;
+        
+
       }
       else if ( potential instanceof Coulomb1DPotential ) {
         // offsetHBox = buildHBox(coulomb1DPotentialOffsetSlider);
-        squarePotentialOffsetSlider.visible = false;
-        squarePotentialWidthSlider.visible = false;
-        squarePotentialHeightSlider.visible = false;
-
-        asymmetricPotentialOffsetSlider.visible = false;
-        asymmetricPotentialWidthSlider.visible = false;
-        asymmetricPotentialHeightSlider.visible = false;
         coulomb1DPotentialOffsetSlider.visible = true;
-        coulomb3DPotentialOffsetSlider.visible = false;
-        harmonicPotentialOffsetSlider.visible = false;
-        harmonicPotentialWidthSlider.visible = false;
+        // configurePotentialVBox.visible = false;
+        // removeWidthHbox(); 
+        // removeHeightHbox(); 
       }
       else if ( potential instanceof Coulomb3DPotential ) {
         // offsetHBox = buildHBox(coulomb3DPotentialOffsetSlider);
-        squarePotentialOffsetSlider.visible = false;
-        squarePotentialWidthSlider.visible = false;
-        squarePotentialHeightSlider.visible = false;
-        asymmetricPotentialOffsetSlider.visible = false;
-        asymmetricPotentialWidthSlider.visible = false;
-        asymmetricPotentialHeightSlider.visible = false;
-        coulomb1DPotentialOffsetSlider.visible = false;
         coulomb3DPotentialOffsetSlider.visible = true;
-        harmonicPotentialOffsetSlider.visible = false;
-        harmonicPotentialWidthSlider.visible = false;
+        // configurePotentialVBox.visible = false;
+        // removeWidthHbox();
+        // removeHeightHbox(); 
       }
       else if ( potential instanceof HarmonicOscillatorPotential ) {
         // offsetHBox = buildHBox(harmonicPotentialOffsetSlider);
-        squarePotentialOffsetSlider.visible = false;
-        squarePotentialWidthSlider.visible = false;
-        squarePotentialHeightSlider.visible = false;
-        asymmetricPotentialOffsetSlider.visible = false;
-        asymmetricPotentialWidthSlider.visible = false;
-        asymmetricPotentialHeightSlider.visible = false;
-        coulomb1DPotentialOffsetSlider.visible = false;
-        coulomb3DPotentialOffsetSlider.visible = false;
         harmonicPotentialOffsetSlider.visible = true;
         harmonicPotentialWidthSlider.visible = true;
+        // configurePotentialVBox.visible = false;
+        // removeHeightHbox(); 
       }
     };
     
     setPotentialWellProperties();
-    console.log("setPotentialWellProperties ran successfully");
+    // console.log("setPotentialWellProperties ran successfully");
 
 
     // var offsetHBox = new HBox( { children: [ new HStrut( 10 ), new VStrut( 10 ), squarePotentialOffsetSlider, new HStrut( 15 ) ] } );
     configurePotentialVBox = new VBox( {
       children: [
       new HBox( { children: [ new HStrut( boxwidth - 20 ) ] } ),
-      new HBox( { children: [ new HStrut( 10 ), new VStrut( 10 ), new Text( potentialWellName, optionFont ), new HStrut( 15 ) ] } ), 
-      new VStrut( 10 ),
+      // new HBox( { children: [ new HStrut( 10 ), new VStrut( 10 ), new Text( potentialWellName, optionFont ), new HStrut( 15 ) ] } ), 
+      offsetText,
       offsetHBox, 
-      new VStrut( 10 ),
-      widthHBox, 
-      new VStrut( 10 ),
+      widthText,
+      widthHBox,
+      heightText,
       heightHBox, 
-      new VStrut( 10 ),
-      new HBox( { children: [ new HStrut( 10 ), new VStrut( 10 ), closeButton, new HStrut( 15 ) ] } ),
-      new VStrut( 10 ),
+      closeButton,
       ],
       align: 'left'
     } );

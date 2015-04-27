@@ -135,6 +135,9 @@ define( function( require ) {
     var yScale = function( y ) {
       return ( maxEnergy - (6 * y) ) * ( height / ( maxEnergy - model.getMinEnergy() ) );
     };
+    var probabilityYScale = function( y ) {
+      return ( maxEnergy - (12 * y) ) * ( height / ( maxEnergy - model.getMinEnergy() ) );
+    };
     var plot = this;
 
     // at the beginning we have no plotted paths
@@ -145,13 +148,15 @@ define( function( require ) {
       lineJoin: 'round',
       x: background.left,
       y: -30
-    }
+    };
+
     var realLine = new Path( null, lineOptions );
     realLine.stroke = 'orange';
     var imaginaryLine = new Path( null, lineOptions );
     imaginaryLine.stroke = 'blue';
     var magnitudeLine = new Path( null, lineOptions );
     var probabilityLine = new Path( null, lineOptions );
+    probabilityLine.y = height / 4;
 
     // We add these paths to our plot
     plot.addChild( realLine );
@@ -160,40 +165,45 @@ define( function( require ) {
     plot.addChild( probabilityLine );
 
     // Shape creation function
-    var shapeFunction = function( points ) {
+    var shapeFunction = function( points, probScale ) {
       /* * Converts a set of points to a shape */
       if (points.length === 0) {
         return null;
       }
       var shape = new Shape();
-      shape.moveTo( xScale( points[ 0 ][ 0 ] ), yScale( points[ 1 ][ 0 ] ) );
-      // iterate over all points and generate our full shape
-      // this part takes a while so we only grab every 10th point (good enough)
-      // reduction: 1344 points -> 134 points
-      for (var j = 1; j < points[ 0 ].length; j += 10) {
-        shape.lineTo( xScale( points[ 0 ][ j ] ), yScale( points[ 1 ][ j ] ) );
+      var numPoints = points[ 0 ].length;
+      var yScaleFunc;
+      if ( probScale ) {
+        yScaleFunc = probabilityYScale;
+      }
+      else {
+        yScaleFunc = yScale;
+      }
+      shape.moveTo( xScale( points[ 0 ][ 0 ] ), yScaleFunc( points[ 1 ][ 0 ] ) );
+      for (var j = 1; j < numPoints; j += 5) {
+        shape.lineTo( xScale( points[ 0 ][ j ] ), yScaleFunc( points[ 1 ][ j ] ) );
       }
       return shape;
     };
 
     // Define plotting functions
     var plotReal = function( points ) {
-      realLine.shape = shapeFunction( points );
+      realLine.shape = shapeFunction( points, false );
       return realLine;
     };
     var plotImaginary = function( points ) {
-      imaginaryLine.shape = shapeFunction( points );
+      imaginaryLine.shape = shapeFunction( points, false );
       return imaginaryLine;
     };
     var plotMagnitude = function( points ) {
-      magnitudeLine.shape = shapeFunction( points );
+      magnitudeLine.shape = shapeFunction( points, false );
       return magnitudeLine;
     };
     var plotProbability = function( points ) {
-      probabilityLine.shape = shapeFunction( points );
+      probabilityLine.shape = shapeFunction( points, true );
       return probabilityLine;
     };
-    
+
     var showWaves = function() {
       if ( !model.showProbDensityProperty.value ) {
         realLine.visible = model.showRealProperty.value;
@@ -217,19 +227,19 @@ define( function( require ) {
     // Link properties
     model.realWaveProperty.link( function() {
       var points = model.realWaveProperty.value;
-      var realLine = plotReal( points );
+      realLine = plotReal( points );
     } );
     model.imaginaryWaveProperty.link( function() {
       var points = model.imaginaryWaveProperty.value;
-      var imaginaryLine = plotImaginary( points );
+      imaginaryLine = plotImaginary( points );
     } );
     model.magnitudeProperty.link( function() {
       var points = model.magnitudeProperty.value;
-      var magnitudeLine = plotMagnitude( points );
+      magnitudeLine = plotMagnitude( points );
     } );
     model.probabilityDensityProperty.link( function() {
       var points = model.probabilityDensityProperty.value;
-      var probabilityLine = plotProbability( points );
+      probabilityLine = plotProbability( points );
     } );
 
     this.mutate( options );
