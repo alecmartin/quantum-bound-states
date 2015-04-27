@@ -35,7 +35,7 @@ define( function( require ) {
      * @param nodes number of nodes in the wave function
      */
     getScalingCoefficient: function( nodes ) {
-      return SCALING_COEFFICIENTS[ nodes ];
+      return SCALING_COEFFICIENTS[ nodes - 1 ];
     },
     
     /*
