@@ -64,7 +64,7 @@ define( function( require ) {
     var thisNode = this;
     var setWaves = function() {
       if ( thisNode.showProbDensityProperty.value ) {
-        thisNode.probabilityDensityProperty.set( thisNode.getProbabilityDensity() );
+        thisNode.probabilityDensityProperty.set( thisNode.getProbabilityDensity( thisNode.time ) );
       }
       if ( thisNode.showRealProperty.value ) {
         thisNode.realWaveProperty.set( thisNode.getRealWave( thisNode.time ) );
@@ -73,7 +73,7 @@ define( function( require ) {
         thisNode.imaginaryWaveProperty.set( thisNode.getImaginaryWave( thisNode.time ) );
       }
       if ( thisNode.showMagnitudeProperty.value ) {
-        thisNode.magnitudeProperty.set( thisNode.getMagnitude() );
+        thisNode.magnitudeProperty.set( thisNode.getMagnitude( thisNode.time ) );
       }
     };
     
@@ -129,8 +129,48 @@ define( function( require ) {
           this.imaginaryWaveProperty.set( this.getImaginaryWave( this.time ) );
         }
         if ( this.showMagnitude ) {
-          this.magnitudeProperty.set( this.getMagnitude() );
+          this.magnitudeProperty.set( this.getMagnitude( this.time ) );
         }
+        if ( this.showProbDensity ) {
+          this.probabilityDensityProperty.set( this.getProbabilityDensity( this.time ) );
+        }
+      }
+    },
+    
+    stepManual: function( ) {
+      if ( this.speed === 'normal' ) {
+          this.time = this.time + 0.1;
+        }
+      else {
+        this.time = this.time + 0.2;
+      }
+      if ( this.showReal ) {
+        this.realWaveProperty.set( this.getRealWave( this.time ) );
+      }
+      if ( this.showImaginary ) {
+        this.imaginaryWaveProperty.set( this.getImaginaryWave( this.time ) );
+      }
+      if ( this.showMagnitude ) {
+        this.magnitudeProperty.set( this.getMagnitude( this.time ) );
+      }
+      if ( this.showProbDensity ) {
+        this.probabilityDensityProperty.set( this.getProbabilityDensity( this.time ) );
+      }
+    },
+    
+    resetTime: function( ) {
+      this.time = 0.0;
+      if ( this.showReal ) {
+        this.realWaveProperty.set( this.getRealWave( this.time ) );
+      }
+      if ( this.showImaginary ) {
+        this.imaginaryWaveProperty.set( this.getImaginaryWave( this.time ) );
+      }
+      if ( this.showMagnitude ) {
+        this.magnitudeProperty.set( this.getMagnitude( this.time ) );
+      }
+      if ( this.showProbDensity ) {
+        this.probabilityDensityProperty.set( this.getProbabilityDensity( this.time ) );
       }
     },
     
@@ -309,12 +349,13 @@ define( function( require ) {
     /**
      * Get the probability density function
      */
-    getProbabilityDensity: function( ) {
-      var psi = this.getWavefunctionPoints( 0, true );
-      for (var i = 0; i < psi[1].length; i++) {
-        psi[1][i] = psi[1][i] * psi[1][i];
+    getProbabilityDensity: function( t ) {
+      var psiReal = this.getWavefunctionPoints( t, true );
+      var psiIm = this.getWavefunctionPoints( t, false );
+      for (var i = 0; i < psiReal[1].length; i++) {
+        psiReal[1][i] = psiReal[1][i] * psiReal[1][i] + psiIm[1][i] * psiIm[1][i];
       }
-      return psi;
+      return psiReal;
     },
     
     /**
@@ -334,10 +375,10 @@ define( function( require ) {
     /**
      * Get the magnitude of the wave function
      */
-    getMagnitude: function( ) {
-      var psi = this.getWavefunctionPoints( 0, true );
+    getMagnitude: function( t ) {
+      var psi = this.getProbabilityDensity( t );
       for (var i = 0; i < psi[1].length; i++) {
-        psi[1][i] = Math.abs(psi[1][i]);
+        psi[1][i] = Math.sqrt( psi[1][i] );
       }
       return psi;
     }
