@@ -23,10 +23,9 @@ define( function( require ) {
   var VBox = require( 'SCENERY/nodes/VBox' );
   var HStrut = require( 'SUN/HStrut' );
   var VStrut = require( 'SUN/VStrut' );
-  var Range = require( 'DOT/Range' );
-  var ArrowButton = require( 'SCENERY_PHET/buttons/ArrowButton' );
   var TextPushButton = require( 'SUN/buttons/TextPushButton' );
-  var Property = require( 'AXON/Property' );
+  var SetCoefficientControl = require( 'QUANTUM_BOUND_STATES/quantum-bound-states/view/SetCoefficientControl' );
+  var SuperpositionCoefficients = require( 'QUANTUM_BOUND_STATES/quantum-bound-states/model/SuperpositionCoefficients' )
 
   // Strings
   var titleString = require( 'string!QUANTUM_BOUND_STATES/superposition-state-title-string' );
@@ -48,32 +47,22 @@ define( function( require ) {
     // Link panel visibility to "Superposition State" push button
     var panel = this;
 
-
-
     // Fonts
     var titleFont = { font: new PhetFont( 14 ), fill: 'palegoldenrod' };
     var instructionsFont = { font: new PhetFont( 14 ), fill: 'white' };
     var buttonFont = { font: new PhetFont( 14 ), fill: 'black' };
 
-    // Constants
-    var coefficientRange = new Range( 0.0, 1.0 );
-    var coefficientIncrement = 0.10;
-    var coefficients;
-    var nCoefficients;
-    var coefficientsProperty = new Property( coefficients );
+    // Panel values -- different from model values
+    var i, rowCounter, coefficients, coefficientProperties;
 
-    // Observe the model and update panel coefficients accordingly.
+    // Observe the model and take note when it changes.
     model.superpositionCoefficients.coefficientsProperty.link( function() {
-      coefficients = model.superpositionCoefficients.coefficientsProperty.value;
-      nCoefficients = coefficients.length;
     } );
-    
 
+    coefficients = model.superpositionCoefficients.coefficientsProperty.get( );
+    console.log(coefficients[0]);
+    var setCoefficientControl = new SetCoefficientControl( coefficients[0], 0 );
 
-    var CoefficientSetterControl = function(  ) {};
-    //var coefficients = new SuperpositionCoefficients( model.currentPotentialProperty );
-    //console.log("coefficients");
-    //console.log(coefficients);
 
     // Panel Push Buttons
     var linkButton = function( listenerFunction ) {
@@ -86,19 +75,46 @@ define( function( require ) {
              };
     };
 
-    var clearButton = new TextPushButton( clearString, linkButton( function(){} ) );
+    var clearButton = new TextPushButton( clearString, linkButton( function( ){
+      for ( i = 0; i < coefficients.length; i++ ) {
+        coefficients[i] = 0.0;
+      }
+    } ) );
 
-    var normalizeButton = new TextPushButton( normalizeString, linkButton( function(){} ) );
+    var normalize = function ( coefficients ) {
+      var sum = 0;
+      for ( i = 0; i < coefficients.length; i++ ) {
+        sum += coefficients[ i ] * coefficients[ i ];
+      }
+      sum = Math.sqrt( sum );
+      for ( var j = 0; j < coefficients.length; j++ ) {
+        coefficients[ j ] = coefficients[ j ] / sum;
+      }
+      return coefficients;
+    }
+
+    var normalizeButton = new TextPushButton( normalizeString, linkButton( function( ) {
+      coefficients = normalize( coefficients );
+    } ) );
 
     var applyButton = new TextPushButton( applyString, linkButton( function() { 
+      var sqSum = 0;
+      for ( i = 0; i < coefficients.length; i++ ) {
+        sqSum += coefficients[ i ] * coefficients[ i ];
+      }
+      if( sqSum != 1 ) {
+        coefficients = normalize( coefficients )
+      }
+      for ( i = 0; i < coefficients.length; i++ ) {
+        model.superpositionCoefficients.setCoefficient( i, coefficients[ i ] );
+      }
     } ) );
 
     var closeButton = new TextPushButton( closeString, linkButton( function( ) {
       model.showSuperpositionStatePanelProperty.set( false );
     } ) );
 
-    var setSuperPositionState = function() {
-    };
+
     
     // Panel title text and instructions are composed of these
     var StringHBox = function( text, font, TextType) {
@@ -125,6 +141,16 @@ define( function( require ) {
 
      var panelWidth = pushButtonsHbox.right - pushButtonsHbox.left;
 
+    //var buildCoefficientSetterControls = function( ) {
+    //  coefficients = model.superpositionCoefficients.coefficientsProperty.get( );
+    //  coefficientProperties = [];
+    //  for( var i = 0; i < coefficients.length; i++ ) {
+    //    coefficientProperties.push( new Property ( coefficients[i] ) );
+    //  }
+    //  for( i = 0; i < coefficients.length; i++ ) {
+    //    coefficientSetterControls = new StringHBox( "wooooooo!!!", titleFont, Text );
+    //  }
+    //};
 
     // Put all of it together
     var superpositionStateVBox = new VBox( {
@@ -136,7 +162,7 @@ define( function( require ) {
                 , new VStrut( 20 )
 
                 // Coefficient Entry
-                , new VStrut( 100 )
+                , new SetCoefficientControl
 
                 // Buttons
                 , pushButtonsHbox 
@@ -155,7 +181,8 @@ define( function( require ) {
     Panel.call( panel, superpositionStateVBox, options );
 
     model.showSuperpositionStatePanelProperty.link( function( ) {
-      panel.visible = model.showSuperpositionStatePanelProperty.value;
+      panel.visible = model.showSuperpositionStatePanelProperty.get ( );
+      buildCoefficientSetterControls( );
     } );
   }
   return inherit( Panel, SuperpositionStatePanel );
