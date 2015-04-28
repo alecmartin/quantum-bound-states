@@ -19,9 +19,10 @@
   "close-string" : "Close",
   "normalize-string": "Normalize",
 
-  "width-string" : "Width",
-  "height-string" : "Height",
-  "offset-string" : "Offset",
+  "width-string": "Width",
+  "height-string": "Height",
+  "offset-string": "Offset",
+  "frequency-string": "Frequency",
 
   "potential-well": "Potential Well",
   "square": "Square",
