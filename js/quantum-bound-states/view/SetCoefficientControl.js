@@ -20,7 +20,7 @@
 
     var C_INC = 0.10; // Coefficient increment constant
 
-    HBox.call( this, _.extend( { } ) );
+    HBox.call( this );
     // this.options = _.extend( { }, options );
     this.index = index;
     this.coefficientProperty = new Property ( coefficient );
@@ -78,7 +78,7 @@
 
 
 
-    return inherit( Node, SetCoefficientControl, {
+    return inherit( HBox, SetCoefficientControl, {
       setIndex: function( index ) {
         this.index = index;
         var cLabelString = 'c<sub>' + this.index.toString() + '</sub>:';

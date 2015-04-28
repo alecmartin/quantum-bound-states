@@ -53,7 +53,7 @@ define( function( require ) {
     var buttonFont = { font: new PhetFont( 14 ), fill: 'black' };
 
     // Panel values -- different from model values
-    var i, rowCounter, coefficients, coefficientProperties;
+    var i, rowCounter, row, coefficients, coefficientProperties, coefficientControlsArray, coefficientControlsVBox;
 
     // Observe the model and take note when it changes.
     model.superpositionCoefficients.coefficientsProperty.link( function() {
@@ -61,7 +61,7 @@ define( function( require ) {
 
     coefficients = model.superpositionCoefficients.coefficientsProperty.get( );
     console.log(coefficients[0]);
-    var setCoefficientControl = new SetCoefficientControl( coefficients[0], 0 );
+    //var setCoefficientControl = new SetCoefficientControl( coefficients[0], 0 );
 
 
     // Panel Push Buttons
@@ -141,16 +141,33 @@ define( function( require ) {
 
      var panelWidth = pushButtonsHbox.right - pushButtonsHbox.left;
 
-    //var buildCoefficientSetterControls = function( ) {
-    //  coefficients = model.superpositionCoefficients.coefficientsProperty.get( );
-    //  coefficientProperties = [];
-    //  for( var i = 0; i < coefficients.length; i++ ) {
-    //    coefficientProperties.push( new Property ( coefficients[i] ) );
-    //  }
-    //  for( i = 0; i < coefficients.length; i++ ) {
-    //    coefficientSetterControls = new StringHBox( "wooooooo!!!", titleFont, Text );
-    //  }
-    //};
+    var buildCoefficientSetterControls = function( ) {
+      coefficients = model.superpositionCoefficients.coefficientsProperty.get( );
+      coefficientProperties = [];
+      coefficientControlsVBox = new VBox( );
+      coefficientControlsArray = [];
+      for( var i = 0; i < coefficients.length; i++ ) {
+        coefficientProperties.push( new Property ( coefficients[i] ) );
+        //placeholder for setcoefficientcontrol
+        coefficientControlsArray.push( new TextPushButton( i.toString( ), function() {
+          coefficients[i] += 1;
+          console.log(coefficients[i]); 
+        } ) );
+      }
+      rowCounter = 0;
+      row = [];
+      for( i = 0; i < coefficients.length; i++ ) {
+        if( rowCounter = 4 ) {
+          coefficientControlsVBox.addChild( new HBox( { children: row  } ) );
+          row = [];
+          rowCounter = 0;
+        }
+        else {
+          row.push( coefficientControlsArray[i] );
+          rowCounter++;
+        }
+      }
+    };
 
     // Put all of it together
     var superpositionStateVBox = new VBox( {
@@ -162,7 +179,7 @@ define( function( require ) {
                 , new VStrut( 20 )
 
                 // Coefficient Entry
-                , new SetCoefficientControl
+                , coefficientControlsVBox
 
                 // Buttons
                 , pushButtonsHbox 
@@ -182,7 +199,6 @@ define( function( require ) {
 
     model.showSuperpositionStatePanelProperty.link( function( ) {
       panel.visible = model.showSuperpositionStatePanelProperty.get ( );
-      buildCoefficientSetterControls( );
     } );
   }
   return inherit( Panel, SuperpositionStatePanel );
