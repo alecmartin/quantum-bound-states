@@ -71,10 +71,7 @@ define( function( require ) {
     });
     this.addChild( superpositionStatePanel );
     
-    var timeControls = new TimeControls( quantumBoundStatesModel.timeProperty,
-                                        quantumBoundStatesModel.runningProperty,
-                                        quantumBoundStatesModel.speedProperty,
-                                        {
+    var timeControls = new TimeControls( quantumBoundStatesModel, {
       centerX: waveFunctionPlotNode.centerX,
       top: waveFunctionPlotNode.bottom + 25
     } );

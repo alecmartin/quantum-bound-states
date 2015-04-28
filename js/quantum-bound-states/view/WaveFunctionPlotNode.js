@@ -128,15 +128,14 @@ define( function( require ) {
     };
 
     // Plotting lower graph lines
-    var maxEnergy = model.getMaxEnergy();
     var xScale = function( x ) {
       return ( MAX_X + x ) * ( width / ( MAX_X - MIN_X ) );
     };
     var yScale = function( y ) {
-      return ( maxEnergy - (6 * y) ) * ( height / ( maxEnergy - model.getMinEnergy() ) );
+      return height * ( ( -y / 3 ) + ( 1 / 2 ) );
     };
     var probabilityYScale = function( y ) {
-      return ( maxEnergy - (12 * y) ) * ( height / ( maxEnergy - model.getMinEnergy() ) );
+      return height * ( ( ( -y * 3 ) / 4 ) + 1 );
     };
     var plot = this;
 
@@ -146,8 +145,7 @@ define( function( require ) {
       stroke: 'white',
       lineWidth: 2,
       lineJoin: 'round',
-      x: background.left,
-      y: -30
+      x: background.left
     };
 
     var realLine = new Path( null, lineOptions );
@@ -156,13 +154,18 @@ define( function( require ) {
     imaginaryLine.stroke = 'blue';
     var magnitudeLine = new Path( null, lineOptions );
     var probabilityLine = new Path( null, lineOptions );
-    probabilityLine.y = height / 4;
+    var hoveredProbLine = new Path( null, lineOptions );
+    hoveredProbLine.stroke = 'yellow';
+    var hoveredRealLine = new Path( null, lineOptions );
+    hoveredRealLine.stroke = 'yellow';
 
     // We add these paths to our plot
     plot.addChild( realLine );
     plot.addChild( imaginaryLine );
     plot.addChild( magnitudeLine );
     plot.addChild( probabilityLine );
+    plot.addChild( hoveredProbLine );
+    plot.addChild( hoveredRealLine );
 
     // Shape creation function
     var shapeFunction = function( points, probScale ) {
@@ -173,14 +176,18 @@ define( function( require ) {
       var shape = new Shape();
       var numPoints = points[ 0 ].length;
       var yScaleFunc;
+      var step;
       if ( probScale ) {
         yScaleFunc = probabilityYScale;
+        step = 5;
       }
       else {
         yScaleFunc = yScale;
+        step = 5;
       }
+
       shape.moveTo( xScale( points[ 0 ][ 0 ] ), yScaleFunc( points[ 1 ][ 0 ] ) );
-      for (var j = 1; j < numPoints; j += 5) {
+      for (var j = 1; j < numPoints; j += step) {
         shape.lineTo( xScale( points[ 0 ][ j ] ), yScaleFunc( points[ 1 ][ j ] ) );
       }
       return shape;
@@ -203,6 +210,14 @@ define( function( require ) {
       probabilityLine.shape = shapeFunction( points, true );
       return probabilityLine;
     };
+    var plotHoveredProbability = function( points ) {
+      hoveredProbLine.shape = shapeFunction( points, true );
+      return hoveredProbLine;
+    };
+    var plotHoveredReal = function( points ){
+      hoveredRealLine.shape = shapeFunction( points, false );
+      return hoveredRealLine;
+    };
 
     var showWaves = function() {
       if ( !model.showProbDensityProperty.value ) {
@@ -215,7 +230,21 @@ define( function( require ) {
         imaginaryLine.visible = false;
         magnitudeLine.visible = false;
       }
+
       probabilityLine.visible = model.showProbDensityProperty.value;
+
+      if ( model.hoveredEigenstateProperty.value !== -1 ) {
+          if ( model.showProbDensityProperty.value === true ) {
+              hoveredProbLine.visible = true;
+          }
+          else if ( model.showProbDensityProperty.value === false ) {
+              hoveredRealLine.visible = true;
+          }
+      }
+      else {
+        hoveredProbLine.visible = false;
+        hoveredRealLine.visible = false;
+      }
     };
 
     // Link "hidden" functions
@@ -223,6 +252,8 @@ define( function( require ) {
     model.showImaginaryProperty.link( showWaves );
     model.showMagnitudeProperty.link( showWaves );
     model.showProbDensityProperty.link( showWaves );
+
+    model.hoveredEigenstateProperty.link( showWaves );
 
     // Link properties
     model.realWaveProperty.link( function() {
@@ -241,6 +272,14 @@ define( function( require ) {
       var points = model.probabilityDensityProperty.value;
       probabilityLine = plotProbability( points );
     } );
+    model.hoveredProbabilityDensityProperty.link( function() {
+      var points = model.hoveredProbabilityDensityProperty.value;
+      hoveredProbLine = plotHoveredProbability( points );
+    });
+    model.hoveredRealWaveProperty.link( function() {
+      var points = model.hoveredRealWaveProperty.value;
+      hoveredRealLine = plotHoveredReal( points );
+    });
 
     this.mutate( options );
 

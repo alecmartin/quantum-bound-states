@@ -25,16 +25,18 @@ define( function( require ){
   var femtoSecondString = require( 'string!QUANTUM_BOUND_STATES/fs' );
   
   /**
-  * @param {Property} timeProperty
-  * @param {Property} runningProperty
-  * @param {Property} speedProperty
+  * @param {QuantumBoundStatesModel} model
   * @constructor
   */
-  function TimeControls( timeProperty, runningProperty, speedProperty, options ){
+  function TimeControls( model, options ){
     var dilateX = 5;
     var dilateY = 2;
     var radioButtonRadius = 7.1;
+    var timeProperty = model.timeProperty;
+    var runningProperty = model.runningProperty;
+    var speedProperty = model.speedProperty;
     var buttonOptions = { font: new PhetFont( 16 ), fill: 'white' };
+    
     var fastForwardButton = new AquaRadioButton( speedProperty, 'fast', new Text( fastForwardString, buttonOptions ), {
       radius: radioButtonRadius,
     } );
@@ -61,9 +63,7 @@ define( function( require ){
       playPauseButton.scale( isPlaying ? ( 1 / pauseSizeIncreaseFactor ) : pauseSizeIncreaseFactor );
     } );
 
-    var stepButton = new StepButton( function() { timeProperty.set( timeProperty.value + 0.1 ); }, runningProperty, {
-      //togetherID: options.togetherContext.createTogetherID( 'stepButton' )
-    } );
+    var stepButton = new StepButton( function() { model.stepManual(); }, runningProperty );
 
     // Make the step button slightly smaller than the pause button.
     stepButton.mutate( { scale: ( playPauseButton.height / stepButton.height ) * 0.9 } );
@@ -71,7 +71,7 @@ define( function( require ){
       stepButton.enabled = !runningProperty.value;
     } );
     
-    var rewindButton = new RewindButton( function() { timeProperty.set( 0.0 ); }, runningProperty );
+    var rewindButton = new RewindButton( function() { model.resetTime(); }, runningProperty );
     rewindButton.mutate( { scale: stepButton.height / rewindButton.height } );
     
     var textBox = new Rectangle( 0, rewindButton.top + 5, 100, rewindButton.height - 5, 0, 0, { fill: 'white' } );
