@@ -14,20 +14,20 @@ define( function( require ) {
   'use strict';
 
   // modules
-  var Dimension2 = require( 'DOT/Dimension2' );
   var inherit = require( 'PHET_CORE/inherit' );
-  var PhetFont = require( 'SCENERY_PHET/PhetFont' );
+  var Panel = require( 'SUN/Panel' );
   var Text = require( 'SCENERY/nodes/Text' );
   var SubSupText = require( 'SCENERY_PHET/SubSupText' );
+  var PhetFont = require( 'SCENERY_PHET/PhetFont' );
   var HBox = require( 'SCENERY/nodes/HBox' );
+  var VBox = require( 'SCENERY/nodes/VBox' );
   var HStrut = require( 'SUN/HStrut' );
   var VStrut = require( 'SUN/VStrut' );
-  var Panel = require( 'SUN/Panel' );
   var Range = require( 'DOT/Range' );
-  var VBox = require( 'SCENERY/nodes/VBox' );
+  var ArrowButton = require( 'SCENERY_PHET/buttons/ArrowButton' );
   var TextPushButton = require( 'SUN/buttons/TextPushButton' );
-  var SuperpositionCoefficients = require( 'QUANTUM_BOUND_STATES/quantum-bound-states/model/SuperpositionCoefficients' );
-  
+  var Property = require( 'AXON/Property' );
+
   // Strings
   var titleString = require( 'string!QUANTUM_BOUND_STATES/superposition-state-title-string' );
   var instructionsString = require( 'string!QUANTUM_BOUND_STATES/superposition-state-instructions-string' );
@@ -35,36 +35,47 @@ define( function( require ) {
   var normalizeString = require( 'string!QUANTUM_BOUND_STATES/normalize-string' );
   var applyString = require( 'string!QUANTUM_BOUND_STATES/apply-string' );
   var closeString = require( 'string!QUANTUM_BOUND_STATES/close-string' );
-  var instructionsEqString = "Ψ(x) = c<sub>1</sub>Ψ<sub>1</sub>(x) + "
-                           + "c<sub>2</sub>Ψ<sub>2</sub>(x) + ... + "
-                           + "c<sub>n</sub>Ψ<sub>n</sub>(x).";
+  var instructionsEqString = 'Ψ(x) = c<sub>1</sub>Ψ<sub>1</sub>(x) + '
+                           + 'c<sub>2</sub>Ψ<sub>2</sub>(x) + ... + '
+                           + 'c<sub>n</sub>Ψ<sub>n</sub>(x).';
   
   /**
   * @param {QuantumBoundStatesModel} model
   * @constructor
   */
   function SuperpositionStatePanel( model, options ) {
-    var thisPanel = this;
+
+    // Link panel visibility to "Superposition State" push button
+    var panel = this;
+
+
 
     // Fonts
-    var titleFont = { font: new PhetFont( 14 ), fill: "palegoldenrod" };
-    var instructionsFont = { font: new PhetFont( 14 ), fill: "white" };
-    var buttonFont = { font: new PhetFont( 14 ), fill: "black" };
+    var titleFont = { font: new PhetFont( 14 ), fill: 'palegoldenrod' };
+    var instructionsFont = { font: new PhetFont( 14 ), fill: 'white' };
+    var buttonFont = { font: new PhetFont( 14 ), fill: 'black' };
 
     // Constants
     var coefficientRange = new Range( 0.0, 1.0 );
     var coefficientIncrement = 0.10;
+    var coefficients;
+    var nCoefficients;
+    var coefficientsProperty = new Property( coefficients );
 
-    // Boxwidth
-    var boxwidth = 512;
+    // Observe the model and update panel coefficients accordingly.
+    model.superpositionCoefficients.coefficientsProperty.link( function() {
+      coefficients = model.superpositionCoefficients.coefficientsProperty.value;
+      nCoefficients = coefficients.length;
+    } );
+    
 
-    var panelCoefficients = { n: 5,
-                              coeffients: []
-                            };
 
+    var CoefficientSetterControl = function(  ) {};
+    //var coefficients = new SuperpositionCoefficients( model.currentPotentialProperty );
+    //console.log("coefficients");
+    //console.log(coefficients);
 
-
-    // Buttons
+    // Panel Push Buttons
     var linkButton = function( listenerFunction ) {
       return { font: buttonFont
              , baseColor: 'lightgrey'
@@ -76,16 +87,20 @@ define( function( require ) {
     };
 
     var clearButton = new TextPushButton( clearString, linkButton( function(){} ) );
+
     var normalizeButton = new TextPushButton( normalizeString, linkButton( function(){} ) );
-    var applyButton = new TextPushButton( applyString, linkButton( function(){} ) );
+
+    var applyButton = new TextPushButton( applyString, linkButton( function() { 
+    } ) );
+
     var closeButton = new TextPushButton( closeString, linkButton( function( ) {
-      model.showSuperpositionStatePanelProperty.value = false;
+      model.showSuperpositionStatePanelProperty.set( false );
     } ) );
 
     var setSuperPositionState = function() {
     };
     
-    // Title and instructions are composed of these
+    // Panel title text and instructions are composed of these
     var StringHBox = function( text, font, TextType) {
       return new HBox( { children: [ new HStrut( 10 )
                                    , new VStrut( 20 )
@@ -94,43 +109,54 @@ define( function( require ) {
                                    ] } )
     };
 
+    // Buttons hbox
+    var pushButtonsHbox =  new HBox( { 
+      children: [ new HStrut( 10 )
+                , clearButton
+                , new HStrut( 10 )
+                , normalizeButton
+                , new HStrut( 10 )
+                , applyButton
+                , new HStrut( 10 )
+                , closeButton
+                , new HStrut( 10 )
+                ]
+    } )
+
+     var panelWidth = pushButtonsHbox.right - pushButtonsHbox.left;
 
 
+    // Put all of it together
     var superpositionStateVBox = new VBox( {
-      children: [ new HBox( { children: [ new HStrut( boxwidth - 20 ) ] } )
-                // Text
+      children: [ new VStrut( 10 )
+                  // Panel text
                 , new StringHBox( titleString, titleFont, Text )
                 , new StringHBox( instructionsString, instructionsFont, Text )
                 , new StringHBox( instructionsEqString, instructionsFont, SubSupText )
+                , new VStrut( 20 )
+
                 // Coefficient Entry
+                , new VStrut( 100 )
 
                 // Buttons
-                , new HBox( { children: [ new HStrut( 10 )
-                                        , new VStrut( 10 )
-                                        , clearButton
-                                        , new HStrut( 10 )
-                                        , normalizeButton
-                                        , new HStrut( 10 )
-                                        , applyButton
-                                        , new HStrut( 10 )
-                                        , closeButton
-                                        , new HStrut( 10 )
-                                        ] } )
-                ], align: "left"
+                , pushButtonsHbox 
+                , new VStrut( 10 )
+                ], align: 'left'
     } );
     
+    // Set panel colors
     options = _.extend( {
       fill: 'black',
       stroke: 'white',
       lineWidth: 2,
       top: 5
     }, options );
-    Panel.call( this, superpositionStateVBox, options );
+
+    Panel.call( panel, superpositionStateVBox, options );
 
     model.showSuperpositionStatePanelProperty.link( function( ) {
-      thisPanel.visible = model.showSuperpositionStatePanelProperty.value;
+      panel.visible = model.showSuperpositionStatePanelProperty.value;
     } );
   }
-  // TODO: add SuperPositionStatePanel to main view
   return inherit( Panel, SuperpositionStatePanel );
 } );

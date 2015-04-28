@@ -52,13 +52,6 @@ define( function( require ) {
       top: this.layoutBounds.centerY - 200,
     });
     this.addChild( configurePotentialPanel );
-
-
-    var superpositionStatePanel = new SuperpositionStatePanel( quantumBoundStatesModel, {
-      left: this.layoutBounds.centerX - 240,
-      top: this.layoutBounds.centerY - 200,
-    });
-    this.addChild( superpositionStatePanel );
     
     var waveFunctionPlotControls = new WaveFunctionPlotControls( quantumBoundStatesModel, {
       right: this.layoutBounds.maxX - 10,
@@ -71,6 +64,12 @@ define( function( require ) {
       top: waveFunctionPlotControls.bottom + 10,
     });
     this.addChild( particleMassPanel );
+
+    var superpositionStatePanel = new SuperpositionStatePanel( quantumBoundStatesModel, {
+      left: this.layoutBounds.left + 40,
+      top: this.layoutBounds.top + 40
+    });
+    this.addChild( superpositionStatePanel );
     
     var timeControls = new TimeControls( quantumBoundStatesModel.timeProperty,
                                         quantumBoundStatesModel.runningProperty,

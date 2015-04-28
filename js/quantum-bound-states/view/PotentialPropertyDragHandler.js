@@ -23,7 +23,6 @@ define( function( require ){
     var clickXOffset; // x-offset between initial click and thumb's origin
     var clickYOffset; // y-offset between initial click and thumb's origin
     var isRunning;
-    console.log(runningProperty);
     SimpleDragHandler.call( this, {
       
       allowTouchSnag: true,
