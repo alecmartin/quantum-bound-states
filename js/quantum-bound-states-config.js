@@ -17,7 +17,7 @@ require.config( {
   paths: {
 
     // third-party libs
-    text: '../../sherpa/text',
+    text: '../../sherpa/lib/text',
 
     // PhET plugins
     image: '../../chipper/js/requirejs-plugins/image',
